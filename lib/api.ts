@@ -293,3 +293,61 @@ export async function getCourseBySlug(slug: string): Promise<CatalogProduct> {
   const product = await apiFetch<Record<string, unknown>>(`/courses/${slug}`)
   return normalizeProduct(product)
 }
+
+// ── Editorial / Blog ──
+export interface BlogArticle {
+  id: string
+  slug: string
+  titleFA: string
+  titleEN?: string
+  excerptFA: string
+  bodyFA: string
+  authorFA: string
+  categoryFA: string
+  image?: string
+  readMinutes: number
+  isFeatured: boolean
+  isPublished: boolean
+  publishedAt?: string
+  createdAt: string
+}
+
+export async function getArticles(): Promise<BlogArticle[]> {
+  const articles = await apiFetch<Record<string, unknown>[]>('/editorial/articles')
+  return articles.map((a) => ({
+    id: String(a.id ?? ''),
+    slug: String(a.slug ?? ''),
+    titleFA: String(a.titleFA ?? ''),
+    titleEN: String(a.titleEN ?? ''),
+    excerptFA: String(a.excerptFA ?? ''),
+    bodyFA: String(a.bodyFA ?? ''),
+    authorFA: String(a.authorFA ?? ''),
+    categoryFA: String(a.categoryFA ?? ''),
+    image: String(a.image ?? ''),
+    readMinutes: Number(a.readMinutes ?? 5),
+    isFeatured: Boolean(a.isFeatured ?? false),
+    isPublished: Boolean(a.isPublished ?? false),
+    publishedAt: a.publishedAt as string | undefined,
+    createdAt: String(a.createdAt ?? ''),
+  }))
+}
+
+export async function getArticleBySlug(slug: string): Promise<BlogArticle> {
+  const article = await apiFetch<Record<string, unknown>>(`/editorial/articles/${slug}`)
+  return {
+    id: String(article.id ?? ''),
+    slug: String(article.slug ?? ''),
+    titleFA: String(article.titleFA ?? ''),
+    titleEN: String(article.titleEN ?? ''),
+    excerptFA: String(article.excerptFA ?? ''),
+    bodyFA: String(article.bodyFA ?? ''),
+    authorFA: String(article.authorFA ?? ''),
+    categoryFA: String(article.categoryFA ?? ''),
+    image: String(article.image ?? ''),
+    readMinutes: Number(article.readMinutes ?? 5),
+    isFeatured: Boolean(article.isFeatured ?? false),
+    isPublished: Boolean(article.isPublished ?? false),
+    publishedAt: article.publishedAt as string | undefined,
+    createdAt: String(article.createdAt ?? ''),
+  }
+}
