@@ -74,8 +74,8 @@ export default function CourseCard({ course }: CourseCardProps) {
         {/* Image Container */}
         <div className="relative w-full aspect-[4/3] overflow-hidden">
           <Image
-            src={course.image}
-            alt={course.titleFA}
+            src={course.image || "/images/placeholder.webp"}
+            alt={course.titleFA || "Course image"}
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             className="object-cover transition-all duration-700 group-hover:scale-110"
