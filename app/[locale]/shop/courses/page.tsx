@@ -43,9 +43,34 @@ export default function CoursesPage() {
   }
 
   return (
-    <main className="min-h-screen" dir={isRTL ? "rtl" : "ltr"}>
-      {/* Hero Section */}
-      <div style={{ position: "relative", paddingTop: "96px" }}>
+    <main className="min-h-screen" dir={isRTL ? "rtl" : "ltr"} style={{ background: "#1a0d3d" }}>
+      {/* Fixed Background */}
+      <div style={{ position: "fixed", inset: 0, zIndex: 0 }}>
+        <Image
+          src="/images/hero-backgrounds/courses-hero.webp"
+          alt=""
+          fill
+          sizes="100vw"
+          unoptimized
+          priority
+          className="object-cover object-center"
+          style={{ filter: "blur(3px)" }}
+          onError={(e) => {
+            (e.target as HTMLImageElement).style.display = "none";
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(180deg, rgba(26,13,61,0.5) 0%, transparent 30%, transparent 65%, rgba(26,13,61,0.8) 100%)",
+          }}
+        />
+      </div>
+
+      {/* Content */}
+      <div style={{ position: "relative", zIndex: 1, paddingTop: "96px" }}>
         <ShopHero
           namespace="courses"
           titleKey="title"
@@ -53,30 +78,26 @@ export default function CoursesPage() {
           ctaKey="explore"
           fullWidth={true}
         />
-      </div>
 
-      {/* Content */}
-      <div
-        style={{
-          position: "relative",
-          zIndex: 1,
-          padding: "40px clamp(20px, 5vw, 80px)",
-          maxWidth: "1400px",
-          margin: "0 auto",
-        }}
-      >
-        {/* Courses Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {courses.map((course) => (
-            <CourseCard key={course.id} course={course} />
-          ))}
+        <div
+          style={{
+            padding: "40px clamp(20px, 5vw, 80px)",
+            maxWidth: "1400px",
+            margin: "0 auto",
+          }}
+        >
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {courses.map((course) => (
+              <CourseCard key={course.id} course={course} />
+            ))}
+          </div>
+
+          {courses.length === 0 && (
+            <p style={{ color: "#fff", textAlign: "center", padding: "40px" }}>
+              No courses found
+            </p>
+          )}
         </div>
-
-        {courses.length === 0 && (
-          <p style={{ color: "#fff", textAlign: "center", padding: "40px" }}>
-            No courses found
-          </p>
-        )}
       </div>
 
       {/* Floating cart button — mobile only */}

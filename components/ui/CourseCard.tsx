@@ -152,7 +152,7 @@ export default function CourseCard({ course }: CourseCardProps) {
           {/* Meta Info */}
           <div className="mt-auto text-[10px] sm:text-xs text-white/70 flex items-center gap-3">
             <span>⏱ {course.duration}</span>
-            <span>📖 {course.lessons ?? 0} {t("lessons", { count: course.lessons ?? 0 })}</span>
+            <span>📖 {t("lessons", { count: course.lessons ?? 0 })}</span>
           </div>
 
           {/* Price & Action */}
