@@ -1,0 +1,627 @@
+{
+  "metadata": {
+    "title": "Fared — The Energy of the Universe is in Your Hands",
+    "description": "Fared Spiritual Shop — Crystals, Candles, Tours, Courses and Mentorship for your spiritual journey",
+    "keywords": "crystals, candles, chakra, energy healing, spiritual tour, online courses"
+  },
+  "nav": {
+    "home": "Home",
+    "shop": "Shop",
+    "collections": "Collections",
+    "about": "About",
+    "energyGuide": "Energy Guide",
+    "journal": "Journal",
+    "contact": "Contact",
+    "blog": "Blog",
+    "editorial": "Editorial",
+    "forum": "Forum"
+  },
+  "categories": {
+    "clothes": "Clothes",
+    "stones": "Stones",
+    "tours": "Tours",
+    "candles": "Candles",
+    "courses": "Courses",
+    "mentorship": "Mentorship",
+    "accessories": "Accessories"
+  },
+  "cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is empty",
+    "emptySubtitle": "Discover crystals that call to you",
+    "subtotal": "Subtotal",
+    "checkout": "Proceed to Checkout",
+    "remove": "Remove",
+    "secureCheckout": "Secure & Encrypted Checkout",
+    "explore": "EXPLORE COLLECTION ✦",
+    "items": "Items",
+    "viewCart": "View Cart",
+    "total": "Total",
+    "nav": {
+      "shop": "Shop",
+      "collections": "Collections",
+      "about": "About",
+      "account": "Account",
+      "energyGuide": "Energy Guide"
+    }
+  },
+  "auth": {
+    "login": "Sign In",
+    "register": "Create Account",
+    "email": "Email Address",
+    "password": "Password",
+    "name": "Full Name",
+    "submit": "Submit",
+    "logout": "Sign Out"
+  },
+  "account": {
+    "profile": "Profile",
+    "orders": "My Orders",
+    "wishlist": "Wishlist",
+    "editProfile": "Edit Profile"
+  },
+  "footer": {
+    "newsletter": "Newsletter",
+    "subscribe": "Subscribe",
+    "rights": "All rights reserved",
+    "quickLinks": "Quick Links",
+    "brand": "Fared",
+    "tagline": "Where the Universe Meets Art",
+    "home": "Home",
+    "shop": "Shop",
+    "blog": "Blog",
+    "editorial": "Editorial",
+    "forum": "Forum",
+    "about": "About Us",
+    "contact": "Contact",
+    "copyright": "© 2025 Fared — All rights reserved"
+  },
+  "home": {
+    "hero_title": "The Energy of the Universe is in Your Hands",
+    "hero_subtitle": "Our natural crystals are channels of pure energy that help bring balance, peace, and success to your inner self.",
+    "shopNow": "Shop Now",
+    "bookMentorship": "Book Mentorship",
+    "featuredCollections": "Featured Collections",
+    "spiritualQuote": "The soul always knows what it needs to heal itself. The challenge is to silence the mind.",
+    "exploreNow": "Explore Now",
+    "crystals": "Featured Energy Crystals",
+    "crystalsSubtitle": "Each crystal, a story from the earth and a light from the cosmos",
+    "candles": "Ritual Candles",
+    "candlesSubtitle": "Each candle, a light to illuminate the path within",
+    "accessories": "Energy Accessories",
+    "accessoriesSubtitle": "Jewelry that blends energy and beauty",
+    "clothes": "Ritual Clothing",
+    "clothesSubtitle": "Garments that harmonize with your soul",
+    "viewAll": "View All",
+    "viewAllProducts": "VIEW ALL",
+    "featureBadges": {
+      "crystals": "Natural Crystals",
+      "crystalsSub": "Selected from the heart of the earth",
+      "positiveEnergy": "Positive Energy",
+      "positiveEnergySub": "Balance, peace, healing",
+      "cleansing": "Cleansing & Charging",
+      "cleansingSub": "With traditional and energy methods",
+      "shipping": "Shipping with Intention & Love",
+      "shippingSub": "Sent with good intentions"
+    }
+  },
+  "stones": {
+    "title": "Energy Crystals",
+    "subtitle": "Discover the magic of natural healing crystals. Each stone carries a unique energy for your spiritual journey.",
+    "discover": "Discover the magic of",
+    "explore": "Explore Collection",
+    "exploreMore": "Discover More Crystals",
+    "filterTitle": "Filter by Category",
+    "filters": {
+      "all": "All Stones",
+      "protection": "Protection",
+      "love": "Love",
+      "abundance": "Abundance",
+      "healing": "Healing",
+      "manifestation": "Manifestation",
+      "clarity": "Clarity"
+    }
+  },
+  "clothes": {
+    "title": "Ritual Clothing",
+    "wearEnergy": "Wear the Energy.",
+    "beLight": "Be the Light.",
+    "subtitle": "Elevated garments for your spiritual path and everyday magic.",
+    "explore": "EXPLORE COLLECTIONS",
+    "highVibrational": "High Vibrational",
+    "fabrics": "Fabrics",
+    "ethicallySourced": "Ethically Sourced",
+    "materials": "Materials",
+    "infusedWith": "Infused with",
+    "positiveEnergy": "Positive Energy",
+    "addToCart": "ADD TO CART",
+    "freeShipping": "Free Worldwide Shipping",
+    "onOrders": "On orders over ۱۲,۰۰۰,۰۰۰ تومان",
+    "returns": "30-Day Easy Returns",
+    "exchanges": "& Exchanges",
+    "securePayments": "Secure Payments",
+    "checkout": "& Checkout"
+  },
+  "accessories": {
+    "title": "Bring Magic Into Your Space",
+    "subtitle": "Tools for your spiritual practice. Handpicked to amplify your energy and intention.",
+    "addToCart": "Add to Cart",
+    "shopCollection": "Shop the Collection",
+    "ethical": "Ethically Sourced",
+    "ethicalSub": "Every piece chosen with love & intention",
+    "highVibration": "High Vibration",
+    "highVibrationSub": "Energy cleansing & spiritually aligned",
+    "crystalEnergy": "Crystal Energy",
+    "crystalEnergySub": "Natural stones for healing and protection",
+    "sacredGeometry": "Sacred Geometry",
+    "sacredGeometrySub": "Symbols that align mind, body & spirit",
+    "ambientGlow": "Ambient Glow",
+    "ambientGlowSub": "Lighting that elevates your sacred space",
+    "handcrafted": "Handcrafted",
+    "handcraftedSub": "Made with intention and positive energy",
+    "shopHeading": "Shop Our Spiritual Decor",
+    "viewAllProducts": "VIEW ALL",
+    "viewAll": "View All",
+    "collections": "Accessories Collections",
+    "products": "Products"
+  },
+  "candles": {
+    "title": "Magical Candles",
+    "subtitle": "Handcrafted with intention. Infused with natural fragrances and positive energy.",
+    "addToCart": "Add to Cart",
+    "explore": "Explore Collection",
+    "natural": "Natural Ingredients",
+    "naturalSub": "Clean, plant-based wax",
+    "energyInfused": "Energy Infused",
+    "energyInfusedSub": "Intentions in every candle",
+    "handPoured": "Hand Poured",
+    "handPouredSub": "Made with care",
+    "crueltyFree": "Cruelty Free",
+    "crueltyFreeSub": "Never tested on animals",
+    "shopHeading": "Shop Our Magical Candles",
+    "products": "Our Magical Candles",
+    "collections": "Candle Collections"
+  },
+  "mentorship": {
+    "title": "Private Consultation",
+    "withFard": "with Fard",
+    "subtitle": "A sacred space for clarity, healing, and transformation. Your journey inward begins here.",
+    "awakenAlignTransform": "✦ AWAKEN. ALIGN. TRANSFORM. ✦",
+    "quote": "\"The answers you seek are already within you. I am here to help you remember.\"",
+    "author": "— Fard ✦",
+    "sacredSpace": "Sacred Space",
+    "sacredSpaceSub": "Protected & Private",
+    "trustedGuide": "Trusted Guide",
+    "trustedGuideSub": "Years of Experience",
+    "soulCentered": "Soul Centered",
+    "soulCenteredSub": "Heart-Led Guidance",
+    "chooseSession": "CHOOSE YOUR SESSION",
+    "personalized": "Personalized. Private. Powerful.",
+    "sacredSessions": "Sacred Sessions",
+    "privateSession": "1-ON-1 PRIVATE SESSION",
+    "privateSessionDesc": "Deep personalized guidance and spiritual insight tailored just for you.",
+    "energyReading": "ENERGY READING",
+    "energyReadingDesc": "Gain clarity with a deep energetic assessment of your current state.",
+    "auraCleansing": "AURA CLEANSING",
+    "auraCleansingDesc": "Release energetic blocks and restore your natural light.",
+    "feminineEnergy": "FEMININE ENERGY ACTIVATION",
+    "feminineEnergyDesc": "Reclaim your power, essence, and divine feminine flow.",
+    "spiritualGuidance": "SPIRITUAL GUIDANCE",
+    "spiritualGuidanceDesc": "Answers, clarity, and direction for your soul's path.",
+    "continue": "CONTINUE TO SELECT TIME →",
+    "continueMobile": "CONTINUE →",
+    "privacyNote": "Your session is 100% private and confidential.",
+    "yourJourney": "YOUR JOURNEY",
+    "step1Title": "CHOOSE SESSION",
+    "step1Desc": "Select the session that calls to you.",
+    "step2Title": "SELECT TIME",
+    "step2Desc": "Pick a time that aligns with you.",
+    "step3Title": "PAYMENT",
+    "step3Desc": "Secure and easy checkout.",
+    "step4Title": "CONFIRMATION",
+    "step4Desc": "Receive your booking confirmation.",
+    "globalSessions": "GLOBAL SESSIONS",
+    "globalSessionsSub": "Connect from anywhere in the world.",
+    "privateSecure": "PRIVATE & SECURE",
+    "privateSecureSub": "Your privacy is always protected.",
+    "soulAligned": "SOUL ALIGNED",
+    "soulAlignedSub": "Guidance that aligns with your highest good.",
+    "whatToExpect": "WHAT TO EXPECT",
+    "aboutBody": "Each session is a carefully crafted space where your soul's journey is honored. Whether you're seeking clarity, healing, or spiritual direction, Fard meets you exactly where you are. These sessions are entirely private, conducted virtually or in-person, and tailored to your unique path.",
+    "youllReceive": "You'll receive:",
+    "receive1": "Personalized energetic guidance",
+    "receive2": "Clarity on your current life questions",
+    "receive3": "Tools and practices to continue your journey",
+    "receive4": "Complete privacy and confidentiality",
+    "sessionSelected": "Session selected ✦",
+    "explore": "Explore Sessions"
+  },
+  "selectTime": {
+    "selectDate": "Select Date",
+    "selectTime": "Select Time",
+    "continue": "CONTINUE TO PAYMENT →",
+    "back": "← Back"
+  },
+  "payment": {
+    "orderSummary": "Order Summary",
+    "date": "Date",
+    "time": "Time",
+    "paymentDetails": "Payment Details",
+    "cardNumber": "Card Number •••• •••• •••• ••••",
+    "expiry": "MM/YY",
+    "cvv": "CVV •••",
+    "cardholder": "Cardholder Name",
+    "confirm": "CONFIRM BOOKING ✦",
+    "processing": "Processing..."
+  },
+  "courses": {
+    "title": "Energy Courses",
+    "subtitle": "Spiritual Awakening & Healing Courses",
+    "addToCart": "Add to Cart",
+    "heroSubtitle": "Specialized courses for spiritual awakening, healing and personal growth",
+    "startJourney": "Start Journey",
+    "viewAll": "View All",
+    "viewAllCourses": "View All Courses",
+    "pathOfAwareness": "Path of Awareness, Healing & Inner Awakening",
+    "noCoursesFound": "No courses found",
+    "explore": "Start Journey",
+    "lessons": "{count} lessons",
+    "free": "Free",
+    "addToCart": "Add to Cart",
+    "categories": {
+      "all": "All",
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "sideNav": {
+      "energy": "Energy",
+      "healing": "Healing",
+      "awareness": "Awareness",
+      "balance": "Balance"
+    },
+    "trustBadges": {
+      "expertInstructors": "Expert Instructors",
+      "expertInstructorsSub": "Taught by experienced and specialized instructors",
+      "practicalTraining": "Practical Training",
+      "practicalTrainingSub": "Practical courses for transformation in daily life",
+      "validCertificate": "Valid Certificate",
+      "validCertificateSub": "Internationally recognized and translatable certificate",
+      "lifetimeAccess": "Lifetime Access",
+      "lifetimeAccessSub": "Access to course content anytime, anywhere"
+    }
+  },
+  "sidePanels": {
+    "clothing": {
+      "highVibrational": "High Vibrational",
+      "fabrics": "Fabrics",
+      "ethicallySourced": "Ethically Sourced",
+      "materials": "Materials",
+      "infusedWith": "Infused with",
+      "positiveEnergy": "Positive Energy",
+      "note": "Each piece is mindfully created to elevate your energy and support your journey."
+    },
+    "candles": {
+      "naturalIngredients": "Natural Ingredients",
+      "cleanPlantBasedWax": "Clean, plant-based wax",
+      "energyInfused": "Energy Infused",
+      "intentionsInEveryCandle": "Intentions in every candle",
+      "worldwideShipping": "Worldwide Shipping",
+      "bringingLightToYourDoor": "Bringing light to your door",
+      "handPoured": "Hand Poured",
+      "madeWithCare": "Made with care",
+      "crueltyFree": "Cruelty Free",
+      "neverTestedOnAnimals": "Never tested on animals"
+    },
+    "accessories": {
+      "ethicallySourced": "ETHICALLY SOURCED",
+      "everyPieceChosenWithLove": "Every piece chosen with love & intention",
+      "highVibration": "HIGH VIBRATION",
+      "energyCleansingSpirituallyAligned": "Energy cleansing & spiritually aligned",
+      "worldwideShipping": "WORLDWIDE SHIPPING",
+      "bringingLightToYourDoor": "Bringing light to your door"
+    }
+  },
+  "tours": {
+    "hero": {
+      "title": "Mystical Retreats",
+      "titleFor": "for the",
+      "titleAccent": "Soul",
+      "subtitle": "Journey to sacred places, awaken your inner light, and align with the wisdom of the universe.",
+      "cta": "EXPLORE RETREATS"
+    },
+    "featuredDestinations": "FEATURED DESTINATIONS",
+    "registration": {
+      "title": "Join Our Next Journey",
+      "subtitle": "Reserve your spot and begin your transformation.",
+      "fullName": "Full Name",
+      "emailAddress": "Email Address",
+      "selectRetreat": "Select Retreat",
+      "arrivalDate": "Arrival Date",
+      "registerNow": "REGISTER NOW",
+      "selectRetreatOption": "Select Retreat"
+    },
+    "footer": {
+      "followJourney": "FOLLOW THE JOURNEY",
+      "quote": "The soul always knows what to do to heal itself.",
+      "quoteAccent": "The challenge is to silence the mind.",
+      "newsletter": "NEWSLETTER",
+      "emailPlaceholder": "Your email address",
+      "subscribe": "Subscribe"
+    },
+    "features": {
+      "sacredLocations": "Sacred Locations",
+      "expertGuides": "Expert Guides",
+      "transformativeExperiences": "Transformative Experiences",
+      "soulfulCommunity": "Soulful Community"
+    },
+    "destinations": {
+      "bali": {
+        "country": "BALI",
+        "name": "AWAKENING RETREAT",
+        "dates": "May 10 – May 17, 2025"
+      },
+      "peru": {
+        "country": "PERU",
+        "name": "SACRED VALLEY JOURNEY",
+        "dates": "Jun 14 – Jun 21, 2025"
+      },
+      "greece": {
+        "country": "GREECE",
+        "name": "AEGEAN SOUL ESCAPE",
+        "dates": "Jul 19 – Jul 26, 2025"
+      },
+      "thailand": {
+        "country": "THAILAND",
+        "name": "SPIRIT PATH RETREAT",
+        "dates": "Aug 16 – Aug 23, 2025"
+      }
+    },
+    "explore": "Explore Destinations"
+  },
+  "blog": {
+    "hero": {
+      "stories": "Stories",
+      "forThe": "for the",
+      "soul": "Soul",
+      "subtitle": "Explore wisdom, healing, and higher truths to uplift your spirit and illuminate your path."
+    },
+    "latestArticles": "Latest Articles",
+    "viewAllArticles": "VIEW ALL ARTICLES",
+    "featuredStory": "Featured Story",
+    "featuredLabel": "FEATURED",
+    "readStory": "READ STORY",
+    "spiritualInsights": "Spiritual Insights",
+    "dailyInspiration": "Daily Inspiration",
+    "dailyInspirationText": "You are the universe, expressing itself as a beautiful soul.",
+    "articles": {
+      "innerStillness": "The Power of Inner Stillness",
+      "crystalsVibration": "Crystals That Raise Your Vibration",
+      "newMoonRituals": "New Moon Rituals for Fresh Beginnings",
+      "higherSelf": "How to Connect with Your Higher Self"
+    },
+    "featured": {
+      "title": "Remembering Who You Truly Are",
+      "excerpt": "A soul-deep journey into awakening your true essence and living in alignment with your highest truth.",
+      "author": "Luna Elise"
+    },
+    "insights": {
+      "meditation": "Meditation",
+      "meditationSub": "Find peace within the present moment",
+      "energyHealing": "Energy Healing",
+      "energyHealingSub": "Balance your energy, transform your life",
+      "moonWisdom": "Moon Wisdom",
+      "moonWisdomSub": "Align with lunar cycles and natural rhythms"
+    },
+    "newsletter": {
+      "title": "Stay Connected with the Light",
+      "subtitle": "Receive soulful insights and spiritual guidance straight to your inbox.",
+      "placeholder": "Your email address",
+      "subscribe": "SUBSCRIBE ✦",
+      "subscribing": "SUBSCRIBING...",
+      "subscribed": "✓ SUBSCRIBED"
+    }
+  },
+  "forum": {
+    "hero": {
+      "eyebrow": "COMMUNITY OF SEEKERS",
+      "title": "Sacred Circle of\nShared Wisdom",
+      "subtitle": "A space for crystal experiences, healing journeys, spiritual insights, and conscious living."
+    },
+    "categories": {
+      "all": "All",
+      "crystalHealing": "Crystal Healing",
+      "meditation": "Meditation",
+      "energyWork": "Energy Work",
+      "moonRituals": "Moon Rituals",
+      "personalJourney": "Personal Journey",
+      "knowledge": "Knowledge",
+      "questions": "Questions",
+      "consciousLiving": "Conscious Living"
+    },
+    "search": {
+      "placeholder": "Search wisdom, crystals, questions..."
+    },
+    "posts": {
+      "amethyst": {
+        "title": "How Amethyst Helped Me Sleep Again",
+        "excerpt": "After months of restless nights and overthinking, I began sleeping with amethyst under my pillow. Within a week, I felt calmer, lighter, and finally at peace..."
+      },
+      "fullMoon": {
+        "title": "Full Moon Release Ritual That Transformed Me",
+        "excerpt": "This full moon was incredibly powerful. I wrote down everything I was ready to release and burned it under the moonlight. I felt such clarity and emotional relief..."
+      },
+      "selenite": {
+        "title": "Clearing My Energy with Selenite",
+        "excerpt": "I've been working with selenite daily to cleanse my energy field and protect my aura. The shift has been incredible..."
+      },
+      "labradorite": {
+        "title": "Labradorite: My Shield in Difficult Times",
+        "excerpt": "During one of the hardest seasons of my life, labradorite became my safe space. It protected my energy and helped me trust the process..."
+      },
+      "clearQuartz": {
+        "title": "Morning Meditation with Clear Quartz",
+        "excerpt": "Starting my day with clear quartz and 10 minutes of stillness has completely changed my mindset. I feel more present, grounded, and grateful..."
+      }
+    },
+    "founder": {
+      "name": "Fard",
+      "title": "Founder & Mentor",
+      "quote": "Your crystals do not change your life. They help you remember your own light.",
+      "readReflection": "Read Reflection"
+    },
+    "share": {
+      "title": "Share Your Wisdom",
+      "subtitle": "Your story may be the guidance someone else needs today. Join the conversation in any post."
+    }
+  },
+  "contact": {
+    "hero": {
+      "badge": "COSMIC CONTACT",
+      "title": "Get in Touch",
+      "subtitle": "We're always here. Reach out to us anytime."
+    },
+    "form": {
+      "title": "Send a Message",
+      "labels": {
+        "name": "Full Name",
+        "email": "Email Address",
+        "phone": "Phone Number",
+        "subject": "Subject",
+        "message": "Your Message"
+      },
+      "buttons": {
+        "submit": "Send Message",
+        "submitting": "Sending...",
+        "newMessage": "Send New Message"
+      },
+      "success": "Your message was sent successfully ✦",
+      "successTitle": "Message Sent",
+      "successMessage": "We'll get back to you shortly",
+      "errors": {
+        "required": "Please fill in all required fields",
+        "failed": "Failed to send. Please try again."
+      }
+    },
+    "faq": {
+      "title": "FREQUENTLY ASKED IN OTHER DIMENSIONS",
+      "questions": {
+        "shipping": "How long does shipping take?",
+        "returns": "Can I return items?",
+        "authenticity": "Are the crystals authentic?",
+        "mentor": "How do I choose a mentor?"
+      },
+      "answers": {
+        "shipping": "Orders within Tehran are delivered in 2-3 business days, and other cities in 3-7 business days.",
+        "returns": "Yes, you can return items within 7 days of receipt if they are unused.",
+        "authenticity": "All crystals are sourced directly from natural mines and come with a certificate of authenticity.",
+        "mentor": "From the mentorship page, you can view each mentor's full profile and choose based on their expertise and user reviews."
+      }
+    },
+    "desktop": {
+      "badge": "TRANSCEND THE VEIL",
+      "formBadge": "SPEAK TO THE UNIVERSE",
+      "submitting": "CONNECTING TO THE COSMOS...",
+      "faqBadge": "FREQUENTLY ASKED IN OTHER DIMENSIONS"
+    }
+  },
+  "support": {
+    "fastResponse": "Fast Response",
+    "fastResponseSub": "24/7 Support",
+    "professionalTeam": "Professional Team",
+    "professionalTeamSub": "Expert & Experienced Consultants",
+    "yourSatisfaction": "Your Satisfaction",
+    "yourSatisfactionSub": "Our Top Priority"
+  },
+  "social": {
+    "telegram": "Telegram",
+    "instagram": "Instagram",
+    "whatsapp": "WhatsApp",
+    "email": "Email"
+  },
+  "tahririye": {
+    "hero": {
+      "title": "Editorial",
+      "subtitle": "Thought, Knowledge & Inspiration"
+    },
+    "categories": {
+      "freeEducation": {
+        "title": "Free Educational Content",
+        "description": "A collection of the best educational materials on various topics for growth and awareness",
+        "cta": "View Content"
+      },
+      "bookIntro": {
+        "title": "Book Introductions",
+        "description": "The best books for personal, spiritual and intellectual development",
+        "cta": "View Books"
+      },
+      "articles": {
+        "title": "Articles",
+        "description": "Research and analytical articles on spiritual, philosophical and humanities topics",
+        "cta": "Read Articles"
+      },
+      "poetry": {
+        "title": "Poetry",
+        "description": "A selection of pure Persian poetry for the soul and heart",
+        "cta": "Read Poetry",
+        "verse": "Come, for the palace of hope is built on weak foundations\nBring wine, for the foundation of life is built on wind"
+      }
+    },
+    "footer": {
+      "quote": "Knowledge is the guiding light and wisdom is the key to the future"
+    }
+  },
+  "product": {
+    "notFound": "Product Not Found",
+    "backToShop": "Back to Shop",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock",
+    "addToCart": "Add to Cart",
+    "breadcrumb": {
+      "shop": "Shop"
+    },
+    "specs": {
+      "type": "Type",
+      "name": "Name",
+      "quality": "Quality"
+    },
+    "benefits": {
+      "title": "Benefits",
+      "premium": "Premium quality",
+      "selected": "Carefully selected"
+    },
+    "usage": "Use as intended in your spiritual practice."
+  },
+  "shop": {
+    "addToCart": "Add to Cart",
+    "addToWishlist": "Add to Wishlist",
+    "filterBy": "Filter By",
+    "sortBy": "Sort By",
+    "viewAll": "View All",
+    "outOfStock": "Out of Stock",
+    "inStock": "In Stock",
+    "clothes": "Clothes",
+    "stones": "Stones",
+    "tours": "Tours",
+    "candles": "Candles",
+    "courses": "Courses",
+    "mentorship": "Mentorship",
+    "accessories": "Accessories",
+    "products": "Products",
+    "collections": "Collections",
+    "viewAllProducts": "View All Products",
+    "shopHeading": "Shop Our Spiritual Decor",
+    "allCollections": "All Collections",
+    "allCollectionsSubtitle": "Discover our complete collection of sacred tools, garments, and experiences — each aligned with a specific chakra energy."
+  },
+  "crystals": {
+    "addToCart": "افزودن {name} به سبد خرید"
+  },
+  "common": {
+    "search": "Search...",
+    "menu": "Menu",
+    "close": "Close",
+    "account": "Account",
+    "cart": "Cart"
+  }
+}
