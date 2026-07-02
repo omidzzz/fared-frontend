@@ -5,27 +5,60 @@ import Link from "next/link";
 import { useCart } from "@/lib/cart-context";
 import { useTranslations } from "next-intl";
 import { useLocale } from "@/hooks/useLocale";
-import type { Course } from "@/lib/mock-data";
 
 interface CourseCardProps {
-  course: Course;
+  course: {
+    id: string;
+    slug: string;
+    nameFA: string;
+    nameEN: string;
+    descriptionFA?: string;
+    descriptionEN?: string;
+    price: number;
+    currency?: string;
+    isFree?: boolean;
+    duration: string;
+    durationWeeks?: number;
+    lessons: number;
+    level: string;
+    language?: string;
+    certificate?: boolean;
+    heroImage?: string | null;
+    image?: string;
+    tags?: string[];
+    instructor?: {
+      id: string;
+      nameFA: string;
+      avatar?: string | null;
+    };
+    curriculum?: Array<{
+      id: string;
+      titleFA: string;
+      lessons: Array<{
+        id: string;
+        titleFA: string;
+        duration: string;
+        isFree?: boolean;
+      }>;
+    }>;
+  };
 }
 
 const LEVEL_COLORS: Record<
   string,
   { bg: string; text: string; border: string }
 > = {
-  beginner: {
+  BEGINNER: {
     bg: "rgba(74, 222, 128, 0.15)",
     text: "#4ade80",
     border: "#4ade80",
   },
-  intermediate: {
+  INTERMEDIATE: {
     bg: "rgba(251, 191, 36, 0.15)",
     text: "#fbbf24",
     border: "#fbbf24",
   },
-  advanced: {
+  ADVANCED: {
     bg: "rgba(248, 113, 113, 0.15)",
     text: "#f87171",
     border: "#f87171",
@@ -33,9 +66,6 @@ const LEVEL_COLORS: Record<
 };
 
 const GOLD = "#f5d87a";
-
-const totalLessons = (course: Course): number =>
-  (course.curriculum || []).reduce((sum, ch) => sum + (ch.lessons?.length || 0), 0);
 
 export default function CourseCard({ course }: CourseCardProps) {
   const { addItem } = useCart();
@@ -48,16 +78,16 @@ export default function CourseCard({ course }: CourseCardProps) {
     addItem({
       productId: course.id,
       productType: "course",
-      name: course.titleFA,
-      nameFA: course.titleFA,
+      name: course.nameFA,
+      nameFA: course.nameFA,
       price: course.price,
-      currency: "USD",
+      currency: (course.currency || "IRT") as "IRT" | "USD",
       quantity: 1,
-      image: course.image,
+      image: course.heroImage || course.image || "",
     });
   };
 
-  const lc = LEVEL_COLORS[course.level] ?? LEVEL_COLORS.beginner;
+  const lc = LEVEL_COLORS[course.level] ?? LEVEL_COLORS.BEGINNER;
 
   return (
     <Link href={`/product/${course.id}`} className="block group h-full">
@@ -74,8 +104,8 @@ export default function CourseCard({ course }: CourseCardProps) {
         {/* Image Container */}
         <div className="relative w-full aspect-[4/3] overflow-hidden">
           <Image
-            src={course.image || "/images/placeholder.webp"}
-            alt={course.titleFA || "Course image"}
+            src={course.heroImage || course.image || "/images/placeholder.webp"}
+            alt={course.nameFA || "Course image"}
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             className="object-cover transition-all duration-700 group-hover:scale-110"
@@ -96,7 +126,7 @@ export default function CourseCard({ course }: CourseCardProps) {
               border: "1px solid rgba(245, 216, 122, 0.3)",
             }}
           >
-            {course.instructorFA}
+            {course.instructor?.nameFA || "Instructor"}
           </div>
 
           {/* Level Badge */}
@@ -108,7 +138,7 @@ export default function CourseCard({ course }: CourseCardProps) {
               border: `1px solid ${lc.border}60`,
             }}
           >
-            {course.levelFA}
+            {course.level}
           </div>
 
           {/* Lotus Accent */}
@@ -130,7 +160,7 @@ export default function CourseCard({ course }: CourseCardProps) {
         {/* Card Body */}
         <div className="flex-1 p-4 sm:p-5 flex flex-col">
           <h3 className="font-display text-base sm:text-lg leading-tight text-white mb-3 line-clamp-2">
-            {course.titleFA}
+            {course.nameFA}
           </h3>
 
           {/* Tags */}
@@ -152,15 +182,15 @@ export default function CourseCard({ course }: CourseCardProps) {
 
           {/* Meta Info */}
           <div className="mt-auto text-[10px] sm:text-xs text-white/70 flex items-center gap-3">
-            <span>⏱ {course.durationFA}</span>
-            <span>📖 {t("lessons", { count: totalLessons(course) })}</span>
+            <span>⏱ {course.duration}</span>
+            <span>📖 {course.lessons} {t("lessons", { count: course.lessons })}</span>
           </div>
 
           {/* Price & Action */}
           <div className="flex items-center justify-between mt-5 pt-4 border-t border-white/10">
             <div>
               <span className="text-xl sm:text-2xl font-display text-[#f5d87a]">
-                {course.isFree ? t("free") : `${course.price} تومان`}
+                {course.isFree ? t("free") : `${course.price.toLocaleString('fa-IR')} تومان`}
               </span>
             </div>
 
