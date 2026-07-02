@@ -106,10 +106,10 @@ async function getProductsFromBackend(params?: {
   if (params?.offset) query.set('offset', String(params.offset))
   const qs = query.toString() ? `?${query.toString()}` : ''
 
-  const payload = await apiFetch<{ products: Record<string, unknown>[]; total?: number }>(`/products${qs}`)
+  const products = await apiFetch<Record<string, unknown>[]>(`/products${qs}`)
   return {
-    products: (payload.products ?? []).map(normalizeProduct),
-    count: payload.total ?? (payload.products ?? []).length,
+    products: products.map(normalizeProduct),
+    count: products.length,
   }
 }
 
@@ -213,4 +213,55 @@ export function getForumPosts(): Promise<ForumPost[]> {
 
 export function getForumPost(id: string): Promise<ForumPost> {
   return apiFetch<{ post: ForumPost }>(`/store/forum/${id}`).then((r) => r.post)
+}
+
+// ── Category-specific product fetchers ──
+export async function getStones(): Promise<CatalogProduct[]> {
+  const products = await apiFetch<Record<string, unknown>[]>('/stones')
+  return products.map(normalizeProduct)
+}
+
+export async function getStoneBySlug(slug: string): Promise<CatalogProduct> {
+  const product = await apiFetch<Record<string, unknown>>(`/stones/${slug}`)
+  return normalizeProduct(product)
+}
+
+export async function getCandles(): Promise<CatalogProduct[]> {
+  const products = await apiFetch<Record<string, unknown>[]>('/candles')
+  return products.map(normalizeProduct)
+}
+
+export async function getCandleBySlug(slug: string): Promise<CatalogProduct> {
+  const product = await apiFetch<Record<string, unknown>>(`/candles/${slug}`)
+  return normalizeProduct(product)
+}
+
+export async function getClothes(): Promise<CatalogProduct[]> {
+  const products = await apiFetch<Record<string, unknown>[]>('/clothes')
+  return products.map(normalizeProduct)
+}
+
+export async function getClothBySlug(slug: string): Promise<CatalogProduct> {
+  const product = await apiFetch<Record<string, unknown>>(`/clothes/${slug}`)
+  return normalizeProduct(product)
+}
+
+export async function getAccessories(): Promise<CatalogProduct[]> {
+  const products = await apiFetch<Record<string, unknown>[]>('/accessories')
+  return products.map(normalizeProduct)
+}
+
+export async function getAccessoryBySlug(slug: string): Promise<CatalogProduct> {
+  const product = await apiFetch<Record<string, unknown>>(`/accessories/${slug}`)
+  return normalizeProduct(product)
+}
+
+export async function getCourses(): Promise<CatalogProduct[]> {
+  const products = await apiFetch<Record<string, unknown>[]>('/courses')
+  return products.map(normalizeProduct)
+}
+
+export async function getCourseBySlug(slug: string): Promise<CatalogProduct> {
+  const product = await apiFetch<Record<string, unknown>>(`/courses/${slug}`)
+  return normalizeProduct(product)
 }
