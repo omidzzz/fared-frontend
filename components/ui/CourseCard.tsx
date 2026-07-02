@@ -35,7 +35,7 @@ const LEVEL_COLORS: Record<
 const GOLD = "#f5d87a";
 
 const totalLessons = (course: Course): number =>
-  course.curriculum.reduce((sum, ch) => sum + ch.lessons.length, 0);
+  (course.curriculum || []).reduce((sum, ch) => sum + (ch.lessons?.length || 0), 0);
 
 export default function CourseCard({ course }: CourseCardProps) {
   const { addItem } = useCart();
