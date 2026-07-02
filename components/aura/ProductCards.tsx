@@ -258,11 +258,7 @@ function Card({ p, onAddToCart }: { p: Product; onAddToCart: () => void }) {
 
 export default function ProductCards() {
   const { addItem } = useCart();
-  const { data, isLoading, error } = useProducts({ category: 'clothes', limit: 4 });
-
-  // Debug logging
-  console.log('ProductCards data:', data)
-  console.log('ProductCards error:', error)
+  const { data, isLoading } = useProducts({ category: 'clothes', limit: 4 });
 
   const handleAddToCart = (p: Product) => {
     const numericPrice = p.price;
