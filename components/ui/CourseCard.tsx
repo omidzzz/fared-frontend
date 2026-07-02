@@ -5,43 +5,10 @@ import Link from "next/link";
 import { useCart } from "@/lib/cart-context";
 import { useTranslations } from "next-intl";
 import { useLocale } from "@/hooks/useLocale";
+import type { CatalogProduct } from "@/lib/api";
 
 interface CourseCardProps {
-  course: {
-    id: string;
-    slug: string;
-    nameFA: string;
-    nameEN: string;
-    descriptionFA?: string;
-    descriptionEN?: string;
-    price: number;
-    currency?: string;
-    isFree?: boolean;
-    duration: string;
-    durationWeeks?: number;
-    lessons: number;
-    level: string;
-    language?: string;
-    certificate?: boolean;
-    heroImage?: string | null;
-    image?: string;
-    tags?: string[];
-    instructor?: {
-      id: string;
-      nameFA: string;
-      avatar?: string | null;
-    };
-    curriculum?: Array<{
-      id: string;
-      titleFA: string;
-      lessons: Array<{
-        id: string;
-        titleFA: string;
-        duration: string;
-        isFree?: boolean;
-      }>;
-    }>;
-  };
+  course: CatalogProduct;
 }
 
 const LEVEL_COLORS: Record<
@@ -81,13 +48,15 @@ export default function CourseCard({ course }: CourseCardProps) {
       name: course.nameFA,
       nameFA: course.nameFA,
       price: course.price,
-      currency: (course.currency || "IRT") as "IRT" | "USD",
+      currency: "IRT",
       quantity: 1,
       image: course.heroImage || course.image || "",
     });
   };
 
-  const lc = LEVEL_COLORS[course.level] ?? LEVEL_COLORS.BEGINNER;
+  const lc = LEVEL_COLORS[course.level ?? ''] ?? LEVEL_COLORS.BEGINNER;
+
+  if (!course) return null
 
   return (
     <Link href={`/product/${course.id}`} className="block group h-full">
@@ -183,7 +152,7 @@ export default function CourseCard({ course }: CourseCardProps) {
           {/* Meta Info */}
           <div className="mt-auto text-[10px] sm:text-xs text-white/70 flex items-center gap-3">
             <span>⏱ {course.duration}</span>
-            <span>📖 {course.lessons} {t("lessons", { count: course.lessons })}</span>
+            <span>📖 {course.lessons ?? 0} {t("lessons", { count: course.lessons ?? 0 })}</span>
           </div>
 
           {/* Price & Action */}

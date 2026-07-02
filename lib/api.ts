@@ -15,6 +15,22 @@ export interface CatalogProduct {
   price: number
   image: string
   category?: string
+  // Course-specific fields
+  duration?: string
+  durationWeeks?: number
+  lessons?: number
+  level?: string
+  language?: string
+  certificate?: boolean
+  heroImage?: string | null
+  currency?: string
+  isFree?: boolean
+  instructor?: {
+    id: string
+    nameFA: string
+    avatar?: string | null
+  }
+  tags?: string[]
 }
 
 function buildUrl(endpoint: string): string {
@@ -65,6 +81,18 @@ function normalizeProduct(product: Record<string, unknown>): CatalogProduct {
     price,
     image: imageUrl,
     category: String((product.category as { slug?: string } | undefined)?.slug ?? ''),
+    // Pass through any extra fields for course/category-specific data
+    duration: String(product.duration ?? ''),
+    lessons: Number(product.lessons ?? 0),
+    level: String(product.level ?? ''),
+    instructor: product.instructor as { id: string; nameFA: string; avatar?: string | null } | undefined,
+    tags: product.tags as string[] | undefined,
+    heroImage: product.heroImage as string | null | undefined,
+    currency: String(product.currency ?? ''),
+    isFree: Boolean(product.isFree ?? false),
+    durationWeeks: Number(product.durationWeeks ?? 0),
+    certificate: Boolean(product.certificate ?? false),
+    language: String(product.language ?? ''),
   }
 }
 
