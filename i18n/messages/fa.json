@@ -16,22 +16,6 @@
     "editorial": "تحریریه",
     "forum": "انجمن"
   },
-  "shop": {
-    "addToCart": "افزودن به سبد خرید",
-    "addToWishlist": "افزودن به علاقه‌مندی‌ها",
-    "filterBy": "فیلتر بر اساس",
-    "sortBy": "مرتب‌سازی بر اساس",
-    "viewAll": "مشاهده همه",
-    "outOfStock": "ناموجود",
-    "inStock": "موجود",
-    "clothes": "پوشاک",
-    "stones": "سنگ‌ها",
-    "tours": "تورها",
-    "candles": "شمع‌ها",
-    "courses": "دوره‌ها",
-    "mentorship": "منتورشیپ",
-    "accessories": "اکسسوری"
-  },
   "categories": {
     "clothes": "پوشاک",
     "stones": "سنگ‌ها",
@@ -156,7 +140,14 @@
     "returns": "بازگشت آسان ۳۰ روزه",
     "exchanges": "و تعویض",
     "securePayments": "پرداخت امن",
-    "checkout": "و تسویه"
+    "checkout": "و تسویه",
+    "featuredTitle": "✨ محصولات ویژه",
+    "allProductsTitle": "🛍️ همه محصولات",
+    "noFeatured": "محصول ویژه‌ای موجود نیست",
+    "noProducts": "محصولی یافت نشد",
+    "loadMore": "بارگیری بیشتر",
+    "loadingMore": "در حال بارگیری...",
+    "noMoreProducts": "محصول دیگری برای بارگیری وجود ندارد"
   },
   "accessories": {
     "title": "جادو را به فضای خود بیاورید",
@@ -630,7 +621,7 @@
     "allCollectionsSubtitle": "مجموعه کامل ابزارهای مقدس، لباس‌ها و تجربیات ما را کشف کنید — هر کدام با انرژی چاکرای خاصی هماهنگ شده است."
   },
   "crystals": {
-    "addToCart": "Add {name} to cart"
+    "addToCart": "افزودن {name} به سبد خرید"
   },
   "common": {
     "search": "جستجو...",

@@ -13,26 +13,45 @@ import { useCart } from "@/lib/cart-context";
 import Link from "next/link";
 import { Card } from "@/components/aura/ProductCards";
 import ProductGrid from "@/components/shop/ProductGrid";
+import { useEffect, useState } from "react";
 
 export default function ClothesPage() {
   const t = useTranslations("clothes");
   const { addItem } = useCart();
+  const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
+  const [allProducts, setAllProducts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch featured products for carousel
-  const { data: featuredData, isLoading: featuredLoading } = useProducts({
+  // Fetch all clothes products without limit to get all featured items
+  const { data: productsData, isLoading: productsLoading } = useProducts({
     category: "clothes",
-    limit: 10,
+    limit: 100, // Increased limit to get all products
     offset: 0,
   });
 
-  console.log("Featured Data:", featuredData);
+  useEffect(() => {
+    if (productsData?.products) {
+      const products = productsData.products;
+      setAllProducts(products);
+
+      // Filter featured products - ensure we get ALL featured items
+      const featured = products.filter(
+        (product: any) => product.isFeatured === true,
+      );
+      setFeaturedProducts(featured);
+      setIsLoading(false);
+
+      console.log("All products count:", products.length);
+      console.log("Featured products count:", featured.length);
+      console.log(
+        "Featured products:",
+        featured.map((p: any) => p.nameFA || p.name),
+      );
+    }
+  }, [productsData]);
 
   const handleAddToCart = (productId: string) => {
-    // Find product from featured data
-    const product = featuredData?.products?.find(
-      (p: any) => p.id === productId,
-    );
-
+    const product = allProducts.find((p: any) => p.id === productId);
     if (product) {
       addItem({
         productId: product.id,
@@ -46,17 +65,6 @@ export default function ClothesPage() {
       });
     }
   };
-
-  // Get products from the response
-  const allProducts = featuredData?.products || [];
-
-  // Filter featured products (isFeatured: true)
-  const featuredProducts = allProducts.filter(
-    (product: any) => product.isFeatured === true,
-  );
-
-  console.log("Featured Products:", featuredProducts);
-  console.log("Featured Products count:", featuredProducts.length);
 
   // Render function for carousel
   const renderProduct = (product: any, index: number) => (
@@ -160,7 +168,7 @@ export default function ClothesPage() {
             {t("featuredTitle")}
           </h2>
 
-          {featuredLoading ? (
+          {isLoading ? (
             <div className="flex flex-wrap justify-center gap-4 w-full max-w-2xl mx-auto">
               {[1, 2, 3, 4].map((i) => (
                 <div
@@ -184,7 +192,7 @@ export default function ClothesPage() {
               items={featuredProducts}
               renderItem={renderProduct}
               tabletItemsPerSlide={2}
-              desktopColumns={4}
+              desktopItemsPerSlide={4}
               autoplayMs={3500}
               className="w-full max-w-2xl mx-auto"
             />
@@ -240,7 +248,7 @@ export default function ClothesPage() {
           padding: "40px clamp(40px, 5vw, 100px)",
         }}
       >
-        {/* Desktop Featured Products */}
+        {/* Desktop Featured Products Carousel */}
         <h2
           className="text-center text-[#F5D79C] font-serif text-3xl md:text-4xl mb-8"
           style={{
@@ -252,39 +260,37 @@ export default function ClothesPage() {
           {t("featuredTitle")}
         </h2>
 
-        <div className="flex flex-wrap justify-center gap-4 mb-16">
-          {featuredLoading ? (
-            <div className="flex flex-wrap justify-center gap-4">
-              {[1, 2, 3, 4].map((i) => (
-                <div
-                  key={i}
-                  className="animate-pulse"
-                  style={{
-                    width: "clamp(130px, 42vw, 260px)",
-                    height: "clamp(240px, 75vw, 460px)",
-                    background: "rgba(255,255,255,0.05)",
-                    borderRadius: "8px",
-                  }}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-wrap justify-center gap-4">
-              {featuredProducts.map((product: any) => (
-                <Link
-                  key={product.id}
-                  href={`/shop/clothes/${product.slug || product.id}`}
-                  className="transition-opacity hover:opacity-90"
-                >
-                  <Card
-                    p={product}
-                    onAddToCart={() => handleAddToCart(product.id)}
-                  />
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
+        {isLoading ? (
+          <div className="flex flex-wrap justify-center gap-4">
+            {[1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="animate-pulse"
+                style={{
+                  width: "clamp(130px, 42vw, 260px)",
+                  height: "clamp(240px, 75vw, 460px)",
+                  background: "rgba(255,255,255,0.05)",
+                  borderRadius: "8px",
+                }}
+              />
+            ))}
+          </div>
+        ) : featuredProducts.length === 0 ? (
+          <div className="w-full text-center text-white/60 py-8">
+            {t("noFeatured")}
+          </div>
+        ) : (
+          <div className="mb-16 max-w-6xl mx-auto">
+            <ResponsiveCarousel
+              items={featuredProducts}
+              renderItem={renderProduct}
+              tabletItemsPerSlide={2}
+              desktopItemsPerSlide={4}
+              autoplayMs={3500}
+              className="w-full"
+            />
+          </div>
+        )}
 
         {/* Desktop All Products */}
         <h2

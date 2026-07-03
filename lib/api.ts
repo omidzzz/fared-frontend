@@ -211,8 +211,66 @@ async function apiFetch<T>(
 
   return payload as T;
 }
+async function apiFetchPaginated<T>(
+  endpoint: string,
+  options?: RequestInit,
+): Promise<{
+  data: T;
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}> {
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("fared_token") : null;
+  const res = await fetch(buildUrl(endpoint), {
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    ...options,
+  });
 
-// In your frontend lib/api.ts
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({ message: res.statusText }));
+    throw new Error(error.message ?? "API request failed");
+  }
+
+  const payload = await res.json().catch(() => null);
+  if (payload && typeof payload === "object" && "success" in payload) {
+    const envelope = payload as {
+      success: boolean;
+      data?: T;
+      pagination?: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+      error?: string;
+    };
+    if (!envelope.success) {
+      throw new Error(envelope.error ?? "API request failed");
+    }
+    return {
+      data: envelope.data as T,
+      pagination: envelope.pagination || {
+        total: 0,
+        page: 1,
+        limit: 0,
+        totalPages: 0,
+      },
+    };
+  }
+
+  return {
+    data: payload as T,
+    pagination: { total: 0, page: 1, limit: 0, totalPages: 0 },
+  };
+}
+
 async function getProductsFromBackend(params?: {
   category?: string;
   limit?: number;
@@ -224,24 +282,30 @@ async function getProductsFromBackend(params?: {
   if (params?.offset) query.set("offset", String(params.offset));
   const qs = query.toString() ? `?${query.toString()}` : "";
 
-  const response = await apiFetch<{
-    data: {
-      products: Record<string, unknown>[];
-      count: number;
-      pagination: {
-        limit: number;
-        offset: number;
-        page: number;
-        total: number;
-        hasMore: boolean;
-      };
+  try {
+    const response = await apiFetchPaginated<Record<string, unknown>[]>(
+      `/products${qs}`,
+    );
+
+    console.log("🔍 API Request:", {
+      endpoint: `/products${qs}`,
+      offset: params?.offset,
+      limit: params?.limit,
+      productsReceived: response.data?.length,
+      total: response.pagination?.total,
+    });
+
+    return {
+      products: (response.data || []).map(normalizeProduct),
+      count: response.pagination?.total || 0,
     };
-  }>(`/products${qs}`);
-  
-  return {
-    products: (response.data?.products || []).map(normalizeProduct),
-    count: response.data?.count || 0,
-  };
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return {
+      products: [],
+      count: 0,
+    };
+  }
 }
 export async function getProducts(params?: {
   category?: string;

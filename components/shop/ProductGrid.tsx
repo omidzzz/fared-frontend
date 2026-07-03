@@ -7,7 +7,7 @@ import { useProducts } from "@/hooks/useProducts";
 
 interface ProductGridProps {
   category: CategoryHandle;
-  initialPage?: number;
+  initialOffset?: number;
   itemsPerPage?: number;
   filter?: (product: any) => boolean;
   renderCard: (
@@ -33,7 +33,7 @@ interface ProductGridProps {
 
 export default function ProductGrid({
   category,
-  initialPage = 1,
+  initialOffset = 0,
   itemsPerPage = 12,
   filter,
   renderCard,
@@ -49,34 +49,38 @@ export default function ProductGrid({
   onProductsLoaded,
   onError,
 }: ProductGridProps) {
-  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [currentOffset, setCurrentOffset] = useState(initialOffset);
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
 
-  // Fetch products for current page
+  // Fetch products for current offset
   const { data, isLoading, error } = useProducts({
     category,
     limit: itemsPerPage,
-    page: currentPage, // Using page instead of offset
+    offset: currentOffset,
   });
 
   // Handle data updates
   useEffect(() => {
     if (!data) return;
 
-    // Your API returns: { products: [...], total: number }
+    console.log("📊 Data received in ProductGrid:", data);
+
+    // Your API returns: { products: [...], count: number }
     const newProducts = data.products || [];
-    const total = data.total || 0;
+    const total = data.count || 0;
+
+    console.log("📊 Extracted:", { productsCount: newProducts.length, total });
 
     setTotalCount(total);
 
     // Apply filter if provided
     const filteredProducts = filter ? newProducts.filter(filter) : newProducts;
 
-    if (currentPage === initialPage) {
+    if (currentOffset === initialOffset) {
       // Initial load - replace all products
       setAllProducts(filteredProducts);
       setIsInitialLoading(false);
@@ -89,16 +93,22 @@ export default function ProductGrid({
         onProductsLoaded(filteredProducts);
       }
     } else {
-      // Load more - append to existing products
+      // Load more - append only products that aren't already loaded
+      // (dedup by ID prevents duplicates from React Query returning stale data
+      //  when offset changes before the new fetch completes)
       setAllProducts((prev) => {
-        const updatedProducts = [...prev, ...filteredProducts];
+        const existingIds = new Set(prev.map((p: any) => p.id));
+        const uniqueNewProducts = filteredProducts.filter(
+          (p: any) => !existingIds.has(p.id),
+        );
+        const updatedProducts = [...prev, ...uniqueNewProducts];
         const hasMoreProducts = updatedProducts.length < total;
         setHasMore(hasMoreProducts);
         return updatedProducts;
       });
       setIsLoadingMore(false);
     }
-  }, [data, currentPage, initialPage, filter, onProductsLoaded]);
+  }, [data, currentOffset, initialOffset, filter, onProductsLoaded]);
 
   // Handle errors
   useEffect(() => {
@@ -112,17 +122,17 @@ export default function ProductGrid({
     if (isLoadingMore || !hasMore || isLoading || isInitialLoading) return;
 
     setIsLoadingMore(true);
-    setCurrentPage((prev) => prev + 1); // Increment page number
-  }, [isLoadingMore, hasMore, isLoading, isInitialLoading]);
+    setCurrentOffset((prev) => prev + itemsPerPage);
+  }, [isLoadingMore, hasMore, isLoading, isInitialLoading, itemsPerPage]);
 
   // Reset grid (useful when category changes)
   const resetGrid = useCallback(() => {
-    setCurrentPage(initialPage);
+    setCurrentOffset(initialOffset);
     setAllProducts([]);
     setIsInitialLoading(true);
     setHasMore(true);
     setTotalCount(0);
-  }, [initialPage]);
+  }, [initialOffset]);
 
   // Map column count to Tailwind classes
   const colClasses = {
@@ -237,9 +247,10 @@ export default function ProductGrid({
 
       {/* Debug info - remove in production */}
       {process.env.NODE_ENV === "development" && (
-        <div className="text-xs text-white/20 text-center mt-4">
+        <div className="text-xs text-white/20 text-center mt-4 font-mono">
           Loaded: {allProducts.length} / Total: {totalCount} | Has More:{" "}
-          {hasMore ? "Yes" : "No"} | Page: {currentPage}
+          {hasMore ? "✅ Yes" : "❌ No"} | Offset: {currentOffset} | Items:{" "}
+          {itemsPerPage}
         </div>
       )}
     </div>

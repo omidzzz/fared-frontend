@@ -1,3 +1,4 @@
+// hooks/useProducts.ts
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
@@ -7,7 +8,6 @@ export function useProducts(params?: {
   category?: string;
   limit?: number;
   offset?: number;
-  page?: number; // Add page support
 }) {
   return useQuery({
     queryKey: ["products", params],
@@ -15,8 +15,7 @@ export function useProducts(params?: {
       getProducts({
         category: params?.category,
         limit: params?.limit || 12,
-        offset: params?.offset,
-        page: params?.page, // Pass page through
+        offset: params?.offset || 0,
       }),
     staleTime: 30_000,
   });

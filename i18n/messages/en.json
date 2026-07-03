@@ -136,11 +136,18 @@
     "positiveEnergy": "Positive Energy",
     "addToCart": "ADD TO CART",
     "freeShipping": "Free Worldwide Shipping",
-    "onOrders": "On orders over ۱۲,۰۰۰,۰۰۰ تومان",
+    "onOrders": "On orders over $120",
     "returns": "30-Day Easy Returns",
     "exchanges": "& Exchanges",
     "securePayments": "Secure Payments",
-    "checkout": "& Checkout"
+    "checkout": "& Checkout",
+    "featuredTitle": "✨ Featured Collection",
+    "allProductsTitle": "🛍️ All Products",
+    "noFeatured": "No featured products available",
+    "noProducts": "No products found",
+    "loadMore": "Load More",
+    "loadingMore": "Loading...",
+    "noMoreProducts": "No more products to load"
   },
   "accessories": {
     "title": "Bring Magic Into Your Space",
@@ -268,7 +275,6 @@
     "explore": "Start Journey",
     "lessons": "{count} lessons",
     "free": "Free",
-    "addToCart": "Add to Cart",
     "categories": {
       "all": "All",
       "beginner": "Beginner",
@@ -616,7 +622,7 @@
     "allCollectionsSubtitle": "Discover our complete collection of sacred tools, garments, and experiences — each aligned with a specific chakra energy."
   },
   "crystals": {
-    "addToCart": "افزودن {name} به سبد خرید"
+    "addToCart": "Add {name} to cart"
   },
   "common": {
     "search": "Search...",
