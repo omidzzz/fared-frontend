@@ -458,9 +458,11 @@ export function getForumPost(id: string): Promise<ForumPost> {
 
 // ── Category-specific product fetchers ──
 export async function getStones(): Promise<CatalogProduct[]> {
-  const response = await apiFetch<{ products: Record<string, unknown>[] }>("/stones");
-  const products = response.products || [];
-  return products.map(normalizeProduct);
+  // Backend returns { products: [...], count } wrapped in success envelope
+  const response = await apiFetch<{
+    products: Record<string, unknown>[];
+  }>("/stones");
+  return (response.products || []).map(normalizeProduct);
 }
 
 export async function getStoneBySlug(slug: string): Promise<CatalogProduct> {
@@ -469,9 +471,10 @@ export async function getStoneBySlug(slug: string): Promise<CatalogProduct> {
 }
 
 export async function getCandles(): Promise<CatalogProduct[]> {
-  const response = await apiFetch<{ products: Record<string, unknown>[] }>("/candles");
-  const products = response.products || [];
-  return products.map(normalizeProduct);
+  const response = await apiFetch<{
+    products: Record<string, unknown>[];
+  }>("/candles");
+  return (response.products || []).map(normalizeProduct);
 }
 
 export async function getCandleBySlug(slug: string): Promise<CatalogProduct> {
@@ -480,9 +483,10 @@ export async function getCandleBySlug(slug: string): Promise<CatalogProduct> {
 }
 
 export async function getClothes(): Promise<CatalogProduct[]> {
-  const response = await apiFetch<{ products: Record<string, unknown>[] }>("/clothes");
-  const products = response.products || [];
-  return products.map(normalizeProduct);
+  const response = await apiFetch<{
+    products: Record<string, unknown>[];
+  }>("/clothes");
+  return (response.products || []).map(normalizeProduct);
 }
 
 export async function getClothBySlug(slug: string): Promise<CatalogProduct> {
@@ -491,9 +495,10 @@ export async function getClothBySlug(slug: string): Promise<CatalogProduct> {
 }
 
 export async function getAccessories(): Promise<CatalogProduct[]> {
-  const response = await apiFetch<{ products: Record<string, unknown>[] }>("/accessories");
-  const products = response.products || [];
-  return products.map(normalizeProduct);
+  const response = await apiFetch<{
+    products: Record<string, unknown>[];
+  }>("/accessories");
+  return (response.products || []).map(normalizeProduct);
 }
 
 export async function getAccessoryBySlug(
@@ -506,9 +511,10 @@ export async function getAccessoryBySlug(
 }
 
 export async function getCourses(): Promise<CatalogProduct[]> {
-  const response = await apiFetch<{ products: Record<string, unknown>[] }>("/courses");
-  const products = response.products || [];
-  return products.map(normalizeProduct);
+  const response = await apiFetch<{
+    products: Record<string, unknown>[];
+  }>("/courses");
+  return (response.products || []).map(normalizeProduct);
 }
 
 export async function getCourseBySlug(slug: string): Promise<CatalogProduct> {
