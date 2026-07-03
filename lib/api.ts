@@ -279,7 +279,12 @@ async function getProductsFromBackend(params?: {
   const query = new URLSearchParams();
   if (params?.category) query.set("category", params.category);
   if (params?.limit) query.set("limit", String(params.limit));
-  if (params?.offset) query.set("offset", String(params.offset));
+  // The backend /api/products endpoint uses page-based pagination, not offset.
+  // Convert offset to page so pagination works correctly.
+  if (params?.offset !== undefined && params?.limit) {
+    const page = Math.floor(params.offset / params.limit) + 1;
+    query.set("page", String(page));
+  }
   const qs = query.toString() ? `?${query.toString()}` : "";
 
   try {
@@ -453,7 +458,8 @@ export function getForumPost(id: string): Promise<ForumPost> {
 
 // ── Category-specific product fetchers ──
 export async function getStones(): Promise<CatalogProduct[]> {
-  const products = await apiFetch<Record<string, unknown>[]>("/stones");
+  const response = await apiFetch<{ products: Record<string, unknown>[] }>("/stones");
+  const products = response.products || [];
   return products.map(normalizeProduct);
 }
 
@@ -463,7 +469,8 @@ export async function getStoneBySlug(slug: string): Promise<CatalogProduct> {
 }
 
 export async function getCandles(): Promise<CatalogProduct[]> {
-  const products = await apiFetch<Record<string, unknown>[]>("/candles");
+  const response = await apiFetch<{ products: Record<string, unknown>[] }>("/candles");
+  const products = response.products || [];
   return products.map(normalizeProduct);
 }
 
@@ -473,7 +480,8 @@ export async function getCandleBySlug(slug: string): Promise<CatalogProduct> {
 }
 
 export async function getClothes(): Promise<CatalogProduct[]> {
-  const products = await apiFetch<Record<string, unknown>[]>("/clothes");
+  const response = await apiFetch<{ products: Record<string, unknown>[] }>("/clothes");
+  const products = response.products || [];
   return products.map(normalizeProduct);
 }
 
@@ -483,7 +491,8 @@ export async function getClothBySlug(slug: string): Promise<CatalogProduct> {
 }
 
 export async function getAccessories(): Promise<CatalogProduct[]> {
-  const products = await apiFetch<Record<string, unknown>[]>("/accessories");
+  const response = await apiFetch<{ products: Record<string, unknown>[] }>("/accessories");
+  const products = response.products || [];
   return products.map(normalizeProduct);
 }
 
@@ -497,7 +506,8 @@ export async function getAccessoryBySlug(
 }
 
 export async function getCourses(): Promise<CatalogProduct[]> {
-  const products = await apiFetch<Record<string, unknown>[]>("/courses");
+  const response = await apiFetch<{ products: Record<string, unknown>[] }>("/courses");
+  const products = response.products || [];
   return products.map(normalizeProduct);
 }
 
