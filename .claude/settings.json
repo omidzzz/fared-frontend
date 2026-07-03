@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/usr/bin/find /Users/bryankiani -maxdepth 4 -name \"header-new.svg\" -o -name \"homepage-CTA.svg\" -o -name \"stones-card.svg\" -o -name \"clothes-card.svg\" -o -name \"tahrirye-card.svg\")",
+      "Read(//Users/bryankiani/Downloads/**)"
+    ]
+  }
+}

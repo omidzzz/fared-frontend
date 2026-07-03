@@ -20,7 +20,7 @@ type Product = {
   category?: string;
 };
 
-function Card({ p, onAddToCart }: { p: Product; onAddToCart: () => void }) {
+export function Card({ p, onAddToCart }: { p: Product; onAddToCart: () => void }) {
   const t = useTranslations("clothes");
   const { isRTL } = useLocale();
   const maskSvg = `%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 430.3 753' preserveAspectRatio='none'%3E%3Cpath d='${encodeURIComponent(

@@ -1,0 +1,300 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Chakra Colors */
+  --chakra-root: #c0392b;
+  --chakra-sacral: #e67e22;
+  --chakra-solar: #f1c40f;
+  --chakra-heart: #27ae60;
+  --chakra-throat: #2980b9;
+  --chakra-third: #8e44ad;
+  --chakra-crown: #9b59b6;
+
+  /* Chakra RGB values for dynamic rgba() */
+  --chakra-root-rgb: 192, 57, 43;
+  --chakra-sacral-rgb: 230, 126, 34;
+  --chakra-solar-rgb: 241, 196, 15;
+  --chakra-heart-rgb: 39, 174, 96;
+  --chakra-throat-rgb: 41, 128, 185;
+  --chakra-third-rgb: 142, 68, 173;
+  --chakra-crown-rgb: 155, 89, 182;
+
+  /* Cosmic Background */
+  --cosmic-dark: #0a0a1a;
+  --deep-indigo: #0d0d2b;
+  --card-glass: rgba(255, 255, 255, 0.05);
+  --card-border: rgba(255, 255, 255, 0.12);
+
+  /* Gold */
+  --gold-accent: #fecb7d;
+  --gold-deep: #c9a84c;
+  --gold-light: #e8c97a;
+  --gold-accent-rgb: 254, 203, 125;
+
+  /* Teal Glass */
+  --teal-glass: rgba(20, 80, 90, 0.6);
+
+  /* Card */
+  --card-bg: rgba(8, 18, 32, 0.85);
+
+  /* Crystal */
+  --crystal-blue: #7ec8e3;
+
+  /* Text */
+  --text-primary: #f0ebe3;
+  --text-secondary: #b8aead;
+  --text-muted: rgba(180, 200, 220, 0.7);
+
+  /* Aura Veda tokens */
+  --avad-gold: #d8b36a;
+  --avad-gold-bright: #f3dca0;
+  --avad-gold-deep: #b88f44;
+  --avad-cream: #f6ecd6;
+  --avad-text-dim: #d6c7e8;
+  --avad-ink: #3b2a47;
+  --avad-stage: #140926;
+  --avad-viewport: #0c0518;
+  --avad-serif: "Cormorant Garamond", serif;
+  --avad-sans: "Jost", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--cosmic-dark);
+  color: var(--text-primary);
+  font-family: Inter, sans-serif;
+}
+
+::selection {
+  background: rgba(254, 203, 125, 0.3);
+  color: var(--cosmic-dark);
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cosmic-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gold-deep);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-accent);
+}
+
+/* Glassmorphism utility classes */
+@layer utilities {
+  .glass-light {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-medium {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-dark {
+    background: rgba(10, 10, 26, 0.6);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .gold-border {
+    border: 1px solid var(--gold-deep);
+  }
+
+  .gold-text {
+    color: var(--gold-accent);
+  }
+
+  .chakra-glow-root {
+    box-shadow: 0 0 30px rgba(var(--chakra-root-rgb), 0.4);
+  }
+
+  .chakra-glow-sacral {
+    box-shadow: 0 0 30px rgba(var(--chakra-sacral-rgb), 0.4);
+  }
+
+  .chakra-glow-solar {
+    box-shadow: 0 0 30px rgba(var(--chakra-solar-rgb), 0.4);
+  }
+
+  .chakra-glow-heart {
+    box-shadow: 0 0 30px rgba(var(--chakra-heart-rgb), 0.4);
+  }
+
+  .chakra-glow-throat {
+    box-shadow: 0 0 30px rgba(var(--chakra-throat-rgb), 0.4);
+  }
+
+  .chakra-glow-third {
+    box-shadow: 0 0 30px rgba(var(--chakra-third-rgb), 0.4);
+  }
+
+  .chakra-glow-crown {
+    box-shadow: 0 0 30px rgba(var(--chakra-crown-rgb), 0.4);
+  }
+
+  /* Per-chakra page gradients — used below hero fold on shop category pages */
+  .page-gradient-root {
+    background:
+      radial-gradient(ellipse 80% 40% at 20% 10%, rgba(192, 57, 43, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 30%, rgba(146, 42, 32, 0.08) 0%, transparent 60%),
+      #070714;
+  }
+
+  .page-gradient-sacral {
+    background:
+      radial-gradient(ellipse 80% 40% at 20% 10%, rgba(230, 126, 34, 0.10) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 30%, rgba(88, 42, 107, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 100% 60% at 50% 80%, rgba(142, 68, 173, 0.08) 0%, transparent 70%),
+      #070714;
+  }
+
+  .page-gradient-solar {
+    background:
+      radial-gradient(ellipse 80% 40% at 20% 10%, rgba(241, 196, 15, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 30%, rgba(192, 156, 12, 0.08) 0%, transparent 60%),
+      #070714;
+  }
+
+  .page-gradient-heart {
+    background:
+      radial-gradient(ellipse 80% 40% at 20% 10%, rgba(39, 174, 96, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 30%, rgba(41, 128, 185, 0.10) 0%, transparent 60%),
+      radial-gradient(ellipse 100% 60% at 50% 80%, rgba(27, 79, 114, 0.08) 0%, transparent 70%),
+      #070714;
+  }
+
+  .page-gradient-throat {
+    background:
+      radial-gradient(ellipse 80% 40% at 20% 10%, rgba(41, 128, 185, 0.14) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 30%, rgba(21, 67, 96, 0.10) 0%, transparent 60%),
+      #070714;
+  }
+
+  .page-gradient-third {
+    background:
+      radial-gradient(ellipse 80% 40% at 20% 10%, rgba(142, 68, 173, 0.14) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 30%, rgba(88, 42, 107, 0.10) 0%, transparent 60%),
+      #070714;
+  }
+
+  .page-gradient-crown {
+    background:
+      radial-gradient(ellipse 80% 40% at 20% 10%, rgba(155, 89, 182, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 30%, rgba(88, 42, 107, 0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 100% 60% at 50% 90%, rgba(100, 50, 130, 0.06) 0%, transparent 70%),
+      #070714;
+  }
+}
+
+/* Feature grid dividers — responsive border logic */
+.feature-grid-cell {
+  border: none;
+}
+
+/* Mobile 2×2: bottom border on top row, right border on right column (RTL) */
+.feature-grid-cell:nth-child(1),
+.feature-grid-cell:nth-child(2) {
+  border-bottom: 1px solid rgba(254, 203, 125, 0.15);
+}
+
+.feature-grid-cell:nth-child(2),
+.feature-grid-cell:nth-child(4) {
+  border-right: 1px solid rgba(254, 203, 125, 0.15);
+}
+
+/* Desktop 1×4: right border on first 3 items only */
+@media (min-width: 1024px) {
+  .feature-grid-cell {
+    border: none !important;
+  }
+
+  .feature-grid-cell:nth-child(1),
+  .feature-grid-cell:nth-child(2),
+  .feature-grid-cell:nth-child(3) {
+    border-right: 1px solid rgba(254, 203, 125, 0.15) !important;
+  }
+}
+
+/* Vazirmatn — add font files to public/fonts/ when available */
+/* @font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/Vazirmatn-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+} */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Tahririye mobile: hide card images, expand text to full width */
+@media (max-width: 640px) {
+  .tahririye-card-image {
+    display: none;
+  }
+
+  .tahririye-card-text {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+}
+
+/* Responsive slider animation */
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

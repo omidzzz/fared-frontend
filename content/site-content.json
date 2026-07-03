@@ -1,0 +1,1599 @@
+{
+  "_meta": {
+    "purpose": "Inventory of all user-facing copy with design locations",
+    "note": "Source text only, recorded verbatim and NOT translated. The site is mixed-language: global chrome, metadata, and the mobile shop layouts are Farsi (RTL); most desktop shop pages, mentorship, blog, forum and about are English. Strings are recorded exactly as currently written regardless of language. HTML entities are shown as their rendered characters (e.g. ' \" —). Decorative glyph-only strings (✦ → ◆ emoji) and values pulled from the data layer (mock-data.ts, hardcoded product/post/article arrays) are excluded from the inventory and summarized in _review.",
+    "coverage": [
+      "/",
+      "/shop/stones",
+      "/shop/stones-v2",
+      "/shop/candles",
+      "/shop/accessories",
+      "/shop/clothes",
+      "/shop/courses",
+      "/shop/mentorship",
+      "/shop/mentorship/select-time",
+      "/shop/mentorship/payment",
+      "/community",
+      "/about",
+      "/about/story",
+      "/checkout",
+      "/blog",
+      "/contact",
+      "global chrome (nav, footer, feature badges, toasts)"
+    ]
+  },
+  "global": {
+    "meta": {
+      "title": {
+        "text": "اورا میستیک — انرژی کیهان در دستان توست",
+        "where": "app/layout.tsx — browser tab / document <title> for the whole site",
+        "type": "meta"
+      },
+      "description": {
+        "text": "فروشگاه معنوی اورا میستیک — کریستال، شمع، تور، دوره و منتورشیپ برای سفر معنوی شما",
+        "where": "app/layout.tsx — site-wide SEO/social meta description",
+        "type": "meta"
+      }
+    },
+    "nav": {
+      "brand": {
+        "text": "اورا میستیک",
+        "where": "components/layout/DynamicHeader.tsx — logo wordmark, top of the fixed header (desktop, right of the lotus mark)"
+      },
+      "brandTagline": {
+        "text": "تجارت معنوی",
+        "where": "components/layout/DynamicHeader.tsx — tiny tagline directly under the logo wordmark"
+      },
+      "home": {
+        "text": "خانه",
+        "where": "components/layout/DynamicHeader.tsx — first item in the desktop top nav (also appears in the mobile slide-out menu)"
+      },
+      "shop": {
+        "text": "فروشگاه",
+        "where": "components/layout/DynamicHeader.tsx — desktop nav 'Shop' dropdown trigger (mobile: 'Shop' accordion, see nav.mobileShop)"
+      },
+      "shopItems.clothes": {
+        "text": "لباس‌ها",
+        "where": "DynamicHeader.tsx — Shop dropdown / mobile Shop accordion, item 1 (links to /shop/clothes)"
+      },
+      "shopItems.candles": {
+        "text": "شمع‌ها",
+        "where": "DynamicHeader.tsx — Shop dropdown / mobile Shop accordion, item 2 (links to /shop/candles)"
+      },
+      "shopItems.accessories": {
+        "text": "لوازم دکوراتیو",
+        "where": "DynamicHeader.tsx — Shop dropdown / mobile Shop accordion, item 3 (links to /shop/accessories)"
+      },
+      "shopItems.tours": {
+        "text": "تورها",
+        "where": "DynamicHeader.tsx — Shop dropdown / mobile Shop accordion, item 4 (links to /shop/tours)"
+      },
+      "shopItems.stones": {
+        "text": "سنگ‌ها",
+        "where": "DynamicHeader.tsx — Shop dropdown / mobile Shop accordion, item 5 (links to /shop/stones)"
+      },
+      "shopItems.courses": {
+        "text": "دوره‌ها",
+        "where": "DynamicHeader.tsx — Shop dropdown / mobile Shop accordion, item 6 (links to /shop/courses)"
+      },
+      "shopItems.mentorship": {
+        "text": "منتورشیپ",
+        "where": "DynamicHeader.tsx — Shop dropdown / mobile Shop accordion, item 7 (links to /shop/mentorship)"
+      },
+      "links.blog": {
+        "text": "بلاگ",
+        "where": "DynamicHeader.tsx — desktop top nav link (also in mobile menu); links to /blog"
+      },
+      "links.editorial": {
+        "text": "تحریریه",
+        "where": "DynamicHeader.tsx — desktop top nav link (also in mobile menu); links to /tahrirye"
+      },
+      "links.forum": {
+        "text": "انجمن",
+        "where": "DynamicHeader.tsx — desktop top nav link (also in mobile menu); links to /forum (the Community page)"
+      },
+      "links.contact": {
+        "text": "تماس با ما",
+        "where": "DynamicHeader.tsx — desktop top nav link (also mobile 'More' accordion); links to /contact"
+      },
+      "mobileMore.energyGuide": {
+        "text": "راهنمای انرژی",
+        "where": "DynamicHeader.tsx — mobile slide-out 'More' (بیشتر) accordion, item 1; links to /energy-guide"
+      },
+      "mobileMore.journal": {
+        "text": "بلاگ",
+        "where": "DynamicHeader.tsx — mobile 'More' accordion, item 2; links to /journal (second 'Blog' entry, distinct from the main /blog link)"
+      },
+      "search.placeholder": {
+        "text": "جستجو...",
+        "where": "components/layout/DynamicHeader.tsx — placeholder inside the desktop search input (header right side)"
+      },
+      "aria.menu": {
+        "text": "منو",
+        "where": "DynamicHeader.tsx — aria-label on the mobile hamburger button",
+        "type": "a11y"
+      },
+      "mobileBrand": {
+        "text": "FARED",
+        "where": "components/layout/MobileNav.tsx — wordmark in the mobile slide-out menu top bar (NOTE: uses 'FARED', inconsistent with 'Aura Mystic' brand elsewhere)"
+      },
+      "mobileShop": {
+        "text": "Shop",
+        "where": "components/layout/MobileNav.tsx — the Shop accordion toggle label in the mobile menu (English, while items inside are Farsi)"
+      },
+      "mobileMoreToggle": {
+        "text": "بیشتر",
+        "where": "components/layout/MobileNav.tsx — the 'More' accordion toggle label in the mobile menu"
+      },
+      "mobileLang.en": {
+        "text": "EN",
+        "where": "MobileNav.tsx — language toggle pill in the mobile menu bottom bar (left of FA)"
+      },
+      "mobileLang.fa": {
+        "text": "FA",
+        "where": "MobileNav.tsx — language toggle pill in the mobile menu bottom bar (right of EN)"
+      },
+      "mobileAccount": {
+        "text": "Account",
+        "where": "MobileNav.tsx — 'Account' link in the mobile menu bottom bar (center)"
+      },
+      "mobileCart": {
+        "text": "Cart",
+        "where": "MobileNav.tsx — 'Cart' link with cart icon in the mobile menu bottom bar (right)"
+      },
+      "aria.closeMenu": {
+        "text": "Close menu",
+        "where": "MobileNav.tsx — aria-label on the X close button in the mobile menu top bar",
+        "type": "a11y"
+      },
+      "aria.navMenu": {
+        "text": "Navigation menu",
+        "where": "MobileNav.tsx — aria-label on the mobile menu dialog container",
+        "type": "a11y"
+      }
+    },
+    "footer": {
+      "brand": {
+        "text": "اورا میستیک",
+        "where": "components/layout/Footer.tsx — brand wordmark, top of footer (right side)"
+      },
+      "tagline": {
+        "text": "جایی که کیهان با هنر ملاقات می‌کند",
+        "where": "Footer.tsx — tagline line directly under the footer brand wordmark"
+      },
+      "links.home": {
+        "text": "خانه",
+        "where": "Footer.tsx — footer nav row, link 1 (/)"
+      },
+      "links.shop": {
+        "text": "فروشگاه",
+        "where": "Footer.tsx — footer nav row, link 2 (/shop)"
+      },
+      "links.blog": {
+        "text": "بلاگ",
+        "where": "Footer.tsx — footer nav row, link 3 (/blog)"
+      },
+      "links.editorial": {
+        "text": "تحریریه",
+        "where": "Footer.tsx — footer nav row, link 4 (/tahrirye)"
+      },
+      "links.forum": {
+        "text": "انجمن",
+        "where": "Footer.tsx — footer nav row, link 5 (/forum)"
+      },
+      "links.about": {
+        "text": "درباره ما",
+        "where": "Footer.tsx — footer nav row, link 6 (/about)"
+      },
+      "links.contact": {
+        "text": "تماس",
+        "where": "Footer.tsx — footer nav row, link 7 (/contact)"
+      },
+      "copyright": {
+        "text": "© ۱۴۰۴ اورا میستیک — تمامی حقوق محفوظ است",
+        "where": "Footer.tsx — copyright line in the footer bottom row (left). Year is the Persian calendar ۱۴۰۴"
+      },
+      "aria.instagram": {
+        "text": "اینستاگرام",
+        "where": "Footer.tsx — aria-label on the Instagram social icon (footer bottom-right)",
+        "type": "a11y"
+      },
+      "aria.telegram": {
+        "text": "تلگرام",
+        "where": "Footer.tsx — aria-label on the Telegram social icon (footer bottom-right)",
+        "type": "a11y"
+      },
+      "aria.youtube": {
+        "text": "یوتیوب",
+        "where": "Footer.tsx — aria-label on the YouTube social icon (footer bottom-right)",
+        "type": "a11y"
+      }
+    },
+    "featureBadges": {
+      "badge1.title": {
+        "text": "کریستال‌های طبیعی",
+        "where": "components/home/FeatureBadges.tsx — 4-up trust-badge strip (overlaps the home hero bottom; reused across shop pages), badge 1 title"
+      },
+      "badge1.sub": {
+        "text": "منتخب از دل زمین",
+        "where": "FeatureBadges.tsx — badge 1 subtitle"
+      },
+      "badge2.title": {
+        "text": "انرژی مثبت",
+        "where": "FeatureBadges.tsx — badge 2 title"
+      },
+      "badge2.sub": {
+        "text": "تعادل، آرامش، شفابخشی",
+        "where": "FeatureBadges.tsx — badge 2 subtitle"
+      },
+      "badge3.title": {
+        "text": "پاکسازی و شارژ",
+        "where": "FeatureBadges.tsx — badge 3 title"
+      },
+      "badge3.sub": {
+        "text": "با روش‌های سنتی و انرژی",
+        "where": "FeatureBadges.tsx — badge 3 subtitle"
+      },
+      "badge4.title": {
+        "text": "ارسال با نیت و عشق",
+        "where": "FeatureBadges.tsx — badge 4 title"
+      },
+      "badge4.sub": {
+        "text": "هر بسته با نیت خیر ارسال می‌شود",
+        "where": "FeatureBadges.tsx — badge 4 subtitle"
+      }
+    },
+    "shopCommon": {
+      "mobileHeroCta": {
+        "text": "کشف مجموعه",
+        "where": "Mobile hero CTA button (gold/glass pill at the bottom of the isolated hero card). Repeated on: / (home mobile), /shop/candles, /shop/accessories"
+      },
+      "mobileViewAll": {
+        "text": "مشاهده همه",
+        "where": "Mobile product-stream 'view all' tile (last card in the horizontal swipe row, with a → arrow). Repeated on: /shop/candles, /shop/accessories, /shop/courses"
+      },
+      "mobileCollectionHeading": {
+        "text": "مجموعه ما",
+        "where": "Mobile product-stream section heading above the swipe row. Repeated on: /shop/candles, /shop/accessories"
+      },
+      "desktopViewAllProducts": {
+        "text": "View All Products",
+        "where": "Desktop shop-heading 'view all' link (top-right of the product grid heading, with arrow). Repeated on: /shop/candles, /shop/accessories"
+      },
+      "desktopWorldwideShipping.title": {
+        "text": "Worldwide Shipping",
+        "where": "Desktop right glass sidebar, shipping feature title. Repeated on: /shop/candles, /shop/accessories"
+      },
+      "desktopWorldwideShipping.sub": {
+        "text": "Bringing light to your door",
+        "where": "Desktop right glass sidebar, shipping feature subtitle. Repeated on: /shop/candles, /shop/accessories"
+      }
+    },
+    "toasts": {
+      "cart.added": {
+        "text": "Added to cart ✦",
+        "where": "lib/cart-context.tsx — toast shown (top-center) when any item is added to the cart"
+      },
+      "cart.removed": {
+        "text": "Item removed",
+        "where": "lib/cart-context.tsx — toast shown when an item is removed from the cart (with trash icon)"
+      },
+      "cart.cleared": {
+        "text": "Cart cleared",
+        "where": "lib/cart-context.tsx — toast shown when the whole cart is cleared"
+      },
+      "wishlist.added": {
+        "text": "Added to wishlist ♡",
+        "where": "lib/wishlist-context.tsx — toast shown when an item is added to the wishlist"
+      },
+      "wishlist.removed": {
+        "text": "Removed from wishlist",
+        "where": "lib/wishlist-context.tsx — toast shown when an item is removed from the wishlist"
+      }
+    }
+  },
+  "routes": {
+    "/": {
+      "file": "app/page.tsx",
+      "strings": {
+        "hero.headline": {
+          "text": "انرژی کیهان در دستان توست",
+          "where": "app/page.tsx — main hero H1, large gold-gradient serif. Desktop: left half of the full-bleed hero. Mobile: bottom of the isolated hero card. Rendered on two lines (انرژی کیهان / در دستان توست)"
+        },
+        "hero.subtitle": {
+          "text": "کریستال‌های طبیعی ما کانال‌هایی از انرژی خالص هستند که به تعادل، آرامش و موفقیت درون شما کمک می‌کنند.",
+          "where": "app/page.tsx — desktop hero paragraph under the headline (left column, dim text)"
+        },
+        "hero.cta": {
+          "text": "✦ اکنون کشف کن",
+          "where": "app/page.tsx — desktop hero primary CTAButton, below the hero paragraph (links to /shop). Leading ✦ is decorative"
+        },
+        "hero.ctaMobile": {
+          "text": "کشف مجموعه",
+          "where": "app/page.tsx — mobile hero button at the bottom of the isolated hero card (gold). Same wording as global.shopCommon.mobileHeroCta"
+        },
+        "quote.front.title": {
+          "text": "پیام امروزت رو کشف کن",
+          "where": "components/home/QuoteOfTheDay.tsx — front face of the flip card (Quote of the Day), near top of the scrolling section below the hero"
+        },
+        "quote.front.tapToReveal": {
+          "text": "TAP TO REVEAL ✦",
+          "where": "QuoteOfTheDay.tsx — small uppercase hint on the front of the flip card"
+        },
+        "quote.back.label": {
+          "text": "نقل قول روز",
+          "where": "QuoteOfTheDay.tsx — label at the top of the flipped (back) card"
+        },
+        "quote.back.text": {
+          "text": "بیا که قصر امل سخت سست بنیاد است بیار باده که بنیاد عمر بر باد است",
+          "where": "QuoteOfTheDay.tsx — the quotation text on the back of the flip card (a Hafez couplet, rendered on two lines)"
+        },
+        "quote.back.author": {
+          "text": "— حافظ",
+          "where": "QuoteOfTheDay.tsx — quote attribution under the couplet on the back of the card"
+        },
+        "quote.back.tapToClose": {
+          "text": "TAP TO CLOSE",
+          "where": "QuoteOfTheDay.tsx — small hint at the bottom of the flipped card"
+        },
+        "quote.cta": {
+          "text": "✦ مشاهده نقل قول‌ها",
+          "where": "QuoteOfTheDay.tsx — CTAButton that appears under the card once flipped (links to /quotes)"
+        },
+        "sections.stones.title": {
+          "text": "منتخب کریستال‌های انرژی",
+          "where": "app/page.tsx — featured-products section 1 heading (stones), centered gold serif with ❖ ornaments"
+        },
+        "sections.stones.subtitle": {
+          "text": "هر کریستال، داستانی از زمین و نوری از کیهان است",
+          "where": "app/page.tsx — subtitle under featured section 1 (stones) heading"
+        },
+        "sections.candles.title": {
+          "text": "شمع‌های آیینی",
+          "where": "app/page.tsx — featured-products section 2 heading (candles)"
+        },
+        "sections.candles.subtitle": {
+          "text": "هر شمع، نوری برای روشن‌کردن مسیر درون",
+          "where": "app/page.tsx — subtitle under featured section 2 (candles)"
+        },
+        "sections.accessories.title": {
+          "text": "اکسسوری‌های انرژی",
+          "where": "app/page.tsx — featured-products section 3 heading (accessories)"
+        },
+        "sections.accessories.subtitle": {
+          "text": "زیورآلاتی که انرژی و زیبایی را در هم می‌آمیزند",
+          "where": "app/page.tsx — subtitle under featured section 3 (accessories)"
+        },
+        "sections.clothes.title": {
+          "text": "پوشاک آیینی",
+          "where": "app/page.tsx — featured-products section 4 heading (clothes)"
+        },
+        "sections.clothes.subtitle": {
+          "text": "لباس‌هایی که با روح شما هماهنگ می‌شوند",
+          "where": "app/page.tsx — subtitle under featured section 4 (clothes)"
+        },
+        "bottomCta": {
+          "text": "✦ VIEW ALL ✦",
+          "where": "app/page.tsx — large CTAButton at the very bottom of the desktop scroll, before the footer (links to /shop)"
+        }
+      }
+    },
+    "/shop/stones": {
+      "file": "app/shop/stones/page.tsx",
+      "strings": {
+        "mobile.hero.headline": {
+          "text": "Energy Crystals",
+          "where": "app/shop/stones/page.tsx — mobile hero H1 (centered, top of the mobile layout)"
+        },
+        "mobile.hero.subtitle": {
+          "text": "Discover the magic of natural healing crystals. Each stone carries unique energy for your spiritual journey.",
+          "where": "stones page — mobile hero paragraph under the headline divider"
+        },
+        "desktop.hero.eyebrow": {
+          "text": "DISCOVER THE MAGIC OF",
+          "where": "stones page — small uppercase eyebrow above the desktop hero H1 (centered)"
+        },
+        "desktop.hero.headline": {
+          "text": "ENERGY CRYSTALS",
+          "where": "stones page — desktop hero H1, large serif, centered"
+        },
+        "desktop.hero.subtitle": {
+          "text": "Awaken your spirit. Elevate your energy. Align with the natural vibrations of the Earth's most powerful crystals.",
+          "where": "stones page — desktop hero subtitle under the divider, centered dim text"
+        },
+        "desktop.hero.cta": {
+          "text": "EXPLORE COLLECTION ✦",
+          "where": "stones page — desktop hero primary CTAButton below the subtitle"
+        },
+        "desktop.loadMore": {
+          "text": "EXPLORE MORE CRYSTALS",
+          "where": "stones page — 'Load More' CTAButton centered below the desktop product grid"
+        },
+        "mobileFilter.button": {
+          "text": "⚙ Filters",
+          "where": "stones page — mobile filter trigger button (pill) above the product grid; shows the active filter label appended after a dot when not 'All'"
+        },
+        "mobileFilter.sheetTitle": {
+          "text": "Filter by Category",
+          "where": "stones page — heading inside the mobile filter bottom-sheet"
+        },
+        "filter.all": {
+          "text": "ALL STONES",
+          "where": "stones page — filter pill, item 1. Desktop filter bar shows 'ALL STONES'; mobile bottom-sheet shows the label 'All'"
+        },
+        "filter.protection": {
+          "text": "PROTECTION",
+          "where": "stones page — filter pill, item 2 (desktop UPPERCASE; mobile sheet label 'Protection')"
+        },
+        "filter.love": {
+          "text": "LOVE",
+          "where": "stones page — filter pill, item 3 (desktop UPPERCASE; mobile sheet label 'Love')"
+        },
+        "filter.abundance": {
+          "text": "ABUNDANCE",
+          "where": "stones page — filter pill, item 4 (desktop UPPERCASE; mobile sheet label 'Abundance')"
+        },
+        "filter.healing": {
+          "text": "HEALING",
+          "where": "stones page — filter pill, item 5 (desktop UPPERCASE; mobile sheet label 'Healing')"
+        },
+        "filter.manifestation": {
+          "text": "MANIFESTATION",
+          "where": "stones page — filter pill, item 6 (desktop UPPERCASE; mobile sheet label 'Manifestation')"
+        },
+        "filter.clarity": {
+          "text": "CLARITY",
+          "where": "stones page — filter pill, item 7 (desktop UPPERCASE; mobile sheet label 'Clarity')"
+        }
+      }
+    },
+    "/shop/stones-v2": {
+      "file": "app/shop/stones-v2/page.tsx",
+      "strings": {
+        "hero.eyebrow": {
+          "text": "Discover the Magic of",
+          "where": "app/shop/stones-v2/page.tsx — hero eyebrow above the H1 (desktop-only fixed 1920×1080 stage, centered). Title-case variant of the /shop/stones 'DISCOVER THE MAGIC OF'"
+        },
+        "hero.headline": {
+          "text": "Energy Crystals",
+          "where": "stones-v2 — hero H1, very large serif, centered"
+        },
+        "hero.subtitle": {
+          "text": "Awaken your spirit. Elevate your energy. Align with the natural vibrations of the Earth's most powerful crystals.",
+          "where": "stones-v2 — hero subtitle under the divider, centered (same copy as /shop/stones desktop subtitle)"
+        },
+        "hero.cta": {
+          "text": "EXPLORE COLLECTION",
+          "where": "stones-v2 — hero CTAButton below the subtitle"
+        }
+      }
+    },
+    "/shop/candles": {
+      "file": "app/shop/candles/page.tsx",
+      "strings": {
+        "mobile.hero.headline": {
+          "text": "شمع‌های جادویی",
+          "where": "app/shop/candles/page.tsx — mobile hero H1 (bottom-left of the isolated hero card)"
+        },
+        "mobile.hero.subtitle": {
+          "text": "شمع‌های دست‌ساز با نیت مثبت. هر شمع با عشق و انرژی ساخته شده است.",
+          "where": "candles — mobile hero paragraph under the headline"
+        },
+        "desktop.hero.eyebrow": {
+          "text": "Handcrafted. Infused. Intentional.",
+          "where": "candles — desktop hero eyebrow (uppercase, gold) above the H1, left column"
+        },
+        "desktop.hero.headline": {
+          "text": "Magical Candles",
+          "where": "candles — desktop hero H1, large serif, left column"
+        },
+        "desktop.hero.subtitle": {
+          "text": "Handcrafted with intention. Infused with natural fragrances and positive energy.",
+          "where": "candles — desktop hero paragraph under the H1"
+        },
+        "desktop.hero.cta": {
+          "text": "Explore Collection",
+          "where": "candles — desktop hero CTAButton"
+        },
+        "desktop.sidebar.natural.title": {
+          "text": "Natural Ingredients",
+          "where": "candles — desktop right glass sidebar item 1 title (also repeated as feature-bar item 1)"
+        },
+        "desktop.sidebar.natural.sub": {
+          "text": "Clean, plant-based wax",
+          "where": "candles — desktop right sidebar item 1 subtitle (also feature-bar item 1)"
+        },
+        "desktop.sidebar.energy.title": {
+          "text": "Energy Infused",
+          "where": "candles — desktop right sidebar item 2 title (also feature-bar item 3)"
+        },
+        "desktop.sidebar.energy.sub": {
+          "text": "Intentions in every candle",
+          "where": "candles — desktop right sidebar item 2 subtitle (also feature-bar item 3)"
+        },
+        "desktop.featureBar.handPoured.title": {
+          "text": "Hand Poured",
+          "where": "candles — desktop feature bar (horizontal, below hero) item 2 title"
+        },
+        "desktop.featureBar.handPoured.sub": {
+          "text": "Made with care",
+          "where": "candles — desktop feature bar item 2 subtitle"
+        },
+        "desktop.featureBar.crueltyFree.title": {
+          "text": "Cruelty Free",
+          "where": "candles — desktop feature bar item 4 title"
+        },
+        "desktop.featureBar.crueltyFree.sub": {
+          "text": "Never tested on animals",
+          "where": "candles — desktop feature bar item 4 subtitle"
+        },
+        "desktop.shopHeading": {
+          "text": "Shop Our Magical Candles",
+          "where": "candles — desktop product-grid section heading (large serif, left)"
+        }
+      }
+    },
+    "/shop/accessories": {
+      "file": "app/shop/accessories/page.tsx",
+      "strings": {
+        "mobile.hero.headline": {
+          "text": "لوازم دکوراتیو مقدس",
+          "where": "app/shop/accessories/page.tsx — mobile hero H1 (bottom-left of the isolated hero card)"
+        },
+        "mobile.hero.subtitle": {
+          "text": "ابزارهایی برای تمرین معنوی شما. سازهای دست‌چین شده برای تقویت انرژی و نیت شما.",
+          "where": "accessories — mobile hero paragraph under the headline"
+        },
+        "desktop.hero.eyebrow": {
+          "text": "Connect. Elevate. Transform.",
+          "where": "accessories — desktop hero eyebrow (uppercase, gold) above the H1, left column"
+        },
+        "desktop.hero.headline": {
+          "text": "Bring Magic Into Your Space",
+          "where": "accessories — desktop hero H1, large serif, left column (rendered on two lines: 'Bring Magic' / 'Into Your Space')"
+        },
+        "desktop.hero.cta": {
+          "text": "Shop the Collection",
+          "where": "accessories — desktop hero CTAButton"
+        },
+        "desktop.sidebar.ethical.title": {
+          "text": "Ethically Sourced",
+          "where": "accessories — desktop right glass sidebar item 1 title"
+        },
+        "desktop.sidebar.ethical.sub": {
+          "text": "Every piece chosen with love & intention",
+          "where": "accessories — desktop right sidebar item 1 subtitle"
+        },
+        "desktop.sidebar.highVibration.title": {
+          "text": "High Vibration",
+          "where": "accessories — desktop right sidebar item 2 title"
+        },
+        "desktop.sidebar.highVibration.sub": {
+          "text": "Energy cleansing & spiritually aligned",
+          "where": "accessories — desktop right sidebar item 2 subtitle"
+        },
+        "desktop.featureBar.crystalEnergy.title": {
+          "text": "Crystal Energy",
+          "where": "accessories — desktop feature bar item 1 title"
+        },
+        "desktop.featureBar.crystalEnergy.sub": {
+          "text": "Natural stones for healing and protection",
+          "where": "accessories — desktop feature bar item 1 subtitle"
+        },
+        "desktop.featureBar.sacredGeometry.title": {
+          "text": "Sacred Geometry",
+          "where": "accessories — desktop feature bar item 2 title"
+        },
+        "desktop.featureBar.sacredGeometry.sub": {
+          "text": "Symbols that align mind, body & spirit",
+          "where": "accessories — desktop feature bar item 2 subtitle"
+        },
+        "desktop.featureBar.ambientGlow.title": {
+          "text": "Ambient Glow",
+          "where": "accessories — desktop feature bar item 3 title"
+        },
+        "desktop.featureBar.ambientGlow.sub": {
+          "text": "Lighting that elevates your sacred space",
+          "where": "accessories — desktop feature bar item 3 subtitle"
+        },
+        "desktop.featureBar.handcrafted.title": {
+          "text": "Handcrafted",
+          "where": "accessories — desktop feature bar item 4 title"
+        },
+        "desktop.featureBar.handcrafted.sub": {
+          "text": "Made with intention and positive energy",
+          "where": "accessories — desktop feature bar item 4 subtitle"
+        },
+        "desktop.shopHeading": {
+          "text": "Shop Our Spiritual Decor",
+          "where": "accessories — desktop product-grid section heading (large serif, left)"
+        }
+      }
+    },
+    "/shop/clothes": {
+      "file": "app/shop/clothes/page.tsx",
+      "strings": {
+        "hero.headline.line1": {
+          "text": "Wear the Energy.",
+          "where": "components/aura/ShopHero.tsx — desktop hero H1 line 1 (cream), top-left of the clothes hero (desktop-only page)"
+        },
+        "hero.headline.line2": {
+          "text": "Be the Light.",
+          "where": "components/aura/ShopHero.tsx — desktop hero H1 line 2 (bright gold), directly under line 1"
+        },
+        "hero.subtitle": {
+          "text": "Elevated garments for your spiritual path and everyday magic.",
+          "where": "components/aura/ShopHero.tsx — hero subtitle under the H1"
+        },
+        "hero.cta": {
+          "text": "EXPLORE COLLECTIONS",
+          "where": "components/aura/ShopHero.tsx — hero CTAButton (large) below the subtitle"
+        },
+        "features.highVibrational.title": {
+          "text": "High Vibrational",
+          "where": "components/aura/ShopSidePanels.tsx (FeaturesPanel) — left arch panel, feature 1 title"
+        },
+        "features.highVibrational.sub": {
+          "text": "Fabrics",
+          "where": "ShopSidePanels.tsx (FeaturesPanel) — left panel feature 1 subtitle"
+        },
+        "features.ethicallySourced.title": {
+          "text": "Ethically Sourced",
+          "where": "ShopSidePanels.tsx (FeaturesPanel) — left panel feature 2 title"
+        },
+        "features.ethicallySourced.sub": {
+          "text": "Materials",
+          "where": "ShopSidePanels.tsx (FeaturesPanel) — left panel feature 2 subtitle"
+        },
+        "features.infusedWith.title": {
+          "text": "Infused with",
+          "where": "ShopSidePanels.tsx (FeaturesPanel) — left panel feature 3 title"
+        },
+        "features.infusedWith.sub": {
+          "text": "Positive Energy",
+          "where": "ShopSidePanels.tsx (FeaturesPanel) — left panel feature 3 subtitle"
+        },
+        "note": {
+          "text": "Each piece is mindfully created to elevate your energy and support your journey.",
+          "where": "components/aura/ShopSidePanels.tsx (NotePanel) — italic note in the right arch panel beside the product cards"
+        },
+        "card.addToCart": {
+          "text": "ADD TO CART",
+          "where": "components/aura/ProductCards.tsx — CTAButton on each clothing product card (info panel bottom)"
+        },
+        "benefits.shipping.title": {
+          "text": "Free Worldwide Shipping",
+          "where": "components/aura/ShopBenefits.tsx — bottom benefits strip, item 1 title"
+        },
+        "benefits.shipping.sub": {
+          "text": "On orders over $120",
+          "where": "components/aura/ShopBenefits.tsx — benefits strip item 1 subtitle"
+        },
+        "benefits.returns.title": {
+          "text": "30-Day Easy Returns",
+          "where": "components/aura/ShopBenefits.tsx — benefits strip item 2 title"
+        },
+        "benefits.returns.sub": {
+          "text": "& Exchanges",
+          "where": "components/aura/ShopBenefits.tsx — benefits strip item 2 subtitle"
+        },
+        "benefits.payments.title": {
+          "text": "Secure Payments",
+          "where": "components/aura/ShopBenefits.tsx — benefits strip item 3 title"
+        },
+        "benefits.payments.sub": {
+          "text": "& Checkout",
+          "where": "components/aura/ShopBenefits.tsx — benefits strip item 3 subtitle"
+        }
+      }
+    },
+    "/shop/courses": {
+      "file": "app/shop/courses/page.tsx",
+      "strings": {
+        "hero.headline": {
+          "text": "دوره‌های مقدس",
+          "where": "app/shop/courses/page.tsx — mobile-only isolated hero H1 (bottom-left of the hero card)"
+        },
+        "hero.subtitle": {
+          "text": "دوره‌های تخصصی برای بیداری معنوی، شفا و رشد شما.",
+          "where": "courses — hero paragraph under the headline"
+        },
+        "hero.cta": {
+          "text": "شروع سفر",
+          "where": "courses — hero CTA button (glass pill); links to /shop/courses/products"
+        },
+        "quicknav.all": {
+          "text": "همه",
+          "where": "courses — horizontal quick-nav (circle chips), item 1 'All'"
+        },
+        "quicknav.beginner": {
+          "text": "مبتدی",
+          "where": "courses — quick-nav item 2 'Beginner'"
+        },
+        "quicknav.intermediate": {
+          "text": "متوسط",
+          "where": "courses — quick-nav item 3 'Intermediate'"
+        },
+        "quicknav.advanced": {
+          "text": "پیشرفته",
+          "where": "courses — quick-nav item 4 'Advanced'"
+        },
+        "section.title": {
+          "text": "همه دوره‌ها",
+          "where": "courses — product-stream section heading ('All courses') above the swipe row"
+        },
+        "viewAll": {
+          "text": "مشاهده همه",
+          "where": "courses — 'view all' tile at the end of the product swipe row (same wording as global.shopCommon.mobileViewAll)"
+        }
+      }
+    },
+    "/shop/mentorship": {
+      "file": "app/shop/mentorship/page.tsx",
+      "strings": {
+        "hero.eyebrow": {
+          "text": "AWAKEN. ALIGN. TRANSFORM.",
+          "where": "app/shop/mentorship/page.tsx — hero eyebrow above the H1 (centered, gold); flanked by decorative ✦ (desktop & mobile)"
+        },
+        "hero.headline.line1": {
+          "text": "Private Consultation",
+          "where": "mentorship — hero H1 line 1 (white serif), centered (desktop & mobile)"
+        },
+        "hero.headline.line2": {
+          "text": "with Fard",
+          "where": "mentorship — hero H1 line 2 (italic gold), under line 1 (NOTE: 'Fard' here vs 'Fared'/'Aura Mystic' elsewhere)"
+        },
+        "hero.subtitle": {
+          "text": "A sacred space for clarity, healing, and transformation. Your journey inward begins here.",
+          "where": "mentorship — desktop hero subtitle (two lines). Mobile shows only the first sentence: 'A sacred space for clarity, healing, and transformation.'"
+        },
+        "quote.text": {
+          "text": "\"The answers you seek are already within you. I am here to help you remember.\"",
+          "where": "mentorship — desktop left column, italic founder quote (rendered across 4 lines)"
+        },
+        "quote.author": {
+          "text": "— Fard ✦",
+          "where": "mentorship — attribution under the left-column quote"
+        },
+        "badges.sacredSpace.label": {
+          "text": "Sacred Space",
+          "where": "mentorship — desktop left column, 3 small badges row, badge 1 label"
+        },
+        "badges.sacredSpace.sub": {
+          "text": "Protected & Private",
+          "where": "mentorship — left badges, badge 1 subtitle"
+        },
+        "badges.trustedGuide.label": {
+          "text": "Trusted Guide",
+          "where": "mentorship — left badges, badge 2 label"
+        },
+        "badges.trustedGuide.sub": {
+          "text": "Years of Experience",
+          "where": "mentorship — left badges, badge 2 subtitle"
+        },
+        "badges.soulCentered.label": {
+          "text": "Soul Centered",
+          "where": "mentorship — left badges, badge 3 label"
+        },
+        "badges.soulCentered.sub": {
+          "text": "Heart-Led Guidance",
+          "where": "mentorship — left badges, badge 3 subtitle"
+        },
+        "selector.title": {
+          "text": "CHOOSE YOUR SESSION",
+          "where": "mentorship — center session-selector card header title (desktop & mobile)"
+        },
+        "selector.subtitle": {
+          "text": "Personalized. Private. Powerful.",
+          "where": "mentorship — center card header subtitle (desktop & mobile)"
+        },
+        "selector.badge": {
+          "text": "Sacred Sessions",
+          "where": "mentorship — small pill badge in the center card header top-right (preceded by a decorative ✿)"
+        },
+        "session.private.name": {
+          "text": "1-ON-1 PRIVATE SESSION",
+          "where": "mentorship — session selector row 1 name"
+        },
+        "session.private.desc": {
+          "text": "Deep personalized guidance and spiritual insight tailored just for you.",
+          "where": "mentorship — session selector row 1 description (row also shows '60 Min' and '$222')"
+        },
+        "session.reading.name": {
+          "text": "ENERGY READING",
+          "where": "mentorship — session selector row 2 name"
+        },
+        "session.reading.desc": {
+          "text": "Gain clarity with a deep energetic assessment of your current state.",
+          "where": "mentorship — session selector row 2 description ('45 Min', '$155')"
+        },
+        "session.cleansing.name": {
+          "text": "AURA CLEANSING",
+          "where": "mentorship — session selector row 3 name"
+        },
+        "session.cleansing.desc": {
+          "text": "Release energetic blocks and restore your natural light.",
+          "where": "mentorship — session selector row 3 description ('60 Min', '$188')"
+        },
+        "session.feminine.name": {
+          "text": "FEMININE ENERGY ACTIVATION",
+          "where": "mentorship — session selector row 4 name"
+        },
+        "session.feminine.desc": {
+          "text": "Reclaim your power, essence, and divine feminine flow.",
+          "where": "mentorship — session selector row 4 description ('75 Min', '$244')"
+        },
+        "session.guidance.name": {
+          "text": "SPIRITUAL GUIDANCE",
+          "where": "mentorship — session selector row 5 name"
+        },
+        "session.guidance.desc": {
+          "text": "Answers, clarity, and direction for your soul's path.",
+          "where": "mentorship — session selector row 5 description ('60 Min', '$199')"
+        },
+        "selector.cta": {
+          "text": "CONTINUE TO SELECT TIME →",
+          "where": "mentorship — desktop session card footer button (links to /shop/mentorship/select-time)"
+        },
+        "selector.ctaMobile": {
+          "text": "CONTINUE →",
+          "where": "mentorship — mobile session card footer CTAButton"
+        },
+        "selector.privacyNote": {
+          "text": "Your session is 100% private and confidential.",
+          "where": "mentorship — reassurance line under the desktop continue button (preceded by a 🔒 lock)"
+        },
+        "journey.title": {
+          "text": "YOUR JOURNEY",
+          "where": "mentorship — desktop right column heading above the vertical step list"
+        },
+        "journey.step1.title": {
+          "text": "CHOOSE SESSION",
+          "where": "mentorship — right-column journey step 01 title"
+        },
+        "journey.step1.desc": {
+          "text": "Select the session that calls to you.",
+          "where": "mentorship — journey step 01 description"
+        },
+        "journey.step2.title": {
+          "text": "SELECT TIME",
+          "where": "mentorship — journey step 02 title"
+        },
+        "journey.step2.desc": {
+          "text": "Pick a time that aligns with you.",
+          "where": "mentorship — journey step 02 description"
+        },
+        "journey.step3.title": {
+          "text": "PAYMENT",
+          "where": "mentorship — journey step 03 title"
+        },
+        "journey.step3.desc": {
+          "text": "Secure and easy checkout.",
+          "where": "mentorship — journey step 03 description"
+        },
+        "journey.step4.title": {
+          "text": "CONFIRMATION",
+          "where": "mentorship — journey step 04 title"
+        },
+        "journey.step4.desc": {
+          "text": "Receive your booking confirmation.",
+          "where": "mentorship — journey step 04 description"
+        },
+        "trust.global.label": {
+          "text": "GLOBAL SESSIONS",
+          "where": "mentorship — bottom trust bar item 1 label (desktop & mobile)"
+        },
+        "trust.global.sub": {
+          "text": "Connect from anywhere in the world.",
+          "where": "mentorship — bottom trust bar item 1 subtitle (desktop only; two lines)"
+        },
+        "trust.private.label": {
+          "text": "PRIVATE & SECURE",
+          "where": "mentorship — bottom trust bar item 2 label (desktop & mobile)"
+        },
+        "trust.private.sub": {
+          "text": "Your privacy is always protected.",
+          "where": "mentorship — bottom trust bar item 2 subtitle (desktop only)"
+        },
+        "trust.soul.label": {
+          "text": "SOUL ALIGNED",
+          "where": "mentorship — bottom trust bar item 3 label (desktop & mobile)"
+        },
+        "trust.soul.sub": {
+          "text": "Guidance that aligns with your highest good.",
+          "where": "mentorship — bottom trust bar item 3 subtitle (desktop only)"
+        },
+        "about.title": {
+          "text": "WHAT TO EXPECT",
+          "where": "mentorship — desktop 'About' section left heading (gold)"
+        },
+        "about.body": {
+          "text": "Each session is a carefully crafted space where your soul's journey is honored. Whether you're seeking clarity, healing, or spiritual direction, Fard meets you exactly where you are. These sessions are entirely private, conducted virtually or in-person, and tailored to your unique path.",
+          "where": "mentorship — 'About' section left paragraph"
+        },
+        "about.receiveTitle": {
+          "text": "You'll receive:",
+          "where": "mentorship — 'About' section right card heading"
+        },
+        "about.receive.1": {
+          "text": "Personalized energetic guidance",
+          "where": "mentorship — 'You'll receive' checklist item 1"
+        },
+        "about.receive.2": {
+          "text": "Clarity on your current life questions",
+          "where": "mentorship — 'You'll receive' checklist item 2"
+        },
+        "about.receive.3": {
+          "text": "Tools and practices to continue your journey",
+          "where": "mentorship — 'You'll receive' checklist item 3"
+        },
+        "about.receive.4": {
+          "text": "Complete privacy and confidentiality",
+          "where": "mentorship — 'You'll receive' checklist item 4"
+        },
+        "toast.sessionSelected": {
+          "text": "Session selected ✦",
+          "where": "mentorship — toast shown when a session row is tapped/selected"
+        }
+      }
+    },
+    "/shop/mentorship/select-time": {
+      "file": "app/shop/mentorship/select-time/page.tsx",
+      "strings": {
+        "selectDate": {
+          "text": "Select Date",
+          "where": "app/shop/mentorship/select-time/page.tsx — heading above the day picker (in the booking card)"
+        },
+        "selectTime": {
+          "text": "Select Time",
+          "where": "select-time — heading above the time-slot buttons (appears after a day is chosen)"
+        },
+        "cta": {
+          "text": "CONTINUE TO PAYMENT →",
+          "where": "select-time — primary CTAButton at the bottom of the booking card (disabled until day+time chosen)"
+        },
+        "back": {
+          "text": "← Back",
+          "where": "select-time — back link under the continue button (returns to /shop/mentorship)"
+        }
+      }
+    },
+    "/shop/mentorship/payment": {
+      "file": "app/shop/mentorship/payment/page.tsx",
+      "strings": {
+        "summary.title": {
+          "text": "Order Summary",
+          "where": "app/shop/mentorship/payment/page.tsx — heading of the order-summary box (top of the card)"
+        },
+        "summary.date": {
+          "text": "Date",
+          "where": "payment — order summary row label 'Date'"
+        },
+        "summary.time": {
+          "text": "Time",
+          "where": "payment — order summary row label 'Time'"
+        },
+        "form.title": {
+          "text": "Payment Details",
+          "where": "payment — heading above the card fields"
+        },
+        "form.cardNumber.placeholder": {
+          "text": "Card Number •••• •••• •••• ••••",
+          "where": "payment — placeholder in the card-number input"
+        },
+        "form.expiry.placeholder": {
+          "text": "MM/YY",
+          "where": "payment — placeholder in the expiry input (left of CVV)"
+        },
+        "form.cvv.placeholder": {
+          "text": "CVV •••",
+          "where": "payment — placeholder in the CVV input (right of expiry)"
+        },
+        "form.cardholder.placeholder": {
+          "text": "Cardholder Name",
+          "where": "payment — placeholder in the cardholder-name input"
+        },
+        "cta.default": {
+          "text": "CONFIRM BOOKING ✦",
+          "where": "payment — confirm CTAButton at the bottom of the card (default state)"
+        },
+        "cta.loading": {
+          "text": "PROCESSING...",
+          "where": "payment — confirm button label while the booking request is in flight"
+        },
+        "back": {
+          "text": "← Back",
+          "where": "payment — back link under the confirm button (returns to select-time)"
+        },
+        "toast.confirmed": {
+          "text": "Booking confirmed! ✦",
+          "where": "payment — success toast after a confirmed booking"
+        },
+        "toast.failed": {
+          "text": "Booking failed. Please try again.",
+          "where": "payment — error toast if the booking request fails"
+        }
+      }
+    },
+    "/community": {
+      "file": "app/forum/page.tsx",
+      "strings": {
+        "meta.title": {
+          "text": "Community — Lumina Crystals",
+          "where": "app/forum/page.tsx — document <title> for the Community/Forum page (NOTE: brand 'Lumina Crystals', inconsistent with the rest of the site)",
+          "type": "meta"
+        },
+        "hero.eyebrow": {
+          "text": "COMMUNITY OF SEEKERS",
+          "where": "forum — hero eyebrow above the H1 (centered, gold uppercase)"
+        },
+        "hero.headline": {
+          "text": "Sacred Circle of Shared Wisdom",
+          "where": "forum — hero H1, large serif, centered (rendered on two lines)"
+        },
+        "hero.subtitle": {
+          "text": "A space for crystal experiences, healing journeys, spiritual insights, and conscious living.",
+          "where": "forum — hero subtitle under the gold ornament divider"
+        },
+        "filter.all": {
+          "text": "All",
+          "where": "forum — category filter pills above the post feed, item 1"
+        },
+        "filter.crystalHealing": {
+          "text": "Crystal Healing",
+          "where": "forum — category filter pill, item 2"
+        },
+        "filter.meditation": {
+          "text": "Meditation",
+          "where": "forum — category filter pill, item 3"
+        },
+        "filter.energyWork": {
+          "text": "Energy Work",
+          "where": "forum — category filter pill, item 4"
+        },
+        "filter.moonRituals": {
+          "text": "Moon Rituals",
+          "where": "forum — category filter pill, item 5"
+        },
+        "filter.personalJourney": {
+          "text": "Personal Journey",
+          "where": "forum — category filter pill, item 6"
+        },
+        "filter.knowledge": {
+          "text": "Knowledge",
+          "where": "forum — category filter pill, item 7"
+        },
+        "filter.questions": {
+          "text": "Questions",
+          "where": "forum — category filter pill, item 8"
+        },
+        "filter.consciousLiving": {
+          "text": "Conscious Living",
+          "where": "forum — category filter pill, item 9"
+        },
+        "search.placeholder": {
+          "text": "Search wisdom, crystals, questions...",
+          "where": "forum — placeholder in the search bar below the filter pills"
+        },
+        "founder.name": {
+          "text": "Fard",
+          "where": "forum — founder-quote card (inserted in the post feed), name under the avatar"
+        },
+        "founder.role": {
+          "text": "Founder & Mentor",
+          "where": "forum — founder-quote card, role under the name"
+        },
+        "founder.quote": {
+          "text": "\"Your crystals do not change your life. They help you remember your own light.\"",
+          "where": "forum — founder-quote card, the italic quote text"
+        },
+        "founder.cta": {
+          "text": "Read Reflection →",
+          "where": "forum — founder-quote card, link on the right (to /about)"
+        },
+        "banner.title": {
+          "text": "Share Your Wisdom",
+          "where": "forum — 'Share Your Wisdom' banner heading below the post feed"
+        },
+        "banner.body": {
+          "text": "Your story may be the guidance someone else needs today. Join the conversation in any post.",
+          "where": "forum — 'Share Your Wisdom' banner body text"
+        }
+      }
+    },
+    "/about": {
+      "file": "app/about/page.tsx",
+      "strings": {
+        "hero.eyebrow": {
+          "text": "DISCOVER OUR ESSENCE",
+          "where": "app/about/page.tsx — hero eyebrow above the H1 (left column, gold uppercase)"
+        },
+        "hero.headline": {
+          "text": "About Us",
+          "where": "about — hero H1 (large serif, left); followed by a decorative ✦ superscript"
+        },
+        "hero.body": {
+          "text": "We are a spiritual guide for seekers of light, creators of sacred tools, and believers in the infinite power within.",
+          "where": "about — hero paragraph under the divider (left column)"
+        },
+        "hero.quote": {
+          "text": "Crystals are not just stones. They are ancient whispers of the Earth, reminding us who we are.",
+          "where": "about — quote card on the right of the hero row"
+        },
+        "hero.quoteAuthor": {
+          "text": "— Founder",
+          "where": "about — attribution at the bottom of the hero quote card"
+        },
+        "values.title": {
+          "text": "Our Core Values",
+          "where": "about — 'Core Values' panel heading (bottom row, left); 'Values' is italic gold"
+        },
+        "values.authenticity.name": {
+          "text": "Authenticity",
+          "where": "about — Core Values, value 1 name"
+        },
+        "values.authenticity.desc": {
+          "text": "We source mindfully and honor nature in every step.",
+          "where": "about — Core Values, value 1 description"
+        },
+        "values.innerGrowth.name": {
+          "text": "Inner Growth",
+          "where": "about — Core Values, value 2 name"
+        },
+        "values.innerGrowth.desc": {
+          "text": "We support your journey to healing, awakening and self-discovery.",
+          "where": "about — Core Values, value 2 description"
+        },
+        "values.energyIntention.name": {
+          "text": "Energy & Intention",
+          "where": "about — Core Values, value 3 name"
+        },
+        "values.energyIntention.desc": {
+          "text": "Every crystal is cleansed, charged and blessed with positive intention.",
+          "where": "about — Core Values, value 3 description"
+        },
+        "values.connection.name": {
+          "text": "Connection",
+          "where": "about — Core Values, value 4 name"
+        },
+        "values.connection.desc": {
+          "text": "We build a conscious community of like-minded souls.",
+          "where": "about — Core Values, value 4 description"
+        },
+        "believe.title": {
+          "text": "We Believe",
+          "where": "about — center 'We Believe' panel heading (bottom row, middle)"
+        },
+        "believe.line1": {
+          "text": "You are energy.",
+          "where": "about — 'We Believe' panel, line 1"
+        },
+        "believe.line2": {
+          "text": "You are magic.",
+          "where": "about — 'We Believe' panel, line 2"
+        },
+        "believe.line3": {
+          "text": "You are becoming.",
+          "where": "about — 'We Believe' panel, line 3"
+        },
+        "story.title": {
+          "text": "Our Story",
+          "where": "about — 'Our Story' panel heading (bottom row, right); 'Story' is italic gold"
+        },
+        "story.body": {
+          "text": "Auravista was born from a deep love for crystals and a calling to help others remember their inner light. What began as a personal healing journey has blossomed into a brand devoted to conscious living, spiritual tools and beautiful energy.",
+          "where": "about — 'Our Story' panel paragraph (NOTE: brand 'Auravista'; same paragraph reused on /about/story)"
+        },
+        "story.cta": {
+          "text": "Read Our Full Journey →",
+          "where": "about — 'Our Story' panel CTAButton (links to /about/story)"
+        },
+        "footer.message": {
+          "text": "We are here to walk beside you on your path to clarity, balance and spiritual empowerment.",
+          "where": "about — bottom bar message (left of the closing line)"
+        },
+        "footer.closing": {
+          "text": "You are not alone ♡",
+          "where": "about — bottom bar closing line (italic gold, right)"
+        }
+      }
+    },
+    "/about/story": {
+      "file": "app/about/story/page.tsx",
+      "strings": {
+        "headline": {
+          "text": "مسیر ما",
+          "where": "app/about/story/page.tsx — page H1 ('Our Path'), centered in the glass card"
+        },
+        "body": {
+          "text": "Auravista was born from a deep love for crystals and a calling to help others remember their inner light. What began as a personal healing journey has blossomed into a brand devoted to conscious living, spiritual tools and beautiful energy.",
+          "where": "about/story — single body paragraph (English; identical to /about story.body, under a Farsi heading)"
+        },
+        "cta": {
+          "text": "← بازگشت",
+          "where": "about/story — CTAButton under the paragraph ('Back', links to /about)"
+        }
+      }
+    },
+    "/checkout": {
+      "file": "app/checkout/page.tsx",
+      "strings": {
+        "hero.title": {
+          "text": "تکمیل سفارش",
+          "where": "app/checkout/page.tsx — page H1 ('Complete order') in the hero card at the top"
+        },
+        "stepper.info": {
+          "text": "اطلاعات",
+          "where": "components/ui/CheckoutStepper.tsx — step 1 label under the stepper circle ('Info')"
+        },
+        "stepper.payment": {
+          "text": "پرداخت",
+          "where": "CheckoutStepper.tsx — step 2 label ('Payment')"
+        },
+        "stepper.confirm": {
+          "text": "تأیید",
+          "where": "CheckoutStepper.tsx — step 3 label ('Confirm')"
+        },
+        "step1.title": {
+          "text": "اطلاعات ارسال",
+          "where": "checkout — Step 1 (Shipping) section heading ('Shipping info')"
+        },
+        "step1.fullName.label": {
+          "text": "نام و نام خانوادگی",
+          "where": "checkout — Step 1, full-name field label (placeholder is the same text)"
+        },
+        "step1.email.label": {
+          "text": "ایمیل",
+          "where": "checkout — Step 1, email field label ('Email'; placeholder is 'you@example.com')"
+        },
+        "step1.email.placeholder": {
+          "text": "you@example.com",
+          "where": "checkout — Step 1, placeholder inside the email input"
+        },
+        "step1.phone.label": {
+          "text": "شماره تماس",
+          "where": "checkout — Step 1, phone field label ('Phone'; placeholder is the same text)"
+        },
+        "step1.address.label": {
+          "text": "آدرس کامل",
+          "where": "checkout — Step 1, full-address textarea label ('Full address'; placeholder is the same text)"
+        },
+        "step1.city.label": {
+          "text": "شهر",
+          "where": "checkout — Step 1, city field label ('City'; placeholder is the same text)"
+        },
+        "step1.postalCode.label": {
+          "text": "کد پستی",
+          "where": "checkout — Step 1, postal-code field label ('Postal code'; placeholder is the same text)"
+        },
+        "step1.error": {
+          "text": "لطفاً همه فیلدها را پر کنید",
+          "where": "checkout — Step 1, validation error shown above the next button when required fields are empty"
+        },
+        "step1.next": {
+          "text": "مرحله بعد ←",
+          "where": "checkout — Step 1, 'Next step' CTAButton"
+        },
+        "step2.title": {
+          "text": "اطلاعات پرداخت",
+          "where": "checkout — Step 2 (Payment) section heading ('Payment info')"
+        },
+        "step2.cardNumber.label": {
+          "text": "شماره کارت",
+          "where": "checkout — Step 2, card-number field label ('Card number')"
+        },
+        "step2.expiry.label": {
+          "text": "تاریخ انقضا",
+          "where": "checkout — Step 2, expiry field label ('Expiry date'; placeholder 'MM/YY')"
+        },
+        "step2.cvv.label": {
+          "text": "CVV",
+          "where": "checkout — Step 2, CVV field label (placeholder '•••')"
+        },
+        "step2.cardholder.label": {
+          "text": "نام دارنده کارت",
+          "where": "checkout — Step 2, cardholder-name field label (placeholder is the same text)"
+        },
+        "step2.back": {
+          "text": "→ برگشت",
+          "where": "checkout — Step 2, 'Back' button (returns to Step 1)"
+        },
+        "step2.placeOrder.default": {
+          "text": "ثبت سفارش ✓",
+          "where": "checkout — Step 2, place-order CTAButton ('Place order', default state)"
+        },
+        "step2.placeOrder.loading": {
+          "text": "در حال ثبت...",
+          "where": "checkout — Step 2, place-order button label while submitting ('Submitting...')"
+        },
+        "step3.title": {
+          "text": "سفارش شما ثبت شد",
+          "where": "checkout — Step 3 confirmation heading ('Your order is placed')"
+        },
+        "step3.subtitle": {
+          "text": "به زودی با شما تماس می‌گیریم",
+          "where": "checkout — Step 3, line under the confirmation heading ('We'll contact you soon')"
+        },
+        "step3.summaryLabel": {
+          "text": "خلاصه سفارش:",
+          "where": "checkout — Step 3, label above the confirmed order summary"
+        },
+        "step3.total": {
+          "text": "جمع کل",
+          "where": "checkout — Step 3, 'Total' row label in the confirmed summary"
+        },
+        "step3.backToShop": {
+          "text": "بازگشت به فروشگاه",
+          "where": "checkout — Step 3, CTAButton 'Back to shop' (links to /shop)"
+        },
+        "step3.viewOrders": {
+          "text": "مشاهده سفارش‌ها",
+          "where": "checkout — Step 3, CTAButton 'View orders' (links to /profile)"
+        },
+        "summary.title": {
+          "text": "خلاصه سفارش",
+          "where": "components/ui/OrderSummary.tsx — order-summary box title shown within checkout Step 2 ('Order summary')"
+        },
+        "summary.itemCount": {
+          "text": "تعداد اقلام",
+          "where": "OrderSummary.tsx — 'Item count' row label"
+        },
+        "summary.total": {
+          "text": "جمع کل",
+          "where": "OrderSummary.tsx — 'Total' row label"
+        },
+        "summary.currencySuffix": {
+          "text": "تومان",
+          "where": "OrderSummary.tsx — 'Toman' currency suffix after the total amount"
+        },
+        "summary.checkout": {
+          "text": "ادامه و پرداخت ←",
+          "where": "OrderSummary.tsx — 'Continue & pay' button at the bottom of the order summary"
+        },
+        "toast.orderPlaced": {
+          "text": "Order placed! ✦",
+          "where": "checkout — success toast after the order is placed"
+        },
+        "toast.orderFailed": {
+          "text": "Order failed. Please try again.",
+          "where": "checkout — error toast if the order request fails"
+        }
+      }
+    },
+    "/blog": {
+      "file": "app/blog/page.tsx",
+      "strings": {
+        "hero.headline": {
+          "text": "Stories for the Soul",
+          "where": "app/blog/page.tsx — hero H1 overlaid on the background ('Stories' purple / 'for the' italic cream / 'Soul' teal)"
+        },
+        "hero.subtitle": {
+          "text": "Explore wisdom, healing, and higher truths to uplift your spirit and illuminate your path.",
+          "where": "blog — hero paragraph under the H1 and gold divider"
+        },
+        "latest.label": {
+          "text": "Latest Articles",
+          "where": "blog — left column card eyebrow/label (with star) above the article list"
+        },
+        "latest.viewAll": {
+          "text": "VIEW ALL ARTICLES",
+          "where": "blog — left column CTAButton below the latest-articles list (links to /blog)"
+        },
+        "featured.label": {
+          "text": "Featured Story",
+          "where": "blog — center column card label (with diamond) above the featured image"
+        },
+        "featured.badge": {
+          "text": "FEATURED",
+          "where": "blog — badge on the featured story image (preceded by a decorative ★)"
+        },
+        "featured.cta": {
+          "text": "READ STORY",
+          "where": "blog — center column CTAButton on the featured story"
+        },
+        "insights.label": {
+          "text": "Spiritual Insights",
+          "where": "blog — right column card label above the insight list"
+        },
+        "insights.meditation.title": {
+          "text": "Meditation",
+          "where": "blog — Spiritual Insights, item 1 title"
+        },
+        "insights.meditation.sub": {
+          "text": "Find peace within the present moment",
+          "where": "blog — Spiritual Insights, item 1 subtitle"
+        },
+        "insights.energyHealing.title": {
+          "text": "Energy Healing",
+          "where": "blog — Spiritual Insights, item 2 title"
+        },
+        "insights.energyHealing.sub": {
+          "text": "Balance your energy, transform your life",
+          "where": "blog — Spiritual Insights, item 2 subtitle"
+        },
+        "insights.moonWisdom.title": {
+          "text": "Moon Wisdom",
+          "where": "blog — Spiritual Insights, item 3 title"
+        },
+        "insights.moonWisdom.sub": {
+          "text": "Align with lunar cycles and natural rhythms",
+          "where": "blog — Spiritual Insights, item 3 subtitle"
+        },
+        "dailyInspiration.label": {
+          "text": "Daily Inspiration",
+          "where": "blog — right column, 'Daily Inspiration' card label"
+        },
+        "dailyInspiration.quote": {
+          "text": "You are the universe, expressing itself as a beautiful soul.",
+          "where": "blog — the italic quote inside the Daily Inspiration card (rendered wrapped in typographic quotes)"
+        },
+        "newsletter.title": {
+          "text": "Stay Connected with the Light",
+          "where": "blog — newsletter banner title (bottom of page, before footer)"
+        },
+        "newsletter.subtitle": {
+          "text": "Receive soulful insights and spiritual guidance straight to your inbox.",
+          "where": "blog — newsletter banner subtitle"
+        },
+        "newsletter.placeholder": {
+          "text": "Your email address",
+          "where": "blog — placeholder in the newsletter email input"
+        },
+        "newsletter.cta.default": {
+          "text": "SUBSCRIBE ✦",
+          "where": "blog — newsletter subscribe button (default state)"
+        },
+        "newsletter.cta.loading": {
+          "text": "SUBSCRIBING...",
+          "where": "blog — newsletter subscribe button label while submitting"
+        },
+        "newsletter.cta.done": {
+          "text": "✓ SUBSCRIBED",
+          "where": "blog — newsletter subscribe button label after a successful subscribe"
+        },
+        "toast.subscribed": {
+          "text": "Subscribed successfully ✦",
+          "where": "blog — success toast after subscribing to the newsletter"
+        },
+        "toast.subscribeFailed": {
+          "text": "Subscription failed. Try again.",
+          "where": "blog — error toast if the newsletter subscribe fails"
+        }
+      }
+    },
+    "/contact": {
+      "file": "app/contact/page.tsx",
+      "strings": {
+        "hero.title": {
+          "text": "تماس با ما",
+          "where": "app/contact/page.tsx — hero H1 ('Contact us') at the bottom of the isolated hero card"
+        },
+        "hero.subtitle": {
+          "text": "همیشه اینجاییم",
+          "where": "contact — hero subtitle under the H1 ('Always here')"
+        },
+        "social.heading": {
+          "text": "راه‌های ارتباطی",
+          "where": "contact — 'Ways to connect' heading above the social link grid (Block A)"
+        },
+        "social.instagram": {
+          "text": "اینستاگرام",
+          "where": "contact — social grid, Instagram card label"
+        },
+        "social.telegram": {
+          "text": "تلگرام",
+          "where": "contact — social grid, Telegram card label"
+        },
+        "social.whatsapp": {
+          "text": "واتساپ",
+          "where": "contact — social grid, WhatsApp card label"
+        },
+        "social.email": {
+          "text": "ایمیل",
+          "where": "contact — social grid, Email card label"
+        },
+        "form.heading": {
+          "text": "ارسال پیام",
+          "where": "contact — 'Send message' heading above the contact form (Block B)"
+        },
+        "form.error": {
+          "text": "لطفاً فیلدهای ضروری را پر کنید",
+          "where": "contact — validation error banner shown above the form when required fields are empty"
+        },
+        "form.fullName.label": {
+          "text": "نام و نام خانوادگی",
+          "where": "contact — form field label, full name"
+        },
+        "form.email.label": {
+          "text": "ایمیل",
+          "where": "contact — form field label, email"
+        },
+        "form.phone.label": {
+          "text": "شماره تماس",
+          "where": "contact — form field label, phone"
+        },
+        "form.subject.label": {
+          "text": "موضوع",
+          "where": "contact — form field label, subject"
+        },
+        "form.message.label": {
+          "text": "پیام شما",
+          "where": "contact — form field label, message textarea"
+        },
+        "form.submit.default": {
+          "text": "ارسال پیام",
+          "where": "contact — form submit button ('Send message', default state)"
+        },
+        "form.submit.loading": {
+          "text": "در حال ارسال...",
+          "where": "contact — submit button label while sending ('Sending...')"
+        },
+        "success.title": {
+          "text": "پیام شما ارسال شد",
+          "where": "contact — success state heading after submit ('Your message was sent')"
+        },
+        "success.subtitle": {
+          "text": "به زودی با شما تماس می‌گیریم",
+          "where": "contact — success state line under the heading ('We'll contact you soon')"
+        },
+        "success.newMessage": {
+          "text": "ارسال پیام جدید",
+          "where": "contact — 'Send a new message' button in the success state"
+        },
+        "faq.heading": {
+          "text": "سوالات متداول",
+          "where": "contact — 'FAQ' heading above the accordion (Block C)"
+        },
+        "faq.q1.question": {
+          "text": "زمان ارسال سفارش‌ها چقدر است؟",
+          "where": "contact — FAQ accordion, question 1"
+        },
+        "faq.q1.answer": {
+          "text": "سفارش‌های داخل تهران ۲-۳ روز کاری و سایر شهرها ۳-۷ روز کاری تحویل داده می‌شوند.",
+          "where": "contact — FAQ accordion, answer 1 (revealed on expand)"
+        },
+        "faq.q2.question": {
+          "text": "آیا امکان مرجوع کردن کالا وجود دارد؟",
+          "where": "contact — FAQ accordion, question 2"
+        },
+        "faq.q2.answer": {
+          "text": "بله، تا ۷ روز پس از دریافت کالا در صورت عدم استفاده امکان مرجوعی وجود دارد.",
+          "where": "contact — FAQ accordion, answer 2"
+        },
+        "faq.q3.question": {
+          "text": "کریستال‌ها اصل هستند؟",
+          "where": "contact — FAQ accordion, question 3"
+        },
+        "faq.q3.answer": {
+          "text": "تمامی کریستال‌های اورا مستقیم از معادن طبیعی تهیه شده و دارای گواهی اصالت هستند.",
+          "where": "contact — FAQ accordion, answer 3"
+        },
+        "faq.q4.question": {
+          "text": "چگونه منتور مناسب انتخاب کنم؟",
+          "where": "contact — FAQ accordion, question 4"
+        },
+        "faq.q4.answer": {
+          "text": "از صفحه منتورشیپ می‌توانید پروفایل کامل هر منتور را مشاهده و بر اساس تخصص و نظرات کاربران انتخاب کنید.",
+          "where": "contact — FAQ accordion, answer 4"
+        },
+        "toast.sent": {
+          "text": "Message sent! We'll be in touch ✦",
+          "where": "contact — success toast after the contact form is submitted"
+        },
+        "toast.failed": {
+          "text": "Failed to send. Please try again.",
+          "where": "contact — error toast if the contact form submit fails"
+        }
+      }
+    }
+  },
+  "_review": [
+    "Excluded as data/seed content (not UI copy) — flag if these need to be editable: product catalog arrays hardcoded in components (NOT mock-data.ts): /shop/stones-v2 PRODUCTS (names Amethyst/Rose Quartz/Citrine/Clear Quartz/Labradorite, their quality tags e.g. Calm/Intuition/Protection, and prices); /shop/clothes ProductCards.tsx PRODUCTS (Luna Meditation Robe, Sol Yoga Top, Gaia Flow Pants, Nova Energy Shirt + prices); mentorship session prices/durations (e.g. '60 Min', '$222'); blog LATEST_ARTICLES + FEATURED article titles/dates/authors/read-times (e.g. 'The Power of Inner Stillness', 'Remembering Who You Truly Are', 'Luna Elise'); forum POSTS sample content (authors, titles, excerpts, dates).",
+    "Defined but NOT currently rendered: app/page.tsx SECTIONS[].viewAllLabel values ('مشاهده همه سنگ‌ها', 'مشاهده همه شمع‌ها', 'مشاهده همه اکسسوری‌ها', 'مشاهده همه پوشاک') are passed to BestSellersSection but never displayed (component does not render viewAllLabel). Not inventoried as visible copy.",
+    "Brand-name inconsistency (worth a designer/content decision): 'Aura Mystic' / 'اورا میستیک' (header, footer, metadata), 'FARED' (mobile menu wordmark), 'Lumina Crystals' (Community/forum <title>), 'Auravista' (About + About/Story story body). Founder is 'Fard' on mentorship & forum.",
+    "app/layout.tsx also defines metadata.keywords and openGraph title/description (Farsi). Not user-visible on the page; excluded as pure SEO/social metadata — include later if a meta inventory is wanted.",
+    "Metadata coverage: only /community (forum) sets a per-page document <title>. Other listed routes inherit the global app/layout.tsx title; no per-page meta descriptions were found on them.",
+    "Currency/number formatting: prices show as USD ($) on most desktop/English pages; OrderSummary uses Toman ('تومان') with fa-IR digits; BestSellersSection product data uses Toman. Mixed currency is a content decision, not an extraction issue.",
+    "Out of scope (exist in the app but not in the requested coverage list, so NOT extracted): /shop/tours, /shop/stones-v3, /shop/clothes-v3, /shop/* product & [id] detail pages, /cart, /product/[id], /tahrirye + /tahririye (editorial), /journal, /quotes, /faq, /energy-guide, /auth (+login/register), /account (+orders), /profile, /blog/[slug], /forum/[id]. Say the word to inventory any of these."
+  ]
+}

@@ -1,66 +1,254 @@
-'use client'
+"use client";
 
-import { useParams } from 'next/navigation'
-import Link from 'next/link'
-import DynamicHeader from '@/components/layout/DynamicHeader'
-import ProductDetailView from '@/components/ui/ProductDetailView'
-import { useProduct } from '@/hooks/useProducts'
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import Link from "next/link";
+import DynamicHeader from "@/components/layout/DynamicHeader";
+import ProductDetailView from "@/components/ui/ProductDetailView";
+import { getClothBySlug, getClothes } from "@/lib/api";
+import type { CatalogProduct } from "@/lib/api";
 
 export default function ClothesDetailPage() {
-  const { id } = useParams<{ id: string }>()
-  const { data: product, isLoading, error } = useProduct(id)
+  const { id } = useParams<{ id: string }>();
+  const [item, setItem] = useState<CatalogProduct | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<CatalogProduct[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isRTL, setIsRTL] = useState(false);
 
+  useEffect(() => {
+    // Detect RTL direction from HTML or document
+    const htmlDir = document.documentElement.dir;
+    setIsRTL(htmlDir === "rtl");
+
+    // Also listen for direction changes if needed
+    const observer = new MutationObserver(() => {
+      const dir = document.documentElement.dir;
+      setIsRTL(dir === "rtl");
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["dir"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    async function loadCloth() {
+      try {
+        setIsLoading(true);
+
+        // Fetch the cloth by slug or id
+        const cloth = await getClothBySlug(id);
+        setItem(cloth);
+
+        // Fetch related clothes (same category, excluding current)
+        if (cloth) {
+          const allClothes = await getClothes();
+          const related = allClothes
+            .filter((c: CatalogProduct) => c.id !== cloth.id)
+            .slice(0, 4);
+          setRelatedProducts(related);
+        }
+      } catch (error) {
+        console.error("Failed to load cloth:", error);
+        setItem(null);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    if (id) {
+      loadCloth();
+    }
+  }, [id]);
+
+  // Show loading state
   if (isLoading) {
     return (
-      <main style={{ minHeight: '100vh', background: '#0a0514', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ color: '#fff' }}>Loading...</div>
-      </main>
-    )
-  }
-
-  if (error || !product) {
-    return (
-      <main style={{ minHeight: '100vh', background: '#0a0514', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ textAlign: 'center' }}>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", color: '#fff', marginBottom: '16px' }}>Product Not Found</h1>
-          <Link href="/shop/clothes" style={{ color: '#d4af64' }}>← Back to Clothes</Link>
+      <main
+        style={{
+          minHeight: "100vh",
+          background: "#0a0514",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <DynamicHeader />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "80vh",
+            color: "#fff",
+            direction: isRTL ? "rtl" : "ltr",
+          }}
+        >
+          <h1
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              color: "#fff",
+              direction: isRTL ? "rtl" : "ltr",
+            }}
+          >
+            {isRTL ? "در حال بارگذاری..." : "Loading..."}
+          </h1>
         </div>
       </main>
-    )
+    );
   }
+
+  // Show not found state
+  if (!item) {
+    return (
+      <main
+        style={{
+          minHeight: "100vh",
+          background: "#0a0514",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "1rem",
+        }}
+      >
+        <DynamicHeader />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "80vh",
+            gap: "20px",
+            direction: isRTL ? "rtl" : "ltr",
+          }}
+        >
+          <h1
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              color: "#fff",
+              marginBottom: "16px",
+            }}
+          >
+            {isRTL ? "محصول یافت نشد" : "Product Not Found"}
+          </h1>
+          <Link href="/shop/clothes" style={{ color: "#d4af64" }}>
+            {isRTL ? "→ بازگشت به لباس‌ها" : "← Back to Clothes"}
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
+  // Use both language fields for RTL/LTR support
+  const itemName = isRTL
+    ? item.nameFA || item.name || "Product"
+    : item.name || item.nameFA || "Product";
+
+  const itemDescription = isRTL
+    ? item.descriptionFA ||
+      item.description ||
+      `${itemName} — لباس با کیفیت برای سفر معنوی شما.`
+    : item.description ||
+      item.descriptionFA ||
+      `${itemName} — Quality clothing for your spiritual journey.`;
+
+  // Format price with RTL/LTR awareness
+  const formattedPrice = new Intl.NumberFormat(isRTL ? "fa-IR" : "en-US", {
+    style: "currency",
+    currency: item.currency || "IRT",
+    maximumFractionDigits: 0,
+    currencyDisplay: "code",
+  }).format(item.price);
+
+  // Build specs with RTL/LTR support
+  const specs = [
+    {
+      icon: "👗",
+      label: isRTL ? "نوع" : "Type",
+      value: isRTL ? "لباس" : "Clothing",
+    },
+    {
+      icon: "✨",
+      label: isRTL ? "مجموعه" : "Collection",
+      value: isRTL ? "معنوی" : "Spiritual",
+    },
+    {
+      icon: "⭐",
+      label: isRTL ? "کیفیت" : "Quality",
+      value: isRTL ? "برتر" : "Premium",
+    },
+  ];
+
+  // Build benefits with RTL/LTR support
+  const benefits = isRTL
+    ? ["تناسب راحت", "طراحی معنوی", "مواد با کیفیت", "استایل چندمنظوره"]
+    : [
+        "Comfortable fit",
+        "Spiritual design",
+        "Premium materials",
+        "Versatile styling",
+      ];
 
   const productData = {
-    id: product.id,
-    name: product.name,
-    category: 'Clothing',
-    categoryHref: '/shop/clothes',
-    description: product.description || `${product.name} — crafted with care for your spiritual journey.`,
-    price: product.price,
-    originalPrice: Math.round(product.price * 1.3),
+    id: item.id,
+    name: itemName,
+    category: isRTL ? "لباس" : "Clothing",
+    categoryHref: "/shop/clothes",
+    description: itemDescription,
+    price: item.price,
+    formattedPrice: formattedPrice,
+    originalPrice: Math.round(item.price * 1.3),
     discountPercent: 23,
     inStock: true,
-    images: [product.image],
+    stock: 10, // Default stock
+    images: [item.image, item.heroImage].filter((img): img is string => Boolean(img && img.trim() !== '')),
     sizes: [
-      { label: 'S', value: 's' },
-      { label: 'M', value: 'm' },
-      { label: 'L', value: 'l' },
+      { label: "S", value: "s" },
+      { label: "M", value: "m" },
+      { label: "L", value: "l" },
     ],
-    specs: [
-      { icon: '👗', label: 'Type', value: 'Clothing' },
-      { icon: '✨', label: 'Collection', value: 'Spiritual' },
-      { icon: '⭐', label: 'Quality', value: 'Premium' },
-    ],
-    overview: `${product.name}. Designed for comfort and spiritual alignment. ${product.descriptionFA || product.description || 'Each piece is crafted with intention for your sacred journey.'}`,
-    benefits: ['Comfortable fit', 'Spiritual design', 'Premium materials', 'Versatile styling'],
-    usage: 'Perfect for meditation, yoga, spiritual ceremonies, or everyday wear.',
+    specs: specs,
+    overview: isRTL
+      ? `${itemName}. طراحی شده برای راحتی و هم‌اهنگی معنوی. ${itemDescription}`
+      : `${itemName}. Designed for comfort and spiritual alignment. ${itemDescription}`,
+    benefits: benefits,
+    usage: isRTL
+      ? "مناسب برای مدیتیشن، یوگا، مراسم معنوی، یا استفاده روزانه."
+      : "Perfect for meditation, yoga, spiritual ceremonies, or everyday wear.",
     reviews: [],
-    relatedProducts: [],
-  }
+    relatedProducts: relatedProducts.map((p: CatalogProduct) => ({
+      id: p.id,
+      name: isRTL ? p.nameFA || p.name : p.name || p.nameFA,
+      price: p.price,
+      image: p.image,
+      slug: p.slug,
+    })),
+    isRTL: isRTL,
+    avgRating: 0,
+    comparePrice: Math.round(item.price * 1.3),
+    currency: item.currency,
+    variants: [],
+    colorOptions: [],
+    attributes: [],
+    tags: isRTL
+      ? ["معنوی", "با کیفیت", "راحت"]
+      : ["Spiritual", "Premium", "Comfortable"],
+  };
 
   return (
-    <main style={{ minHeight: '100vh' }}>
+    <main
+      style={{
+        minHeight: "100vh",
+        background: "#0a0514",
+        direction: isRTL ? "rtl" : "ltr",
+      }}
+    >
       <DynamicHeader />
       <ProductDetailView product={productData} />
     </main>
-  )
+  );
 }

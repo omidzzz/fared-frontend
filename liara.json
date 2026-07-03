@@ -1,0 +1,11 @@
+{
+  "app": "fared",
+  "port": 3000,
+  "build": {
+    "location": "germany"
+  },
+  "next": {
+    "modifyConfig": false
+  },
+  "disks": []
+}
