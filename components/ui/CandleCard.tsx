@@ -44,6 +44,7 @@ export default function CandleCard({ candle }: CandleCardProps) {
           aspectRatio: "3 / 4",
           display: "flex",
           flexDirection: "column",
+          overflow: "hidden",
           // Enhanced border styling
           border: "2px solid transparent",
           backgroundImage:
@@ -119,6 +120,11 @@ export default function CandleCard({ candle }: CandleCardProps) {
               letterSpacing: "0.05em",
               textTransform: "uppercase",
               margin: 0,
+              width: "100%",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              padding: "0 4px",
             }}
           >
             {candle.name}
@@ -130,6 +136,11 @@ export default function CandleCard({ candle }: CandleCardProps) {
               color: "rgba(255,255,255,0.6)",
               margin: 0,
               letterSpacing: "0.02em",
+              width: "100%",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              padding: "0 4px",
             }}
           >
             · {candle.scent?.split(",").join(" · ")} ·
