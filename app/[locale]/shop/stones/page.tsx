@@ -303,7 +303,7 @@ export default function StonesPage() {
         href={`/shop/stones/${product.slug || product.id}`}
         className="flex justify-center transition-opacity hover:opacity-90"
       >
-        <div style={{ maxWidth: 200, width: "100%", overflow: "hidden" }}>
+        <div style={{ maxWidth: 250, width: "100%" }}>
           <CrystalCard stone={stone} />
         </div>
       </Link>
@@ -322,7 +322,7 @@ export default function StonesPage() {
         href={`/shop/stones/${product.slug || product.id}`}
         className="block transition-opacity hover:opacity-90"
       >
-        <div style={{ maxWidth: 200, margin: "0 auto", overflow: "hidden" }}>
+        <div style={{ maxWidth: 300, margin: "0 auto" }}>
           <CrystalCard stone={stone} />
         </div>
       </Link>
@@ -778,21 +778,6 @@ export default function StonesPage() {
               {t("stones.subtitle")}
             </p>
 
-            {/* CTA */}
-            <div
-              className="hero-el"
-              style={{
-                ...fadeSlideUp,
-                animationDelay: "600ms",
-                marginTop: 28,
-              }}
-            >
-              <ShopHero
-                namespace="stones"
-                fullWidth={true}
-                ctaKey="explore"
-              />
-            </div>
           </section>
 
           {/* ── FEATURED PRODUCTS CAROUSEL ── */}
@@ -901,7 +886,7 @@ export default function StonesPage() {
           </div>
 
           {/* ── PRODUCT GRID ── */}
-          <div style={{ position: "relative", zIndex: 2, paddingBottom: "24px" }}>
+          <div style={{ position: "relative", zIndex: 2, paddingBottom: "24px", maxWidth: "1440px", margin: "0 auto" }}>
             <ProductGrid
               category="stones"
               itemsPerPage={12}
