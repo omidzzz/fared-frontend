@@ -303,7 +303,9 @@ export default function StonesPage() {
         href={`/shop/stones/${product.slug || product.id}`}
         className="flex justify-center transition-opacity hover:opacity-90"
       >
-        <CrystalCard stone={stone} />
+        <div style={{ maxWidth: 260, width: "100%" }}>
+          <CrystalCard stone={stone} />
+        </div>
       </Link>
     );
   };
@@ -320,7 +322,9 @@ export default function StonesPage() {
         href={`/shop/stones/${product.slug || product.id}`}
         className="block transition-opacity hover:opacity-90"
       >
-        <CrystalCard stone={stone} />
+        <div style={{ maxWidth: 260, margin: "0 auto" }}>
+          <CrystalCard stone={stone} />
+        </div>
       </Link>
     );
   };
