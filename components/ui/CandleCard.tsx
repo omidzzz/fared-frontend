@@ -42,6 +42,8 @@ export default function CandleCard({ candle }: CandleCardProps) {
             "transform 0.3s ease, filter 0.4s ease, box-shadow 0.4s ease",
           background: "#2a0a4a",
           aspectRatio: "3/4",
+          width: "100%",
+          minWidth: 0,
           display: "flex",
           flexDirection: "column",
           // Enhanced border styling
