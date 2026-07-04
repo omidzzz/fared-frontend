@@ -303,7 +303,7 @@ export default function StonesPage() {
         href={`/shop/stones/${product.slug || product.id}`}
         className="flex justify-center transition-opacity hover:opacity-90"
       >
-        <div style={{ maxWidth: 260, width: "100%" }}>
+        <div style={{ maxWidth: 200, width: "100%", overflow: "hidden" }}>
           <CrystalCard stone={stone} />
         </div>
       </Link>
@@ -322,7 +322,7 @@ export default function StonesPage() {
         href={`/shop/stones/${product.slug || product.id}`}
         className="block transition-opacity hover:opacity-90"
       >
-        <div style={{ maxWidth: 260, margin: "0 auto" }}>
+        <div style={{ maxWidth: 200, margin: "0 auto", overflow: "hidden" }}>
           <CrystalCard stone={stone} />
         </div>
       </Link>
