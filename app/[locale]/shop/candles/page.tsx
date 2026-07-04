@@ -3,8 +3,6 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import CTAButton from "@/components/ui/CTAButton";
-import CandleCard from "@/components/ui/CandleCard";
 import ShopHero from "@/components/aura/ShopHero";
 import { ResponsiveCarousel } from "@/components/ui/ResponsiveCarousel";
 import { useCart } from "@/hooks/useCart";
@@ -13,7 +11,7 @@ import { useLocale } from "@/hooks/useLocale";
 import { useProducts } from "@/hooks/useProducts";
 import { getCandles } from "@/lib/api";
 import ProductGrid from "@/components/shop/ProductGrid";
-import { Card } from "@/components/aura/ProductCards";
+import CandleCard from "@/components/ui/CandleCard";
 
 export default function CandlesPage() {
   const [candles, setCandles] = useState<any[]>([]);
@@ -49,60 +47,56 @@ export default function CandlesPage() {
     (product: any) => product.isFeatured === true,
   );
 
-  const handleAddToCart = (productId: string) => {
-    const product = allProducts.find((p: any) => p.id === productId);
-    if (product) {
-      addItem({
-        productId: product.id,
-        productType: "candle",
-        name: product.nameEN || product.nameFA || product.name,
-        nameFA: product.nameFA,
-        price: product.price,
-        currency: "IRT",
-        quantity: 1,
-        image: product.images?.[0]?.url || product.image || "",
-      });
-    }
+  // Map API product to CandleCard-compatible format
+  const mapToCandle = (product: any) => ({
+    id: product.id,
+    slug: product.slug || product.id,
+    name: product.nameEN || product.name || "Candle",
+    nameFA: product.nameFA || product.name || "شمع",
+    scent: (product.tagsFA?.[0] || product.tagsEN?.[0] || ""),
+    scentFA: (product.tagsFA?.[0] || ""),
+    burnTime: "",
+    burnTimeFA: "",
+    waxType: "",
+    waxTypeFA: "",
+    ingredientsFA: [],
+    chakraAlignmentFA: "",
+    price: product.price || 0,
+    image: product.images?.[0]?.url || product.image || "",
+    accentColor: "var(--chakra-solar)",
+    crystalKeywords: [],
+  });
+
+  // Render function for carousel using CandleCard
+  const renderProduct = (product: any, index: number) => {
+    const candle = mapToCandle(product);
+    return (
+      <Link
+        key={product.id}
+        href={`/shop/candles/${product.slug || product.id}`}
+        className="flex justify-center transition-opacity hover:opacity-90"
+      >
+        <CandleCard candle={candle} />
+      </Link>
+    );
   };
 
-  // Render function for carousel
-  const renderProduct = (product: any, index: number) => (
-    <Link
-      key={product.id}
-      href={`/shop/candles/${product.slug || product.id}`}
-      className="flex justify-center transition-opacity hover:opacity-90"
-    >
-      <Card p={product} onAddToCart={() => handleAddToCart(product.id)} />
-    </Link>
-  );
-
-  // Render function for ProductGrid
+  // Render function for ProductGrid using CandleCard
   const renderCandleCard = (
     product: any,
     onAddToCart: (id: string) => void,
-  ) => (
-    <Link
-      key={product.id}
-      href={`/shop/candles/${product.slug || product.id}`}
-      className="block transition-opacity hover:opacity-90"
-    >
-      <Card
-        p={product}
-        onAddToCart={() => {
-          addItem({
-            productId: product.id,
-            productType: "candle",
-            name: product.nameEN || product.nameFA || product.name,
-            nameFA: product.nameFA,
-            price: product.price,
-            currency: "IRT",
-            quantity: 1,
-            image: product.images?.[0]?.url || product.image || "",
-          });
-        }}
-      />
-    </Link>
-  );
+  ) => {
+    const candle = mapToCandle(product);
+    return (
+      <Link
+        key={product.id}
+        href={`/shop/candles/${product.slug || product.id}`}
+        className="block transition-opacity hover:opacity-90"
+      >
+        <CandleCard candle={candle} />
+      </Link>
+    );
+  };
 
   if (isLoading) {
     return (
