@@ -29,6 +29,7 @@ interface ProductGridProps {
   emptyMessage?: string;
   onProductsLoaded?: (products: any[]) => void;
   onError?: (error: Error) => void;
+  filterParams?: { property?: string };
 }
 
 export default function ProductGrid({
@@ -36,6 +37,7 @@ export default function ProductGrid({
   initialOffset = 0,
   itemsPerPage = 12,
   filter,
+  filterParams,
   renderCard,
   onAddToCart,
   cols = { mobile: 2, tablet: 2, desktop: 4 },
@@ -61,6 +63,7 @@ export default function ProductGrid({
     category,
     limit: itemsPerPage,
     offset: currentOffset,
+    ...(filterParams ? { property: filterParams.property } : {} ),
   });
 
   // Handle data updates
@@ -73,7 +76,8 @@ export default function ProductGrid({
     const newProducts = data.products || [];
     const total = data.count || 0;
 
-    console.log("📊 Extracted:", { productsCount: newProducts.length, total });
+    console.log("📊 Extracted:", { productsCount: newProducts.length, total   ...(filterParams ? { property: filterParams.property } : {} ),
+  });
 
     setTotalCount(total);
 
@@ -105,10 +109,12 @@ export default function ProductGrid({
         const hasMoreProducts = updatedProducts.length < total;
         setHasMore(hasMoreProducts);
         return updatedProducts;
-      });
+        ...(filterParams ? { property: filterParams.property } : {} ),
+  });
       setIsLoadingMore(false);
     }
-  }, [data, currentOffset, initialOffset, filter, onProductsLoaded]);
+  }, [data, currentOffset, initialOffset, filter,
+  filterParams, onProductsLoaded]);
 
   // Handle errors
   useEffect(() => {
@@ -259,3 +265,4 @@ export default function ProductGrid({
     </div>
   );
 }
+
