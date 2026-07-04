@@ -69,7 +69,7 @@ export default function CandleCard({ candle }: CandleCardProps) {
         <div
           style={{
             borderRadius: "16px",
-            overflow: "visible",
+            overflow: "hidden",
             position: "relative",
             flex: "1 1 60%",
           }}
