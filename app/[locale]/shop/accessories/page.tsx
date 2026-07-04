@@ -590,16 +590,7 @@ export default function AccessoriesPage() {
             </div>
 
             {/* ── PRODUCT CARDS ── */}
-            <section
-              style={{
-                position: "relative",
-                zIndex: 2,
-                display: "grid",
-                gridTemplateColumns: "repeat(5, 1fr)",
-                gap: "48px 14px",
-                paddingBottom: "24px",
-              }}
-            >
+            <div style={{ position: "relative", zIndex: 2, paddingBottom: "24px" }}>
               <ProductGrid
                 category="accessories"
                 itemsPerPage={12}
@@ -612,7 +603,7 @@ export default function AccessoriesPage() {
                 noMoreLabel={t("noMoreProducts") || "No more products"}
                 emptyMessage={t("noProducts") || "No accessories found"}
               />
-            </section>
+            </div>
 
             {/* ── CATEGORIES SECTION (DESKTOP) ── */}
             <div className="mt-16 w-full">
