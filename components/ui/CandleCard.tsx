@@ -30,7 +30,7 @@ export default function CandleCard({ candle }: CandleCardProps) {
   return (
     <Link
       href={`/shop/candles/${candle.slug}`}
-      style={{ textDecoration: "none", display: "block", width: "100%", height: "100%" }}
+      style={{ textDecoration: "none", display: "block", width: "100%" }}
     >
       <div
         style={{
@@ -42,7 +42,7 @@ export default function CandleCard({ candle }: CandleCardProps) {
             "transform 0.3s ease, filter 0.4s ease, box-shadow 0.4s ease",
           background: "#2a0a4a",
           width: "100%",
-          height: "100%",
+          aspectRatio: "3 / 4",
           display: "flex",
           flexDirection: "column",
           // Enhanced border styling
