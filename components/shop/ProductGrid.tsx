@@ -196,9 +196,12 @@ export default function ProductGrid({
               delay: index * 0.06,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="flex justify-center"
+            className="flex justify-center w-full"
+            style={{ minWidth: 0 }}
           >
-            {renderCard(product, onAddToCart || (() => {}))}
+            <div style={{ width: "100%", minWidth: 0 }}>
+              {renderCard(product, onAddToCart || (() => {}))}
+            </div>
           </motion.div>
         ))}
       </div>
