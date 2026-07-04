@@ -42,6 +42,7 @@ export default function CandleCard({ candle }: CandleCardProps) {
           background: "#2a0a4a",
           width: "100%",
           height: "clamp(320px, 55vw, 460px)",
+          boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
           // Enhanced border styling
