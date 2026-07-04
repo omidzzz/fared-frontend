@@ -468,6 +468,7 @@ export default function StonesPage() {
               noMoreLabel={t("stones.noMoreProducts") || "No more products"}
               emptyMessage={t("stones.noProducts") || "No stones found"}
               filter={stoneFilter(activeFilter)}
+              filterParams={activeFilter !== "ALL STONES" ? { property: activeFilter.toLowerCase() } : undefined}
             />
           </div>
         </div>
@@ -901,6 +902,7 @@ export default function StonesPage() {
               noMoreLabel={t("stones.noMoreProducts") || "No more products"}
               emptyMessage={t("stones.noProducts") || "No stones found"}
               filter={stoneFilter(activeFilter)}
+              filterParams={activeFilter !== "ALL STONES" ? { property: activeFilter.toLowerCase() } : undefined}
             />
           </div>
         </div>
