@@ -456,6 +456,7 @@ export default function StonesPage() {
               {t("stones.products")}
             </h2>
             <ProductGrid
+              key={activeFilter}
               category="stones"
               itemsPerPage={12}
               renderCard={renderCrystalCard}
@@ -888,6 +889,7 @@ export default function StonesPage() {
           {/* ── PRODUCT GRID ── */}
           <div style={{ position: "relative", zIndex: 2, paddingBottom: "24px", maxWidth: "1440px", margin: "0 auto" }}>
             <ProductGrid
+              key={activeFilter}
               category="stones"
               itemsPerPage={12}
               renderCard={renderCrystalCard}

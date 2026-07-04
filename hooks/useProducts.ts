@@ -1,4 +1,3 @@
-// hooks/useProducts.ts
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
@@ -8,6 +7,7 @@ export function useProducts(params?: {
   category?: string;
   limit?: number;
   offset?: number;
+  property?: string;
 }) {
   return useQuery({
     queryKey: ["products", params],
@@ -16,6 +16,7 @@ export function useProducts(params?: {
         category: params?.category,
         limit: params?.limit || 12,
         offset: params?.offset || 0,
+        property: params?.property,
       }),
     staleTime: 30_000,
   });
