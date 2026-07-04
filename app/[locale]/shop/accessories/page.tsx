@@ -212,6 +212,7 @@ export default function AccessoriesPage() {
                   tabletItemsPerSlide={2}
                   desktopItemsPerSlide={4}
                   autoplayMs={3500}
+                  colorTheme="teal"
                   className="w-full max-w-2xl mx-auto"
                 />
               )}
@@ -422,6 +423,7 @@ export default function AccessoriesPage() {
                       tabletItemsPerSlide={2}
                       desktopItemsPerSlide={4}
                       autoplayMs={3500}
+                      colorTheme="teal"
                       className="w-full"
                     />
                   </div>

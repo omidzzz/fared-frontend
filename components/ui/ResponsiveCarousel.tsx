@@ -10,6 +10,8 @@ interface ResponsiveCarouselProps<T> {
   desktopItemsPerSlide?: number;
   autoplayMs?: number;
   className?: string;
+  /** Color theme for nav arrows: 'gold' (default) or 'teal' */
+  colorTheme?: "gold" | "teal";
 }
 
 // ── shared slider logic ──────────────────────────────────────────────
@@ -143,55 +145,70 @@ const NavArrow = ({
   onClick,
   label,
   disabled = false,
+  colorTheme = "gold",
 }: {
   direction: "prev" | "next";
   onClick: () => void;
   label: string;
   disabled?: boolean;
-}) => (
-  <button
-    onClick={onClick}
-    aria-label={label}
-    disabled={disabled}
-    className={`absolute ${
-      direction === "prev" ? "right-4" : "left-4"
-    } top-1/2 -translate-y-1/2 z-20 transition-all duration-300 ${
-      disabled
-        ? "opacity-30 cursor-not-allowed"
-        : "hover:opacity-80 hover:scale-110"
-    }`}
-    style={{
-      width: 40,
-      height: 40,
-      borderRadius: "50%",
-      background:
-        "linear-gradient(160deg, rgba(96,46,160,0.85), rgba(43,18,90,0.9))",
-      border: "1px solid rgba(231,193,111,0.5)",
-      boxShadow: "0 0 16px rgba(120,60,190,0.4)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      backdropFilter: "blur(4px)",
-    }}
-  >
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#F5D79C"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+  colorTheme?: "gold" | "teal";
+}) => {
+  const isTeal = colorTheme === "teal";
+  const arrowBg = isTeal
+    ? "linear-gradient(160deg, rgba(20,80,80,0.9), rgba(10,40,40,0.95))"
+    : "linear-gradient(160deg, rgba(96,46,160,0.85), rgba(43,18,90,0.9))";
+  const arrowBorder = isTeal
+    ? "1px solid rgba(127,220,203,0.5)"
+    : "1px solid rgba(231,193,111,0.5)";
+  const arrowShadow = isTeal
+    ? "0 0 16px rgba(127,220,203,0.4)"
+    : "0 0 16px rgba(120,60,190,0.4)";
+  const arrowStroke = isTeal ? "#7fdccb" : "#F5D79C";
+
+  return (
+    <button
+      onClick={onClick}
+      aria-label={label}
+      disabled={disabled}
+      className={`absolute ${
+        direction === "prev" ? "right-4" : "left-4"
+      } top-1/2 -translate-y-1/2 z-20 transition-all duration-300 ${
+        disabled
+          ? "opacity-30 cursor-not-allowed"
+          : "hover:opacity-80 hover:scale-110"
+      }`}
+      style={{
+        width: 40,
+        height: 40,
+        borderRadius: "50%",
+        background: arrowBg,
+        border: arrowBorder,
+        boxShadow: arrowShadow,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backdropFilter: "blur(4px)",
+      }}
     >
-      {direction === "prev" ? (
-        <polyline points="9 18 15 12 9 6" />
-      ) : (
-        <polyline points="15 18 9 12 15 6" />
-      )}
-    </svg>
-  </button>
-);
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke={arrowStroke}
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        {direction === "prev" ? (
+          <polyline points="9 18 15 12 9 6" />
+        ) : (
+          <polyline points="15 18 9 12 15 6" />
+        )}
+      </svg>
+    </button>
+  );
+};
 
 // ── dots ─────────────────────────────────────────────────────────────
 const Dots = ({
