@@ -281,6 +281,7 @@ export function ResponsiveCarousel<T>({
   desktopItemsPerSlide = 4,
   autoplayMs = 3500,
   className = "",
+  colorTheme = "gold",
 }: ResponsiveCarouselProps<T>) {
   const memoizedItems = useMemo(() => items, [items]);
 
@@ -396,12 +397,14 @@ export function ResponsiveCarousel<T>({
           onClick={mobileSlider.handlePrev}
           label="قبلی"
           disabled={mobileSlides <= 1}
+          colorTheme={colorTheme}
         />
         <NavArrow
           direction="next"
           onClick={mobileSlider.handleNext}
           label="بعدی"
           disabled={mobileSlides <= 1}
+          colorTheme={colorTheme}
         />
         <Dots
           count={mobileSlides}
@@ -460,12 +463,14 @@ export function ResponsiveCarousel<T>({
           onClick={tabletSlider.handlePrev}
           label="قبلی"
           disabled={tabletSlides <= 1}
+          colorTheme={colorTheme}
         />
         <NavArrow
           direction="next"
           onClick={tabletSlider.handleNext}
           label="بعدی"
           disabled={tabletSlides <= 1}
+          colorTheme={colorTheme}
         />
         <Dots
           count={tabletSlides}
@@ -525,12 +530,14 @@ export function ResponsiveCarousel<T>({
           onClick={desktopSlider.handlePrev}
           label="قبلی"
           disabled={desktopSlides <= 1}
+          colorTheme={colorTheme}
         />
         <NavArrow
           direction="next"
           onClick={desktopSlider.handleNext}
           label="بعدی"
           disabled={desktopSlides <= 1}
+          colorTheme={colorTheme}
         />
         <Dots
           count={desktopSlides}
