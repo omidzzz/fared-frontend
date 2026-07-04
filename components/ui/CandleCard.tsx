@@ -36,13 +36,13 @@ export default function CandleCard({ candle }: CandleCardProps) {
         style={{
           position: "relative",
           borderRadius: "16px",
-          overflow: "visible",
+          overflow: "hidden",
           cursor: "pointer",
           transition:
             "transform 0.3s ease, filter 0.4s ease, box-shadow 0.4s ease",
           background: "#2a0a4a",
           width: "100%",
-          aspectRatio: "3 / 4",
+          height: "clamp(280px, 50vw, 420px)",
           display: "flex",
           flexDirection: "column",
           // Enhanced border styling
