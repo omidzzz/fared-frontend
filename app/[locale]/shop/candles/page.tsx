@@ -6,18 +6,23 @@ import Link from "next/link";
 import CTAButton from "@/components/ui/CTAButton";
 import CandleCard from "@/components/ui/CandleCard";
 import ShopHero from "@/components/aura/ShopHero";
+import { ResponsiveCarousel } from "@/components/ui/ResponsiveCarousel";
 import { useCart } from "@/hooks/useCart";
 import { useTranslations } from "next-intl";
 import { useLocale } from "@/hooks/useLocale";
+import { useProducts } from "@/hooks/useProducts";
 import { getCandles } from "@/lib/api";
+import ProductGrid from "@/components/shop/ProductGrid";
+import { Card } from "@/components/aura/ProductCards";
 
 export default function CandlesPage() {
   const [candles, setCandles] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { totalItems } = useCart();
+  const { totalItems, addItem } = useCart();
   const t = useTranslations();
   const { isRTL } = useLocale();
 
+  // Fetch all candles for the grid
   useEffect(() => {
     async function loadCandles() {
       try {
@@ -31,6 +36,73 @@ export default function CandlesPage() {
     }
     loadCandles();
   }, []);
+
+  // Fetch featured products for carousel
+  const { data: featuredData, isLoading: featuredLoading } = useProducts({
+    category: "candles",
+    limit: 10,
+    offset: 0,
+  });
+
+  const allProducts = featuredData?.products || [];
+  const featuredProducts = allProducts.filter(
+    (product: any) => product.isFeatured === true,
+  );
+
+  const handleAddToCart = (productId: string) => {
+    const product = allProducts.find((p: any) => p.id === productId);
+    if (product) {
+      addItem({
+        productId: product.id,
+        productType: "candle",
+        name: product.nameEN || product.nameFA || product.name,
+        nameFA: product.nameFA,
+        price: product.price,
+        currency: "IRT",
+        quantity: 1,
+        image: product.images?.[0]?.url || product.image || "",
+      });
+    }
+  };
+
+  // Render function for carousel
+  const renderProduct = (product: any, index: number) => (
+    <Link
+      key={product.id}
+      href={`/shop/candles/${product.slug || product.id}`}
+      className="flex justify-center transition-opacity hover:opacity-90"
+    >
+      <Card p={product} onAddToCart={() => handleAddToCart(product.id)} />
+    </Link>
+  );
+
+  // Render function for ProductGrid
+  const renderCandleCard = (
+    product: any,
+    onAddToCart: (id: string) => void,
+  ) => (
+    <Link
+      key={product.id}
+      href={`/shop/candles/${product.slug || product.id}`}
+      className="block transition-opacity hover:opacity-90"
+    >
+      <Card
+        p={product}
+        onAddToCart={() => {
+          addItem({
+            productId: product.id,
+            productType: "candle",
+            name: product.nameEN || product.nameFA || product.name,
+            nameFA: product.nameFA,
+            price: product.price,
+            currency: "IRT",
+            quantity: 1,
+            image: product.images?.[0]?.url || product.image || "",
+          });
+        }}
+      />
+    </Link>
+  );
 
   if (isLoading) {
     return (
@@ -86,11 +158,72 @@ export default function CandlesPage() {
             margin: "0 auto",
           }}
         >
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {candles.map((candle) => (
-              <CandleCard key={candle.id} candle={candle} />
-            ))}
-          </div>
+          {/* Featured Products Carousel */}
+          {featuredProducts.length > 0 && (
+            <div className="mb-12">
+              <h2
+                className="text-center text-[#F5D79C] font-serif text-2xl md:text-3xl mb-6"
+                style={{
+                  fontFamily: "var(--avad-serif)",
+                  textShadow: "0 2px 20px rgba(212,175,100,0.15)",
+                  letterSpacing: "0.05em",
+                }}
+              >
+                {t("candles.featuredTitle") || "✨ Featured Collection"}
+              </h2>
+
+              {featuredLoading ? (
+                <div className="flex flex-wrap justify-center gap-4 w-full max-w-2xl mx-auto">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className="animate-pulse"
+                      style={{
+                        width: "clamp(130px, 42vw, 260px)",
+                        height: "clamp(240px, 75vw, 460px)",
+                        background: "rgba(255,255,255,0.05)",
+                        borderRadius: "8px",
+                      }}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <ResponsiveCarousel
+                  items={featuredProducts}
+                  renderItem={renderProduct}
+                  tabletItemsPerSlide={2}
+                  desktopItemsPerSlide={4}
+                  autoplayMs={3500}
+                  className="w-full max-w-6xl mx-auto"
+                />
+              )}
+            </div>
+          )}
+
+          {/* All Products Grid */}
+          <h2
+            className="text-center text-[#F5D79C] font-serif text-2xl md:text-3xl mb-6"
+            style={{
+              fontFamily: "var(--avad-serif)",
+              textShadow: "0 2px 20px rgba(212,175,100,0.15)",
+              letterSpacing: "0.05em",
+            }}
+          >
+            {t("candles.products") || "All Candles"}
+          </h2>
+
+          <ProductGrid
+            category="candles"
+            itemsPerPage={12}
+            renderCard={renderCandleCard}
+            cols={{ mobile: 2, tablet: 3, desktop: 4 }}
+            gap="gap-4"
+            loadMore={true}
+            loadMoreLabel={t("clothes.loadMore") || "Load More"}
+            loadingLabel={t("clothes.loadingMore") || "Loading..."}
+            noMoreLabel={t("clothes.noMoreProducts") || "No more products to load"}
+            emptyMessage={t("candles.noProducts") || "No candles found"}
+          />
 
           {candles.length === 0 && (
             <p style={{ color: "#fff", textAlign: "center", padding: "40px" }}>
