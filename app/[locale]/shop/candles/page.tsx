@@ -9,31 +9,13 @@ import { useCart } from "@/hooks/useCart";
 import { useTranslations } from "next-intl";
 import { useLocale } from "@/hooks/useLocale";
 import { useProducts } from "@/hooks/useProducts";
-import { getCandles } from "@/lib/api";
 import ProductGrid from "@/components/shop/ProductGrid";
 import CandleCard from "@/components/ui/CandleCard";
 
 export default function CandlesPage() {
-  const [candles, setCandles] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const { totalItems, addItem } = useCart();
   const t = useTranslations();
   const { isRTL } = useLocale();
-
-  // Fetch all candles for the grid
-  useEffect(() => {
-    async function loadCandles() {
-      try {
-        const data = await getCandles();
-        setCandles(data);
-      } catch (error) {
-        console.error('Failed to load candles:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    loadCandles();
-  }, []);
 
   // Fetch featured products for carousel
   const { data: featuredData, isLoading: featuredLoading } = useProducts({
@@ -97,16 +79,6 @@ export default function CandlesPage() {
       </Link>
     );
   };
-
-  if (isLoading) {
-    return (
-      <main className="min-h-screen" style={{ background: "#1a0d3d" }}>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-          <p style={{ color: "#fff" }}>Loading...</p>
-        </div>
-      </main>
-    );
-  }
 
   return (
     <main className="min-h-screen" dir={isRTL ? "rtl" : "ltr"} style={{ background: "#1a0d3d" }}>
@@ -218,12 +190,6 @@ export default function CandlesPage() {
             noMoreLabel={t("clothes.noMoreProducts") || "No more products to load"}
             emptyMessage={t("candles.noProducts") || "No candles found"}
           />
-
-          {candles.length === 0 && (
-            <p style={{ color: "#fff", textAlign: "center", padding: "40px" }}>
-              No candles found
-            </p>
-          )}
         </div>
       </div>
 
