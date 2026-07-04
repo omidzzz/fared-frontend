@@ -36,15 +36,15 @@ export default function CandleCard({ candle }: CandleCardProps) {
         style={{
           position: "relative",
           borderRadius: "16px",
-          overflow: "hidden",
           cursor: "pointer",
           transition:
             "transform 0.3s ease, filter 0.4s ease, box-shadow 0.4s ease",
           background: "#2a0a4a",
           width: "100%",
-          height: "clamp(280px, 50vw, 420px)",
+          aspectRatio: "3 / 4",
           display: "flex",
           flexDirection: "column",
+          overflow: "hidden",
           // Enhanced border styling
           border: "2px solid transparent",
           backgroundImage:
@@ -69,7 +69,7 @@ export default function CandleCard({ candle }: CandleCardProps) {
         <div
           style={{
             borderRadius: "16px",
-            overflow: "hidden",
+            overflow: "visible",
             position: "relative",
             flex: "1 1 60%",
           }}
@@ -104,11 +104,12 @@ export default function CandleCard({ candle }: CandleCardProps) {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: "4px",
+            gap: "2px",
             background: "#2a0a4a",
             textAlign: "center",
             borderRadius: "0 0 16px 16px",
             overflow: "hidden",
+            paddingBottom: "20px",
           }}
         >
           <h3
@@ -142,39 +143,23 @@ export default function CandleCard({ candle }: CandleCardProps) {
               fontSize: "1.1rem",
               fontWeight: 600,
               color: "#d4af64",
-              margin: "4px 0 0",
+              margin: "2px 0 0",
             }}
           >
             {candle.price.toFixed(2)} تومان
           </p>
 
-          {/* Divider line */}
-          <div
-            style={{
-              width: "calc(100% - 32px)",
-              margin: "10px 0 0",
-              borderTop: "1px solid rgba(212,175,100,0.25)",
-            }}
-          />
-        </div>
-
-        {/* [+] button — half outside bottom border */}
-        <div style={{ position: "relative", height: "0" }}>
+          {/* [+] button — inside the info section */}
           <button
             onClick={handleAdd}
             style={{
-              position: "absolute",
-              bottom: "-16px",
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: "32px",
-              height: "32px",
+              width: "28px",
+              height: "28px",
               borderRadius: "50%",
               border: "1px solid rgba(212, 175, 100, 0.6)",
               background: "rgba(10, 5, 30, 0.8)",
-              backdropFilter: "blur(4px)",
               color: "rgba(212, 175, 100, 0.9)",
-              fontSize: "18px",
+              fontSize: "16px",
               lineHeight: 1,
               display: "flex",
               alignItems: "center",
@@ -182,6 +167,7 @@ export default function CandleCard({ candle }: CandleCardProps) {
               cursor: "pointer",
               zIndex: 10,
               transition: "all 0.2s ease",
+              marginTop: "4px",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "rgba(212,175,100,0.2)";
