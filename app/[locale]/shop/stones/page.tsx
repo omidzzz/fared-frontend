@@ -1,16 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import MobileCategoryCard from "@/components/ui/MobileCategoryCard";
-import CTAButton from "@/components/ui/CTAButton";
-import CrystalCard from "@/components/ui/CrystalCard";
 import ShopHero from "@/components/aura/ShopHero";
+import { ResponsiveCarousel } from "@/components/ui/ResponsiveCarousel";
 import { useCart } from "@/hooks/useCart";
 import { useTranslations } from "next-intl";
 import { useLocale } from "@/hooks/useLocale";
-import { getStones } from "@/lib/api";
+import { useProducts } from "@/hooks/useProducts";
+import ProductGrid from "@/components/shop/ProductGrid";
+import CrystalCard from "@/components/ui/CrystalCard";
 
 /* ── Design tokens ── */
 const GOLD = "#f5d87a";
@@ -202,89 +202,128 @@ function FilterBottomSheet({
   );
 }
 
+/* ── Filter function for stones ── */
+const stoneFilter = (activeFilter: string) => (stone: any) => {
+  if (activeFilter === "ALL STONES") return true;
+
+  const properties = (stone.tagsEN || []).map((p: string) => p.toUpperCase());
+  if (activeFilter === "PROTECTION")
+    return properties.some(
+      (p: string) =>
+        p.includes("PROTECTION") ||
+        p.includes("SHIELD") ||
+        p.includes("GROUNDING"),
+    );
+  if (activeFilter === "LOVE")
+    return properties.some(
+      (p: string) =>
+        p.includes("LOVE") ||
+        p.includes("COMPASSION") ||
+        p.includes("HEART"),
+    );
+  if (activeFilter === "ABUNDANCE")
+    return properties.some(
+      (p: string) =>
+        p.includes("ABUNDANCE") ||
+        p.includes("JOY") ||
+        p.includes("CONFIDENCE"),
+    );
+  if (activeFilter === "HEALING")
+    return properties.some(
+      (p: string) =>
+        p.includes("HEALING") ||
+        p.includes("BALANCE") ||
+        p.includes("CLEANSING"),
+    );
+  if (activeFilter === "MANIFESTATION")
+    return properties.some(
+      (p: string) =>
+        p.includes("MANIFESTATION") ||
+        p.includes("MAGIC") ||
+        p.includes("TRANSFORMATION"),
+    );
+  if (activeFilter === "CLARITY")
+    return properties.some(
+      (p: string) =>
+        p.includes("CLARITY") ||
+        p.includes("AMPLIFY") ||
+        p.includes("INTUITION"),
+    );
+  return true;
+};
+
 /* ── Page ── */
 
 export default function StonesPage() {
   const [activeFilter, setActiveFilter] = useState("ALL STONES");
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [stones, setStones] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const { totalItems } = useCart();
   const t = useTranslations();
   const { isRTL } = useLocale();
 
-  useEffect(() => {
-    async function loadStones() {
-      try {
-        const data = await getStones();
-        setStones(data);
-      } catch (error) {
-        console.error('Failed to load stones:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    loadStones();
-  }, []);
-
-  const filteredStones = stones.filter((stone: any) => {
-    if (activeFilter === "ALL STONES") return true;
-    
-    const properties = (stone.tagsEN || []).map((p: string) => p.toUpperCase());
-    if (activeFilter === "PROTECTION")
-      return properties.some(
-        (p: string) =>
-          p.includes("PROTECTION") ||
-          p.includes("SHIELD") ||
-          p.includes("GROUNDING"),
-      );
-    if (activeFilter === "LOVE")
-      return properties.some(
-        (p: string) =>
-          p.includes("LOVE") ||
-          p.includes("COMPASSION") ||
-          p.includes("HEART"),
-      );
-    if (activeFilter === "ABUNDANCE")
-      return properties.some(
-        (p: string) =>
-          p.includes("ABUNDANCE") ||
-          p.includes("JOY") ||
-          p.includes("CONFIDENCE"),
-      );
-    if (activeFilter === "HEALING")
-      return properties.some(
-        (p: string) =>
-          p.includes("HEALING") ||
-          p.includes("BALANCE") ||
-          p.includes("CLEANSING"),
-      );
-    if (activeFilter === "MANIFESTATION")
-      return properties.some(
-        (p: string) =>
-          p.includes("MANIFESTATION") ||
-          p.includes("MAGIC") ||
-          p.includes("TRANSFORMATION"),
-      );
-    if (activeFilter === "CLARITY")
-      return properties.some(
-        (p: string) =>
-          p.includes("CLARITY") ||
-          p.includes("AMPLIFY") ||
-          p.includes("INTUITION"),
-      );
-    return true;
+  // Fetch featured products for carousel
+  const { data: featuredData, isLoading: featuredLoading } = useProducts({
+    category: "stones",
+    limit: 10,
+    offset: 0,
   });
 
-  if (isLoading) {
+  const allProducts = featuredData?.products || [];
+  const featuredProducts = allProducts.filter(
+    (product: any) => product.isFeatured === true,
+  );
+
+  // Map API product to CrystalCard-compatible format
+  const mapToStone = (product: any) => ({
+    id: product.id,
+    slug: product.slug || product.id,
+    name: product.nameEN || product.name || "Crystal",
+    nameFA: product.nameFA || product.name || "سنگ",
+    origin: product.origin || "",
+    originFA: product.originFA || "",
+    hardness: product.hardness || "",
+    chakra: product.chakra || "",
+    chakraFA: product.chakraFA || "",
+    properties: product.tagsEN || [],
+    propertiesFA: product.tagsFA || [],
+    healingProperties: product.tagsEN || [],
+    healingBenefitsFA: [],
+    howToCleanseFA: "",
+    price: product.price || 0,
+    image: product.images?.[0]?.url || product.image || "",
+    accentColor: "var(--chakra-solar)",
+  });
+
+  // Render function for carousel using CrystalCard
+  const renderProduct = (product: any, index: number) => {
+    const stone = mapToStone(product);
     return (
-      <main className="min-h-screen" style={{ background: "#1a0d3d" }}>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-          <p style={{ color: "#fff" }}>Loading...</p>
-        </div>
-      </main>
+      <Link
+        key={product.id}
+        href={`/shop/stones/${product.slug || product.id}`}
+        className="flex justify-center transition-opacity hover:opacity-90"
+      >
+        <CrystalCard stone={stone} />
+      </Link>
     );
-  }
+  };
+
+  // Render function for ProductGrid using CrystalCard
+  const renderCrystalCard = (
+    product: any,
+    onAddToCart: (id: string) => void,
+  ) => {
+    const stone = mapToStone(product);
+    return (
+      <Link
+        key={product.id}
+        href={`/shop/stones/${product.slug || product.id}`}
+        className="block transition-opacity hover:opacity-90"
+      >
+        <CrystalCard stone={stone} />
+      </Link>
+    );
+  };
 
   return (
     <main className="min-h-screen stones-page" dir={isRTL ? "rtl" : "ltr"}>
@@ -348,6 +387,48 @@ export default function StonesPage() {
           {/* Hero */}
           <ShopHero namespace="stones" fullWidth={true} />
 
+          {/* Featured Products Carousel */}
+          {featuredProducts.length > 0 && (
+            <div className="w-full max-w-4xl">
+              <h2
+                className="text-center text-[#F5D79C] font-serif text-xl md:text-2xl mb-4"
+                style={{
+                  fontFamily: "var(--avad-serif)",
+                  textShadow: "0 2px 20px rgba(212,175,100,0.15)",
+                  letterSpacing: "0.05em",
+                }}
+              >
+                {t("stones.featuredTitle") || "✨ Featured Collection"}
+              </h2>
+
+              {featuredLoading ? (
+                <div className="flex flex-wrap justify-center gap-4 w-full max-w-2xl mx-auto">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className="animate-pulse"
+                      style={{
+                        width: "clamp(130px, 42vw, 260px)",
+                        height: "clamp(240px, 75vw, 460px)",
+                        background: "rgba(255,255,255,0.05)",
+                        borderRadius: "8px",
+                      }}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <ResponsiveCarousel
+                  items={featuredProducts}
+                  renderItem={renderProduct}
+                  tabletItemsPerSlide={2}
+                  desktopItemsPerSlide={4}
+                  autoplayMs={3500}
+                  className="w-full max-w-2xl mx-auto"
+                />
+              )}
+            </div>
+          )}
+
           {/* Filter */}
           <MobileFilterBar
             activeFilter={activeFilter}
@@ -362,20 +443,27 @@ export default function StonesPage() {
             t={t}
           />
 
-          {/* Product grid — 2 columns on mobile */}
-          <div
-            className="stones-mobile-grid"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)",
-              gap: "12px",
-              padding: "0 16px 24px",
-              width: "100%",
-            }}
-          >
-            {filteredStones.map((stone) => (
-              <CrystalCard key={stone.id} stone={stone} />
-            ))}
+          {/* Product Grid - Mobile */}
+          <div className="w-full max-w-4xl">
+            <h2
+              className="font-display text-xl text-[var(--text-primary)] mb-6"
+              style={{ color: CREAM }}
+            >
+              {t("stones.products")}
+            </h2>
+            <ProductGrid
+              category="stones"
+              itemsPerPage={12}
+              renderCard={renderCrystalCard}
+              cols={{ mobile: 2, tablet: 2, desktop: 3 }}
+              gap="gap-4"
+              loadMore={true}
+              loadMoreLabel={t("stones.loadMore") || "Load More"}
+              loadingLabel={t("stones.loadingMore") || "Loading..."}
+              noMoreLabel={t("stones.noMoreProducts") || "No more products"}
+              emptyMessage={t("stones.noProducts") || "No stones found"}
+              filter={stoneFilter(activeFilter)}
+            />
           </div>
         </div>
 
@@ -695,42 +783,67 @@ export default function StonesPage() {
                 marginTop: 28,
               }}
             >
-              <CTAButton href="/shop/stones" size="large">
-                {t("stones.explore")} ✦
-              </CTAButton>
+              <ShopHero
+                namespace="stones"
+                fullWidth={true}
+                ctaKey="explore"
+              />
             </div>
           </section>
 
-          {/* ── HERO CARD ROW ── */}
-          <div
-            style={{
-              display: "flex",
-              gap: 48,
-              justifyContent: "center",
-              padding: "20px clamp(40px, 5vw, 100px) 84px",
-              flexWrap: "nowrap",
-              overflowX: "visible",
-              overflowY: "visible",
-            }}
-          >
-            {stones.slice(0, 5).map((stone: any, i: number) => (
-              <div
-                key={stone.id}
-                className="card-entrance"
+          {/* ── FEATURED PRODUCTS CAROUSEL ── */}
+          {featuredProducts.length > 0 && (
+            <section
+              style={{
+                position: "relative",
+                zIndex: 2,
+                marginBottom: 40,
+              }}
+            >
+              <h2
                 style={{
-                  ...fadeSlideUp,
-                  animationDelay: `${i * 80}ms`,
-                  width: `calc((100% - ${4 * 18}px) / 5)`,
-                  minWidth: 200,
-                  maxWidth: 260,
-                  overflow: "visible",
-                  padding: "4px 0",
+                  fontFamily: '"Playfair Display", serif',
+                  fontWeight: 500,
+                  color: CREAM,
+                  fontSize: 38,
+                  textShadow: "0 2px 14px rgba(0,0,0,.6)",
+                  margin: 0,
+                  marginBottom: 20,
+                  textAlign: "center",
                 }}
               >
-                <CrystalCard stone={stone} />
-              </div>
-            ))}
-          </div>
+                {t("stones.featuredTitle") || "✨ Featured Collection"}
+              </h2>
+
+              {featuredLoading ? (
+                <div className="flex flex-wrap justify-center gap-4">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className="animate-pulse"
+                      style={{
+                        width: "clamp(130px, 42vw, 260px)",
+                        height: "clamp(240px, 75vw, 460px)",
+                        background: "rgba(255,255,255,0.05)",
+                        borderRadius: "8px",
+                      }}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="max-w-6xl mx-auto">
+                  <ResponsiveCarousel
+                    items={featuredProducts}
+                    renderItem={renderProduct}
+                    tabletItemsPerSlide={2}
+                    desktopItemsPerSlide={4}
+                    autoplayMs={3500}
+                    className="w-full"
+                  />
+                </div>
+              )}
+            </section>
+          )}
 
           {/* ── FILTER BAR ── */}
           <div
@@ -783,44 +896,21 @@ export default function StonesPage() {
             })}
           </div>
 
-          {/* ── EXPANDED GRID ── */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "48px 24px",
-              margin: "32px auto 40px",
-              padding: "20px clamp(40px, 5vw, 100px) 24px",
-              overflow: "visible",
-            }}
-          >
-            {filteredStones.map((stone: any, i: number) => (
-              <div
-                key={stone.id + "-full"}
-                className="card-entrance"
-                style={{
-                  ...fadeSlideUp,
-                  animationDelay: `${i * 80}ms`,
-                  overflow: "visible",
-                  padding: "4px 0",
-                }}
-              >
-                <div style={{ maxWidth: 260, margin: "0 auto" }}>
-                  <CrystalCard stone={stone} />
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Load More */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              paddingBottom: 80,
-            }}
-          >
-            <CTAButton size="large">{t("stones.exploreMore")}</CTAButton>
+          {/* ── PRODUCT GRID ── */}
+          <div style={{ position: "relative", zIndex: 2, paddingBottom: "24px" }}>
+            <ProductGrid
+              category="stones"
+              itemsPerPage={12}
+              renderCard={renderCrystalCard}
+              cols={{ mobile: 2, tablet: 3, desktop: 3 }}
+              gap="gap-4"
+              loadMore={true}
+              loadMoreLabel={t("stones.loadMore") || "Load More"}
+              loadingLabel={t("stones.loadingMore") || "Loading..."}
+              noMoreLabel={t("stones.noMoreProducts") || "No more products"}
+              emptyMessage={t("stones.noProducts") || "No stones found"}
+              filter={stoneFilter(activeFilter)}
+            />
           </div>
         </div>
       </div>
