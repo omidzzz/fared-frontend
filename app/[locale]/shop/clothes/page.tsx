@@ -125,7 +125,7 @@ export default function ClothesPage() {
   // Fetch all clothes products without limit to get all featured items
   const { data: productsData, isLoading: productsLoading } = useProducts({
     category: "clothes",
-    limit: 100, // Increased limit to get all products
+    limit: 100,
     offset: 0,
   });
 
@@ -134,19 +134,12 @@ export default function ClothesPage() {
       const products = productsData.products;
       setAllProducts(products);
 
-      // Filter featured products - ensure we get ALL featured items
+      // Filter featured products
       const featured = products.filter(
         (product: any) => product.isFeatured === true,
       );
       setFeaturedProducts(featured);
       setIsLoading(false);
-
-      console.log("All products count:", products.length);
-      console.log("Featured products count:", featured.length);
-      console.log(
-        "Featured products:",
-        featured.map((p: any) => p.nameFA || p.name),
-      );
     }
   }, [productsData]);
 
@@ -372,7 +365,7 @@ export default function ClothesPage() {
           )}
         </div>
 
-        {/* Mobile Filter */}
+        {/* Mobile Filter Button */}
         <div className="lg:hidden mb-4">
           <button
             onClick={() => setSheetOpen(true)}
@@ -413,21 +406,6 @@ export default function ClothesPage() {
               </div>
             </>
           )}
-        </div>
-
-        {/* Desktop Filter Bar */}
-        <div className="hidden lg:flex" style={{ background: "rgba(15,5,40,0.6)", borderRadius: 12, padding: "14px 24px", margin: "0 auto 32px", maxWidth: "600px", backdropFilter: "blur(8px)", alignItems: "center", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
-          {FILTER_KEYS.map((key) => {
-            const filterValue = FILTER_MAP[key];
-            const isActive = activeFilter === filterValue;
-            return (
-              <button key={key} role="tab" aria-selected={isActive} onClick={() => setActiveFilter(filterValue)}
-                style={{ border: `1px solid ${isActive ? "rgba(255,215,100,0.8)" : "rgba(255,215,100,0.35)"}`, borderRadius: 100, padding: "6px 20px", fontSize: "0.72rem", letterSpacing: "0.12em",
-                  color: isActive ? "#fff" : "rgba(255,255,255,0.7)", background: isActive ? "rgba(255,215,100,0.15)" : "transparent", cursor: "pointer", transition: "all 0.2s ease", whiteSpace: "nowrap" }}>
-                {gt(key)}
-              </button>
-            );
-          })}
         </div>
 
         {/* All Products Grid - Mobile/Tablet */}
@@ -552,7 +530,7 @@ export default function ClothesPage() {
 
           <div className="flex-1 max-w-4xl">
             {/* Desktop Filter Bar */}
-            <div className="hidden lg:flex" style={{ background: "rgba(15,5,40,0.6)", borderRadius: 12, padding: "14px 24px", marginBottom: 24, backdropFilter: "blur(8px)", alignItems: "center", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+            <div style={{ background: "rgba(15,5,40,0.6)", borderRadius: 12, padding: "14px 24px", marginBottom: 24, backdropFilter: "blur(8px)", alignItems: "center", gap: 12, flexWrap: "wrap", justifyContent: "center", display: "flex" }}>
               {FILTER_KEYS.map((key) => {
                 const filterValue = FILTER_MAP[key];
                 const isActive = activeFilter === filterValue;
@@ -565,6 +543,80 @@ export default function ClothesPage() {
                 );
               })}
             </div>
+            
+            {/* Desktop Sub-filters */}
+            <div className="flex flex-col gap-2 mb-4" style={{ maxWidth: "600px", margin: "0 auto" }}>
+              {/* Size sub-filters */}
+              {availableSizes.length > 0 && (
+                <div className="flex items-center gap-2 flex-wrap justify-center">
+                  <span className="text-white/60 text-xs mr-2">Size:</span>
+                  {SIZE_OPTIONS.map((size) => {
+                    const isActive = activeSizeFilter === size;
+                    const isAvailable = size === "ALL" || availableSizes.includes(size);
+                    return (
+                      <button
+                        key={size}
+                        onClick={() => setActiveSizeFilter(size)}
+                        disabled={!isAvailable}
+                        style={{
+                          padding: "4px 12px",
+                          borderRadius: "6px",
+                          fontSize: "0.7rem",
+                          border: `1px solid ${isActive ? "rgba(212,175,100,0.8)" : "rgba(255,255,255,0.1)"}`,
+                          background: isActive ? "rgba(212,175,100,0.2)" : "rgba(255,255,255,0.04)",
+                          color: isActive ? "#fff" : "rgba(255,255,255,0.7)",
+                          cursor: isAvailable ? "pointer" : "not-allowed",
+                          opacity: isAvailable ? 1 : 0.4,
+                        }}
+                      >
+                        {size}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+              
+              {/* Color sub-filters */}
+              {availableColors.length > 0 && (
+                <div className="flex items-center gap-2 flex-wrap justify-center">
+                  <span className="text-white/60 text-xs mr-2">Color:</span>
+                  {["ALL", ...availableColors].map((color) => {
+                    const isActive = activeColorFilter === color;
+                    const colorHex = color === "ALL" ? "#d4af64" : COLOR_HEX_MAP[color] || color;
+                    return (
+                      <button
+                        key={color}
+                        onClick={() => setActiveColorFilter(color)}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "4px",
+                          padding: "4px 10px",
+                          borderRadius: "6px",
+                          fontSize: "0.7rem",
+                          border: `1px solid ${isActive ? "rgba(212,175,100,0.8)" : "rgba(255,255,255,0.1)"}`,
+                          background: isActive ? "rgba(212,175,100,0.2)" : "rgba(255,255,255,0.04)",
+                          color: isActive ? "#fff" : "rgba(255,255,255,0.7)",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <span
+                          style={{
+                            width: "12px",
+                            height: "12px",
+                            borderRadius: "50%",
+                            background: colorHex,
+                            border: "1px solid rgba(255,255,255,0.3)",
+                          }}
+                        />
+                        {color === "ALL" ? "All" : color.replace("_", " ")}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+            
             <ProductGrid
               key={activeFilter}
               category="clothes"
