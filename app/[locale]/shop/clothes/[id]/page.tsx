@@ -164,7 +164,7 @@ export default function ClothesDetailPage() {
     currencyDisplay: "code",
   }).format(item.price);
 
-  // Build specs with RTL/LTR support
+  // Build specs with RTL/LTR support - use actual attributes from product
   const specs = [
     {
       icon: "👗",
@@ -182,7 +182,7 @@ export default function ClothesDetailPage() {
       value: isRTL ? "برتر" : "Premium",
     },
   ];
-
+  
   // Build benefits with RTL/LTR support
   const benefits = isRTL
     ? ["تناسب راحت", "طراحی معنوی", "مواد با کیفیت", "استایل چندمنظوره"]
@@ -192,7 +192,18 @@ export default function ClothesDetailPage() {
         "Premium materials",
         "Versatile styling",
       ];
-
+  
+  // Use actual variants and colorOptions from the product
+  const sizes = ((item.variants as any[]) || []).map((v: any) => ({
+    label: v.label || v.size || "M",
+    value: (v.label || v.size || "m").toLowerCase(),
+  }));
+  
+  const colorOptions = ((item.colorOptions as any[]) || []).map((c: any) => ({
+    label: c.nameFA || c.nameEN || c.hex || "Color",
+    value: c.hex || c.nameFA || c.nameEN,
+  }));
+  
   const productData = {
     id: item.id,
     name: itemName,
@@ -201,16 +212,19 @@ export default function ClothesDetailPage() {
     description: itemDescription,
     price: item.price,
     formattedPrice: formattedPrice,
-    originalPrice: Math.round(item.price * 1.3),
-    discountPercent: 23,
-    inStock: true,
-    stock: 10, // Default stock
-    images: [item.image, item.heroImage].filter((img): img is string => Boolean(img && img.trim() !== '')),
-    sizes: [
+    originalPrice: item.comparePrice || Math.round(item.price * 1.3),
+    discountPercent: item.discountPercent || 23,
+    inStock: item.isInStock !== false,
+    stock: item.stock || 10,
+    images: ((item.images as any[]) || []).map((img: any) => 
+      typeof img === 'string' ? img : (img?.url || img?.path || '')
+    ).filter((img: string) => Boolean(img && img.trim() !== '')),
+    sizes: sizes.length > 0 ? sizes : [
       { label: "S", value: "s" },
       { label: "M", value: "m" },
       { label: "L", value: "l" },
     ],
+    colorOptions: colorOptions,
     specs: specs,
     overview: isRTL
       ? `${itemName}. طراحی شده برای راحتی و هم‌اهنگی معنوی. ${itemDescription}`
@@ -229,11 +243,10 @@ export default function ClothesDetailPage() {
     })),
     isRTL: isRTL,
     avgRating: 0,
-    comparePrice: Math.round(item.price * 1.3),
+    comparePrice: item.comparePrice,
     currency: item.currency,
-    variants: [],
-    colorOptions: [],
-    attributes: [],
+    variants: (item.variants as any[]) || [],
+    attributes: (item.attributes as Record<string, any>) || {},
     tags: isRTL
       ? ["معنوی", "با کیفیت", "راحت"]
       : ["Spiritual", "Premium", "Comfortable"],

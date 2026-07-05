@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import CTAButton from "@/components/ui/CTAButton";
@@ -23,6 +24,8 @@ type Product = {
 export function Card({ p, onAddToCart }: { p: any; onAddToCart: () => void }) {
   const t = useTranslations("clothes");
   const { isRTL } = useLocale();
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  
   // Show product colors from database colorOptions (now included in list response)
   // When colorOptions are present, show the actual colors from the database
   // Otherwise, show a single gold dot as a generic indicator for clothes products
@@ -55,6 +58,11 @@ export function Card({ p, onAddToCart }: { p: any; onAddToCart: () => void }) {
     ? ["#d4af64"]
     : [];
   const showColors = productColors.length > 0;
+  
+  // Handle color selection
+  const handleColorSelect = (color: string) => {
+    setSelectedColor(color);
+  };
   const maskSvg = `%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 430.3 753' preserveAspectRatio='none'%3E%3Cpath d='${encodeURIComponent(
     CARD_PATH,
   )}' fill='black'/%3E%3C/svg%3E`;
@@ -225,34 +233,47 @@ export function Card({ p, onAddToCart }: { p: any; onAddToCart: () => void }) {
             </div>
             {showColors && (
               <div className="flex" style={{ gap: 4, marginTop: 6 }}>
-                {productColors.slice(0, 4).map((color: string, i: number) => (
-                  <span
-                    key={i}
-                    style={{
-                      width: "clamp(10px, 2.5vw, 13px)",
-                      height: "clamp(10px, 2.5vw, 13px)",
-                      borderRadius: "50%",
-                      display: "block",
-                      background: color,
-                      boxShadow:
-                        "0 0 0 1.5px rgba(212,175,100,0.4), 0 2px 8px rgba(0,0,0,0.3), inset 0 0 4px rgba(0,0,0,0.1)",
-                      transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                      cursor: "pointer",
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.transform =
-                        "scale(1.2)";
-                      (e.currentTarget as HTMLElement).style.boxShadow =
-                        "0 0 0 2px rgba(212,175,100,0.6), 0 4px 12px rgba(0,0,0,0.4)";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.transform =
-                        "scale(1)";
-                      (e.currentTarget as HTMLElement).style.boxShadow =
-                        "0 0 0 1.5px rgba(212,175,100,0.4), 0 2px 8px rgba(0,0,0,0.3)";
-                    }}
-                  />
-                ))}
+                {productColors.slice(0, 4).map((color: string, i: number) => {
+                  const isSelected = selectedColor === color;
+                  return (
+                    <span
+                      key={i}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleColorSelect(color);
+                      }}
+                      style={{
+                        width: "clamp(10px, 2.5vw, 13px)",
+                        height: "clamp(10px, 2.5vw, 13px)",
+                        borderRadius: "50%",
+                        display: "block",
+                        background: color,
+                        boxShadow: isSelected
+                          ? "0 0 0 2px #fff, 0 0 0 4px rgba(212,175,100,0.8), 0 2px 8px rgba(0,0,0,0.3)"
+                          : "0 0 0 1.5px rgba(212,175,100,0.4), 0 2px 8px rgba(0,0,0,0.3), inset 0 0 4px rgba(0,0,0,0.1)",
+                        transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                        cursor: "pointer",
+                        transform: isSelected ? "scale(1.15)" : "scale(1)",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isSelected) {
+                          (e.currentTarget as HTMLElement).style.transform =
+                            "scale(1.2)";
+                          (e.currentTarget as HTMLElement).style.boxShadow =
+                            "0 0 0 2px rgba(212,175,100,0.6), 0 4px 12px rgba(0,0,0,0.4)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isSelected) {
+                          (e.currentTarget as HTMLElement).style.transform =
+                            "scale(1)";
+                          (e.currentTarget as HTMLElement).style.boxShadow =
+                            "0 0 0 1.5px rgba(212,175,100,0.4), 0 2px 8px rgba(0,0,0,0.3)";
+                        }
+                      }}
+                    />
+                  );
+                })}
               </div>
             )}
             <div
