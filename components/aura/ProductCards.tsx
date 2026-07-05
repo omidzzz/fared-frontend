@@ -20,9 +20,41 @@ type Product = {
   category?: string;
 };
 
-export function Card({ p, onAddToCart }: { p: Product; onAddToCart: () => void }) {
+export function Card({ p, onAddToCart }: { p: any; onAddToCart: () => void }) {
   const t = useTranslations("clothes");
   const { isRTL } = useLocale();
+  // Show product colors from database colorOptions (now included in list response)
+  // When colorOptions are present, show the actual colors from the database
+  // Otherwise, show a single gold dot as a generic indicator for clothes products
+  console.log("🎨 Card product data:", { 
+    id: p.id, 
+    name: p.name, 
+    colorOptions: p.colorOptions, 
+    variants: p.variants,
+    type: p.type,
+    category: p.category
+  });
+  // Check if colorOptions exists and has items - use actual database colors
+  // The data structure from the API: { id, hex, nameFA } for each colorOption
+  const hasColorOptions = p.colorOptions && Array.isArray(p.colorOptions) && p.colorOptions.length > 0;
+  const hasVariants = p.variants && Array.isArray(p.variants) && p.variants.length > 0;
+  const isClothes = p.type === "clothes" || p.category === "clothes";
+  
+  // Extract colors from colorOptions, or use fallback
+  const productColors = hasColorOptions
+    ? p.colorOptions.map((c: any) => {
+        // Handle different possible data structures
+        if (typeof c === 'string') return c;
+        if (c.hex) return c.hex;
+        if (c.value) return c.value;
+        return "#d4af64";
+      })
+    : hasVariants
+    ? ["#d4af64"]
+    : isClothes
+    ? ["#d4af64"]
+    : [];
+  const showColors = productColors.length > 0;
   const maskSvg = `%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 430.3 753' preserveAspectRatio='none'%3E%3Cpath d='${encodeURIComponent(
     CARD_PATH,
   )}' fill='black'/%3E%3C/svg%3E`;
@@ -191,36 +223,38 @@ export function Card({ p, onAddToCart }: { p: Product; onAddToCart: () => void }
             >
               {formatPrice(p.price)}
             </div>
-            <div className="flex" style={{ gap: 4, marginTop: 6 }}>
-              {[0, 1, 2, 3].map((i) => (
-                <span
-                  key={i}
-                  style={{
-                    width: "clamp(10px, 2.5vw, 13px)",
-                    height: "clamp(10px, 2.5vw, 13px)",
-                    borderRadius: "50%",
-                    display: "block",
-                    background: ["#7e57c2", "#3f51b5", "#c8a8e0", "#e6a8c8"][i],
-                    boxShadow:
-                      "0 0 0 1.5px rgba(212,175,100,0.4), 0 2px 8px rgba(0,0,0,0.3), inset 0 0 4px rgba(0,0,0,0.1)",
-                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                    cursor: "pointer",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.transform =
-                      "scale(1.2)";
-                    (e.currentTarget as HTMLElement).style.boxShadow =
-                      "0 0 0 2px rgba(212,175,100,0.6), 0 4px 12px rgba(0,0,0,0.4)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.transform =
-                      "scale(1)";
-                    (e.currentTarget as HTMLElement).style.boxShadow =
-                      "0 0 0 1.5px rgba(212,175,100,0.4), 0 2px 8px rgba(0,0,0,0.3)";
-                  }}
-                />
-              ))}
-            </div>
+            {showColors && (
+              <div className="flex" style={{ gap: 4, marginTop: 6 }}>
+                {productColors.slice(0, 4).map((color: string, i: number) => (
+                  <span
+                    key={i}
+                    style={{
+                      width: "clamp(10px, 2.5vw, 13px)",
+                      height: "clamp(10px, 2.5vw, 13px)",
+                      borderRadius: "50%",
+                      display: "block",
+                      background: color,
+                      boxShadow:
+                        "0 0 0 1.5px rgba(212,175,100,0.4), 0 2px 8px rgba(0,0,0,0.3), inset 0 0 4px rgba(0,0,0,0.1)",
+                      transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                      cursor: "pointer",
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLElement).style.transform =
+                        "scale(1.2)";
+                      (e.currentTarget as HTMLElement).style.boxShadow =
+                        "0 0 0 2px rgba(212,175,100,0.6), 0 4px 12px rgba(0,0,0,0.4)";
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLElement).style.transform =
+                        "scale(1)";
+                      (e.currentTarget as HTMLElement).style.boxShadow =
+                        "0 0 0 1.5px rgba(212,175,100,0.4), 0 2px 8px rgba(0,0,0,0.3)";
+                    }}
+                  />
+                ))}
+              </div>
+            )}
             <div
               style={{ marginTop: 6, width: "90%", maxWidth: "140px" }}
               onClick={(e) => e.stopPropagation()}

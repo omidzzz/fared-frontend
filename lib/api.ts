@@ -33,7 +33,7 @@ export interface CatalogProduct {
   certificate?: boolean;
   language?: string;
   // Allow any additional fields
-  [key: string]: any;
+  [key: string]: unknown;
 }
 function buildUrl(endpoint: string): string {
   const normalizedEndpoint = endpoint.startsWith("/")
@@ -137,9 +137,9 @@ function normalizeProduct(product: Record<string, unknown>): CatalogProduct {
     isInStock: stock > 0,
     image: imageUrl,
     images: rawImages
-      .map((img: any) =>
+      .map((img: Record<string, unknown>) =>
         typeof img === "object" && img !== null
-          ? img.url ?? img.path ?? img.src ?? ""
+          ? (img.url ?? img.path ?? img.src ?? "") as string
           : String(img),
       )
       .filter(Boolean),
@@ -177,8 +177,15 @@ function normalizeProduct(product: Record<string, unknown>): CatalogProduct {
     durationWeeks: Number(product.durationWeeks ?? 0),
     certificate: Boolean(product.certificate ?? false),
     language: String(product.language ?? ""),
+    // Explicitly pass through variants and colorOptions
+    variants: product.variants as
+      | { id: string; label: string; stock: number }[]
+      | undefined,
+    colorOptions: product.colorOptions as
+      | { id: string; hex: string; nameFA: string }[]
+      | undefined,
     // Pass through any other fields that might be needed
-    ...(product as any),
+    ...(product as Record<string, unknown>),
   };
 }
 async function apiFetch<T>(
@@ -511,10 +518,8 @@ export async function getAccessoryBySlug(
 }
 
 export async function getCourses(): Promise<CatalogProduct[]> {
-  const response = await apiFetch<{
-    products: Record<string, unknown>[];
-  }>("/courses");
-  return (response.products || []).map(normalizeProduct);
+  const response = await apiFetch<Record<string, unknown>[]>("/courses");
+  return (response || []).map(normalizeProduct);
 }
 
 export async function getCourseBySlug(slug: string): Promise<CatalogProduct> {
@@ -581,5 +586,162 @@ export async function getArticleBySlug(slug: string): Promise<BlogArticle> {
     isPublished: Boolean(article.isPublished ?? false),
     publishedAt: article.publishedAt as string | undefined,
     createdAt: String(article.createdAt ?? ""),
+  };
+}
+
+// ── Tours ──
+export interface Tour {
+  id: string;
+  slug: string;
+  destination: string;
+  titleFA: string;
+  titleEN?: string;
+  descriptionFA: string;
+  descriptionEN?: string;
+  highlightsFA: string[];
+  highlightsEN: string[];
+  dateRange: string;
+  startDate: string;
+  endDate: string;
+  durationDays: number;
+  price: number;
+  currency: string;
+  spotsTotal: number;
+  spotsLeft: number;
+  heroImage?: string;
+  images: { id: string; url: string; sortOrder: number }[];
+  includedFA: string[];
+  notIncludedFA: string[];
+  itinerary: { id: string; day: number; titleFA: string; descriptionFA: string }[];
+  instructor: string;
+  level: string;
+  isActive: boolean;
+  isFeatured: boolean;
+  categoryId: string;
+  category: { id: string; slug: string; nameFA: string; nameEN?: string };
+  enquiriesCount?: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export async function getTours(): Promise<Tour[]> {
+  const tours = await apiFetch<Record<string, unknown>[]>("/tours");
+  return tours.map((tour) => ({
+    id: String(tour.id ?? ""),
+    slug: String(tour.slug ?? ""),
+    destination: String(tour.destination ?? ""),
+    titleFA: String(tour.titleFA ?? ""),
+    titleEN: tour.titleEN ? String(tour.titleEN) : undefined,
+    descriptionFA: String(tour.descriptionFA ?? ""),
+    descriptionEN: tour.descriptionEN ? String(tour.descriptionEN) : undefined,
+    highlightsFA: Array.isArray(tour.highlightsFA) ? tour.highlightsFA.map(String) : [],
+    highlightsEN: Array.isArray(tour.highlightsEN) ? tour.highlightsEN.map(String) : [],
+    dateRange: String(tour.dateRange ?? ""),
+    startDate: String(tour.startDate ?? ""),
+    endDate: String(tour.endDate ?? ""),
+    durationDays: Number(tour.durationDays ?? 0),
+    price: Number(tour.price ?? 0),
+    currency: String(tour.currency ?? "USD"),
+    spotsTotal: Number(tour.spotsTotal ?? 0),
+    spotsLeft: Number(tour.spotsLeft ?? 0),
+    heroImage: tour.heroImage ? String(tour.heroImage) : undefined,
+    images: Array.isArray(tour.images) 
+      ? tour.images.map((img: Record<string, unknown>) => ({
+          id: String(img.id ?? ""),
+          url: String(img.url ?? ""),
+          sortOrder: Number(img.sortOrder ?? 0),
+        }))
+      : [],
+    includedFA: Array.isArray(tour.includedFA) ? tour.includedFA.map(String) : [],
+    notIncludedFA: Array.isArray(tour.notIncludedFA) ? tour.notIncludedFA.map(String) : [],
+    itinerary: Array.isArray(tour.itinerary) 
+      ? tour.itinerary.map((day: Record<string, unknown>) => ({
+          id: String(day.id ?? ""),
+          day: Number(day.day ?? 0),
+          titleFA: String(day.titleFA ?? ""),
+          descriptionFA: String(day.descriptionFA ?? ""),
+        }))
+      : [],
+    instructor: String(tour.instructor ?? ""),
+    level: String(tour.level ?? "ALL_LEVELS"),
+    isActive: Boolean(tour.isActive ?? true),
+    isFeatured: Boolean(tour.isFeatured ?? false),
+    categoryId: String(tour.categoryId ?? ""),
+    category: tour.category 
+      ? {
+          id: String((tour.category as Record<string, unknown>).id ?? ""),
+          slug: String((tour.category as Record<string, unknown>).slug ?? ""),
+          nameFA: String((tour.category as Record<string, unknown>).nameFA ?? ""),
+          nameEN: (tour.category as Record<string, unknown>).nameEN 
+            ? String((tour.category as Record<string, unknown>).nameEN) 
+            : undefined,
+        }
+      : { id: "", slug: "", nameFA: "" },
+    enquiriesCount: (tour._count as Record<string, number> | undefined)?.enquiries 
+      ? Number((tour._count as Record<string, number>).enquiries) 
+      : undefined,
+    createdAt: String(tour.createdAt ?? ""),
+    updatedAt: String(tour.updatedAt ?? ""),
+  }));
+}
+
+export async function getTourBySlug(slug: string): Promise<Tour> {
+  const tour = await apiFetch<Record<string, unknown>>(`/tours/${slug}`);
+  return {
+    id: String(tour.id ?? ""),
+    slug: String(tour.slug ?? ""),
+    destination: String(tour.destination ?? ""),
+    titleFA: String(tour.titleFA ?? ""),
+    titleEN: tour.titleEN ? String(tour.titleEN) : undefined,
+    descriptionFA: String(tour.descriptionFA ?? ""),
+    descriptionEN: tour.descriptionEN ? String(tour.descriptionEN) : undefined,
+    highlightsFA: Array.isArray(tour.highlightsFA) ? tour.highlightsFA.map(String) : [],
+    highlightsEN: Array.isArray(tour.highlightsEN) ? tour.highlightsEN.map(String) : [],
+    dateRange: String(tour.dateRange ?? ""),
+    startDate: String(tour.startDate ?? ""),
+    endDate: String(tour.endDate ?? ""),
+    durationDays: Number(tour.durationDays ?? 0),
+    price: Number(tour.price ?? 0),
+    currency: String(tour.currency ?? "USD"),
+    spotsTotal: Number(tour.spotsTotal ?? 0),
+    spotsLeft: Number(tour.spotsLeft ?? 0),
+    heroImage: tour.heroImage ? String(tour.heroImage) : undefined,
+    images: Array.isArray(tour.images) 
+      ? tour.images.map((img: Record<string, unknown>) => ({
+          id: String(img.id ?? ""),
+          url: String(img.url ?? ""),
+          sortOrder: Number(img.sortOrder ?? 0),
+        }))
+      : [],
+    includedFA: Array.isArray(tour.includedFA) ? tour.includedFA.map(String) : [],
+    notIncludedFA: Array.isArray(tour.notIncludedFA) ? tour.notIncludedFA.map(String) : [],
+    itinerary: Array.isArray(tour.itinerary) 
+      ? tour.itinerary.map((day: Record<string, unknown>) => ({
+          id: String(day.id ?? ""),
+          day: Number(day.day ?? 0),
+          titleFA: String(day.titleFA ?? ""),
+          descriptionFA: String(day.descriptionFA ?? ""),
+        }))
+      : [],
+    instructor: String(tour.instructor ?? ""),
+    level: String(tour.level ?? "ALL_LEVELS"),
+    isActive: Boolean(tour.isActive ?? true),
+    isFeatured: Boolean(tour.isFeatured ?? false),
+    categoryId: String(tour.categoryId ?? ""),
+    category: tour.category 
+      ? {
+          id: String((tour.category as Record<string, unknown>).id ?? ""),
+          slug: String((tour.category as Record<string, unknown>).slug ?? ""),
+          nameFA: String((tour.category as Record<string, unknown>).nameFA ?? ""),
+          nameEN: (tour.category as Record<string, unknown>).nameEN 
+            ? String((tour.category as Record<string, unknown>).nameEN) 
+            : undefined,
+        }
+      : { id: "", slug: "", nameFA: "" },
+    enquiriesCount: (tour._count as Record<string, number> | undefined)?.enquiries 
+      ? Number((tour._count as Record<string, number>).enquiries) 
+      : undefined,
+    createdAt: String(tour.createdAt ?? ""),
+    updatedAt: String(tour.updatedAt ?? ""),
   };
 }
