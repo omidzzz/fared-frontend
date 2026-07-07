@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import MobileCategoryCard from "@/components/ui/MobileCategoryCard";
@@ -11,7 +12,8 @@ import { ResponsiveCarousel } from "@/components/ui/ResponsiveCarousel";
 import { useCart } from "@/hooks/useCart";
 import { useTranslations } from "next-intl";
 import { useLocale } from "@/hooks/useLocale";
-import { useProducts } from "@/hooks/useProducts";
+import { useQuery } from "@tanstack/react-query";
+import { getAccessories } from "@/lib/api";
 import ProductGrid from "@/components/shop/ProductGrid";
 
 /* ---- Design tokens from Mystic Earth ---- */
@@ -25,15 +27,44 @@ export default function AccessoriesPage() {
   const { totalItems, addItem } = useCart();
   const t = useTranslations("accessories");
   const { isRTL } = useLocale();
+  const [activeFilter, setActiveFilter] = useState("ALL ACCESSORIES");
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const gt = useTranslations();
+  
+  const FILTER_KEYS = [
+    "accessories.filters.all",
+    "accessories.filters.material",
+    "accessories.filters.type",
+  ];
+  
+  const FILTER_MAP: Record<string, string> = {
+    "accessories.filters.all": "ALL ACCESSORIES",
+    "accessories.filters.material": "MATERIAL",
+    "accessories.filters.type": "TYPE",
+  };
+  
+  const FILTER_REVERSE_MAP: Record<string, string> = {
+    "ALL ACCESSORIES": "accessories.filters.all",
+    "MATERIAL": "accessories.filters.material",
+    "TYPE": "accessories.filters.type",
+  };
+  
+  const accessoryFilter = (activeFilter: string) => (product: any) => {
+    if (activeFilter === "ALL ACCESSORIES") return true;
+    const tags = (product.tagsEN || []).map((t: string) => t.toUpperCase());
+    if (activeFilter === "MATERIAL") return tags.some((t: string) => t.includes("WOOD") || t.includes("METAL") || t.includes("STONE") || t.includes("FABRIC") || t.includes("GLASS"));
+    if (activeFilter === "TYPE") return tags.some((t: string) => t.includes("DECOR") || t.includes("TOOL") || t.includes("JEWELRY") || t.includes("ALTAR") || t.includes("MEDITATION"));
+    return true;
+  };
 
-  // Fetch featured products for carousel
-  const { data: featuredData, isLoading: featuredLoading } = useProducts({
-    category: "accessories",
-    limit: 10,
-    offset: 0,
+  // Fetch all accessories products using the correct /api/accessories endpoint
+  const { data: accessoriesData, isLoading: featuredLoading } = useQuery({
+    queryKey: ["accessories"],
+    queryFn: () => getAccessories(),
+    staleTime: 30000,
   });
 
-  const allProducts = featuredData?.products || [];
+  const allProducts = accessoriesData || [];
   const featuredProducts = allProducts.filter(
     (product: any) => product.isFeatured === true,
   );
@@ -219,6 +250,64 @@ export default function AccessoriesPage() {
             </div>
           )}
 
+          {/* Filter - Mobile */}
+          <div className="w-full max-w-4xl lg:hidden">
+            <button
+              onClick={() => setSheetOpen(true)}
+              style={{
+                display: "flex", alignItems: "center", gap: "8px",
+                padding: "12px 20px", borderRadius: "100px",
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(127,220,203,0.3)",
+                color: "#fff", fontSize: "0.85rem",
+                margin: "0 0 16px", width: "100%",
+                minHeight: 44, justifyContent: "center", cursor: "pointer",
+              }}
+            >
+              ⚙ {t("filterBy")} {activeFilter !== "ALL ACCESSORIES" && ` · ${gt(FILTER_REVERSE_MAP[activeFilter] || "accessories.filters.all")}`}
+            </button>
+            {sheetOpen && (
+              <>
+                <div onClick={() => setSheetOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }} />
+                <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 201, background: "rgba(15, 8, 40, 0.97)", backdropFilter: "blur(20px)", borderRadius: "24px 24px 0 0", border: "1px solid rgba(127,220,203,0.2)", padding: "12px 20px 32px", maxHeight: "70vh", overflowY: "auto" }}>
+                  <div style={{ width: "40px", height: "4px", borderRadius: "100px", background: "rgba(255,255,255,0.25)", margin: "0 auto 20px" }} />
+                  <h3 style={{ color: "#fff", fontSize: "1.1rem", marginBottom: "16px", fontFamily: "'Playfair Display', serif" }}>{t("filterBy")}</h3>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    {FILTER_KEYS.map((key) => {
+                      const filterValue = FILTER_MAP[key];
+                      const isActive = activeFilter === filterValue;
+                      return (
+                        <button key={key} onClick={() => { setActiveFilter(filterValue); setSheetOpen(false); }}
+                          style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", borderRadius: "14px", minHeight: "52px",
+                            background: isActive ? "rgba(127,220,203,0.15)" : "rgba(255,255,255,0.04)",
+                            border: isActive ? "1px solid rgba(127,220,203,0.5)" : "1px solid rgba(255,255,255,0.08)",
+                            color: isActive ? "#fff" : "rgba(255,255,255,0.7)", fontSize: "0.95rem", cursor: "pointer" }}>
+                          {gt(key)}
+                          {isActive && <span style={{ color: TEAL_GLOW }}>✓</span>}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Filter - Desktop */}
+          <div className="hidden lg:flex" style={{ background: "rgba(9,28,28,0.46)", borderRadius: 12, padding: "14px 24px", marginBottom: 24, backdropFilter: "blur(8px)", alignItems: "center", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+            {FILTER_KEYS.map((key) => {
+              const filterValue = FILTER_MAP[key];
+              const isActive = activeFilter === filterValue;
+              return (
+                <button key={key} role="tab" aria-selected={isActive} onClick={() => setActiveFilter(filterValue)}
+                  style={{ border: `1px solid ${isActive ? "rgba(127,220,203,0.8)" : "rgba(127,220,203,0.35)"}`, borderRadius: 100, padding: "6px 20px", fontSize: "0.72rem", letterSpacing: "0.12em",
+                    color: isActive ? CREAM : "rgba(255,255,255,0.7)", background: isActive ? "rgba(127,220,203,0.15)" : "transparent", cursor: "pointer", transition: "all 0.2s ease", whiteSpace: "nowrap" }}>
+                  {gt(key)}
+                </button>
+              );
+            })}
+          </div>
+
           {/* Product Grid - Mobile */}
           <div className="w-full max-w-4xl">
             <h2
@@ -228,6 +317,7 @@ export default function AccessoriesPage() {
               {t("products")}
             </h2>
             <ProductGrid
+              key={activeFilter}
               category="accessories"
               itemsPerPage={12}
               renderCard={renderAccessoryCard}
@@ -238,6 +328,7 @@ export default function AccessoriesPage() {
               loadingLabel={t("loadingMore") || "Loading..."}
               noMoreLabel={t("noMoreProducts") || "No more products"}
               emptyMessage={t("noProducts") || "No accessories found"}
+              filter={accessoryFilter(activeFilter)}
             />
           </div>
 
@@ -594,6 +685,7 @@ export default function AccessoriesPage() {
             {/* ── PRODUCT CARDS ── */}
             <div style={{ position: "relative", zIndex: 2, paddingBottom: "24px" }}>
               <ProductGrid
+                key={activeFilter}
                 category="accessories"
                 itemsPerPage={12}
                 renderCard={renderAccessoryCard}
@@ -604,6 +696,7 @@ export default function AccessoriesPage() {
                 loadingLabel={t("loadingMore") || "Loading..."}
                 noMoreLabel={t("noMoreProducts") || "No more products"}
                 emptyMessage={t("noProducts") || "No accessories found"}
+                filter={accessoryFilter(activeFilter)}
               />
             </div>
 

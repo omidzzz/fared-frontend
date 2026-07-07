@@ -8,7 +8,8 @@ import { ResponsiveCarousel } from "@/components/ui/ResponsiveCarousel";
 import { useCart } from "@/hooks/useCart";
 import { useTranslations } from "next-intl";
 import { useLocale } from "@/hooks/useLocale";
-import { useProducts } from "@/hooks/useProducts";
+import { useQuery } from "@tanstack/react-query";
+import { getCandles } from "@/lib/api";
 import ProductGrid from "@/components/shop/ProductGrid";
 import CandleCard from "@/components/ui/CandleCard";
 
@@ -16,15 +17,43 @@ export default function CandlesPage() {
   const { totalItems, addItem } = useCart();
   const t = useTranslations();
   const { isRTL } = useLocale();
+  const [activeFilter, setActiveFilter] = useState("ALL CANDLES");
+  const [sheetOpen, setSheetOpen] = useState(false);
+  
+  const FILTER_KEYS = [
+    "candles.filters.all",
+    "candles.filters.scent",
+    "candles.filters.intention",
+  ];
+  
+  const FILTER_MAP: Record<string, string> = {
+    "candles.filters.all": "ALL CANDLES",
+    "candles.filters.scent": "SCENT",
+    "candles.filters.intention": "INTENTION",
+  };
+  
+  const FILTER_REVERSE_MAP: Record<string, string> = {
+    "ALL CANDLES": "candles.filters.all",
+    "SCENT": "candles.filters.scent",
+    "INTENTION": "candles.filters.intention",
+  };
+  
+  const candleFilter = (activeFilter: string) => (product: any) => {
+    if (activeFilter === "ALL CANDLES") return true;
+    const tags = (product.tagsEN || []).map((t: string) => t.toUpperCase());
+    if (activeFilter === "SCENT") return tags.some((t: string) => t.includes("SCENT") || t.includes("VANILLA") || t.includes("LAVENDER") || t.includes("ROSE") || t.includes("FRAGRANCE"));
+    if (activeFilter === "INTENTION") return tags.some((t: string) => t.includes("INTENTION") || t.includes("LOVE") || t.includes("PROTECTION") || t.includes("HEALING") || t.includes("ABUNDANCE"));
+    return true;
+  };
 
-  // Fetch featured products for carousel
-  const { data: featuredData, isLoading: featuredLoading } = useProducts({
-    category: "candles",
-    limit: 10,
-    offset: 0,
+  // Fetch all candles products using the correct /api/candles endpoint
+  const { data: candlesData, isLoading: featuredLoading } = useQuery({
+    queryKey: ["candles"],
+    queryFn: () => getCandles(),
+    staleTime: 30000,
   });
 
-  const allProducts = featuredData?.products || [];
+  const allProducts = candlesData || [];
   const featuredProducts = allProducts.filter(
     (product: any) => product.isFeatured === true,
   );
@@ -166,6 +195,64 @@ export default function CandlesPage() {
             </div>
           )}
 
+          {/* Mobile Filter */}
+          <div className="lg:hidden mb-4">
+            <button
+              onClick={() => setSheetOpen(true)}
+              style={{
+                display: "flex", alignItems: "center", gap: "8px",
+                padding: "12px 20px", borderRadius: "100px",
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(212,175,100,0.3)",
+                color: "#fff", fontSize: "0.85rem",
+                margin: "0 16px 16px", width: "calc(100% - 32px)",
+                minHeight: 44, justifyContent: "center", cursor: "pointer",
+              }}
+            >
+              ⚙ {t("candles.filterBy")} {activeFilter !== "ALL CANDLES" && ` · ${t(FILTER_REVERSE_MAP[activeFilter] || "candles.filters.all")}`}
+            </button>
+            {sheetOpen && (
+              <>
+                <div onClick={() => setSheetOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }} />
+                <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 201, background: "rgba(15, 8, 40, 0.97)", backdropFilter: "blur(20px)", borderRadius: "24px 24px 0 0", border: "1px solid rgba(212,175,100,0.2)", padding: "12px 20px 32px", maxHeight: "70vh", overflowY: "auto" }}>
+                  <div style={{ width: "40px", height: "4px", borderRadius: "100px", background: "rgba(255,255,255,0.25)", margin: "0 auto 20px" }} />
+                  <h3 style={{ color: "#fff", fontSize: "1.1rem", marginBottom: "16px", fontFamily: "'Playfair Display', serif" }}>{t("candles.filterBy")}</h3>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    {FILTER_KEYS.map((key) => {
+                      const filterValue = FILTER_MAP[key];
+                      const isActive = activeFilter === filterValue;
+                      return (
+                        <button key={key} onClick={() => { setActiveFilter(filterValue); setSheetOpen(false); }}
+                          style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", borderRadius: "14px", minHeight: "52px",
+                            background: isActive ? "rgba(212,175,100,0.15)" : "rgba(255,255,255,0.04)",
+                            border: isActive ? "1px solid rgba(212,175,100,0.5)" : "1px solid rgba(255,255,255,0.08)",
+                            color: isActive ? "#fff" : "rgba(255,255,255,0.7)", fontSize: "0.95rem", cursor: "pointer" }}>
+                          {t(key)}
+                          {isActive && <span style={{ color: "#d4af64" }}>✓</span>}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Desktop Filter Bar */}
+          <div className="hidden lg:flex" style={{ background: "rgba(15,5,40,0.6)", borderRadius: 12, padding: "14px 24px", margin: "0 auto 32px", maxWidth: "600px", backdropFilter: "blur(8px)", alignItems: "center", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+            {FILTER_KEYS.map((key) => {
+              const filterValue = FILTER_MAP[key];
+              const isActive = activeFilter === filterValue;
+              return (
+                <button key={key} role="tab" aria-selected={isActive} onClick={() => setActiveFilter(filterValue)}
+                  style={{ border: `1px solid ${isActive ? "rgba(255,215,100,0.8)" : "rgba(255,215,100,0.35)"}`, borderRadius: 100, padding: "6px 20px", fontSize: "0.72rem", letterSpacing: "0.12em",
+                    color: isActive ? "#fff" : "rgba(255,255,255,0.7)", background: isActive ? "rgba(255,215,100,0.15)" : "transparent", cursor: "pointer", transition: "all 0.2s ease", whiteSpace: "nowrap" }}>
+                  {t(key)}
+                </button>
+              );
+            })}
+          </div>
+
           {/* All Products Grid */}
           <h2
             className="text-center text-[#F5D79C] font-serif text-2xl md:text-3xl mb-6"
@@ -179,6 +266,7 @@ export default function CandlesPage() {
           </h2>
 
           <ProductGrid
+            key={activeFilter}
             category="candles"
             itemsPerPage={12}
             renderCard={renderCandleCard}
@@ -189,6 +277,7 @@ export default function CandlesPage() {
             loadingLabel={t("clothes.loadingMore") || "Loading..."}
             noMoreLabel={t("clothes.noMoreProducts") || "No more products to load"}
             emptyMessage={t("candles.noProducts") || "No candles found"}
+            filter={candleFilter(activeFilter)}
           />
         </div>
       </div>

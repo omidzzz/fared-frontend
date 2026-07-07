@@ -1,7 +1,7 @@
 import type { Cart } from "@/types/product";
 import type { Category } from "@/types/category";
 import type { Order } from "@/types/order";
-import type { EditorialPost, ForumPost } from "@/types/content";
+import type { EditorialPost, ForumPost, ForumTopic, ForumReply } from "@/types/content";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL?.replace(/\/+$/, "") ?? "";
 
@@ -13,7 +13,7 @@ export interface CatalogProduct {
   description: string;
   descriptionFA: string;
   price: number;
-  currency?: string; // Add currency field
+  currency?: string;
   comparePrice?: number;
   discountPercent?: number;
   stock?: number;
@@ -32,9 +32,9 @@ export interface CatalogProduct {
   durationWeeks?: number;
   certificate?: boolean;
   language?: string;
-  // Allow any additional fields
   [key: string]: unknown;
 }
+
 function buildUrl(endpoint: string): string {
   const normalizedEndpoint = endpoint.startsWith("/")
     ? endpoint
@@ -64,7 +64,6 @@ function normalizeProduct(product: Record<string, unknown>): CatalogProduct {
       0,
   );
 
-  // Extract currency - check multiple possible field names
   const currency =
     (product.currency as string | undefined) ??
     (product.currencyCode as string | undefined) ??
@@ -100,7 +99,6 @@ function normalizeProduct(product: Record<string, unknown>): CatalogProduct {
         ""
       : (product.image as string | undefined) ?? "";
 
-  // Extract compare price for discount calculation
   const comparePrice = Number(
     (product.comparePrice as number | undefined) ??
       (product.originalPrice as number | undefined) ??
@@ -108,13 +106,11 @@ function normalizeProduct(product: Record<string, unknown>): CatalogProduct {
       0,
   );
 
-  // Calculate discount percent if compare price exists
   const discountPercent =
     comparePrice > 0 && price > 0
       ? Math.round(((comparePrice - price) / comparePrice) * 100)
       : 0;
 
-  // Extract stock status
   const stock = Number(
     (product.stock as number | undefined) ??
       (product.quantity as number | undefined) ??
@@ -130,7 +126,7 @@ function normalizeProduct(product: Record<string, unknown>): CatalogProduct {
     description: String(product.descriptionEN ?? product.description ?? ""),
     descriptionFA: String(product.descriptionFA ?? product.description ?? ""),
     price,
-    currency, // Add the currency field
+    currency,
     comparePrice: comparePrice > 0 ? comparePrice : undefined,
     discountPercent: discountPercent > 0 ? discountPercent : undefined,
     stock,
@@ -139,7 +135,7 @@ function normalizeProduct(product: Record<string, unknown>): CatalogProduct {
     images: rawImages
       .map((img: Record<string, unknown>) =>
         typeof img === "object" && img !== null
-          ? (img.url ?? img.path ?? img.src ?? "") as string
+          ? ((img.url ?? img.path ?? img.src ?? "") as string)
           : String(img),
       )
       .filter(Boolean),
@@ -164,7 +160,6 @@ function normalizeProduct(product: Record<string, unknown>): CatalogProduct {
         )?.name ??
         "",
     ),
-    // Pass through any extra fields for course/category-specific data
     duration: String(product.duration ?? ""),
     lessons: Number(product.lessons ?? 0),
     level: String(product.level ?? ""),
@@ -177,17 +172,20 @@ function normalizeProduct(product: Record<string, unknown>): CatalogProduct {
     durationWeeks: Number(product.durationWeeks ?? 0),
     certificate: Boolean(product.certificate ?? false),
     language: String(product.language ?? ""),
-    // Explicitly pass through variants and colorOptions
     variants: product.variants as
       | { id: string; label: string; stock: number }[]
       | undefined,
     colorOptions: product.colorOptions as
       | { id: string; hex: string; nameFA: string }[]
       | undefined,
-    // Pass through any other fields that might be needed
-    ...(product as Record<string, unknown>),
+    ...Object.fromEntries(
+      Object.entries(product as Record<string, unknown>).filter(
+        ([key]) => key !== "category",
+      ),
+    ),
   };
 }
+
 async function apiFetch<T>(
   endpoint: string,
   options?: RequestInit,
@@ -218,6 +216,7 @@ async function apiFetch<T>(
 
   return payload as T;
 }
+
 async function apiFetchPaginated<T>(
   endpoint: string,
   options?: RequestInit,
@@ -278,6 +277,104 @@ async function apiFetchPaginated<T>(
   };
 }
 
+// ── Auth ──────────────────────────────────────────────────────────────────────
+
+export interface AuthResponse {
+  user: {
+    id: string;
+    nameFA: string | null;
+    name: string | null;
+    phone: string | null;
+    email: string | null;
+    avatar: string | null;
+    role: string;
+    isVerified: boolean;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+  token: string;
+  refreshToken: string;
+}
+
+export async function loginWithEmail(email: string, password: string): Promise<AuthResponse> {
+  return apiFetch<AuthResponse>("/auth/login", {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+  });
+}
+
+export async function registerWithEmail(data: {
+  email: string;
+  password: string;
+  name: string;
+  nameFA?: string;
+}): Promise<AuthResponse> {
+  return apiFetch<AuthResponse>("/auth/register", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function getMe(): Promise<AuthResponse["user"]> {
+  return apiFetch<AuthResponse["user"]>("/auth/me");
+}
+
+export async function refreshAccessToken(refreshToken: string): Promise<{ accessToken: string }> {
+  return apiFetch<{ accessToken: string }>("/auth/refresh", {
+    method: "POST",
+    body: JSON.stringify({ refreshToken }),
+  });
+}
+
+// ── Orders ────────────────────────────────────────────────────────────────────
+
+export interface BackendOrder {
+  id: string;
+  orderNumber: string;
+  userId: string;
+  status: string;
+  paymentMethod: string;
+  paymentStatus: string;
+  subtotal: number;
+  shippingAmount: number;
+  discountAmount: number;
+  total: number;
+  currency: string;
+  addressId: string | null;
+  trackingCode: string | null;
+  notes: string | null;
+  createdAt: string;
+  updatedAt: string;
+  items: {
+    id: string;
+    productType: string;
+    refId: string;
+    nameFA: string;
+    nameEN: string | null;
+    price: number;
+    quantity: number;
+    variant: string | null;
+    image: string | null;
+  }[];
+  address?: {
+    id: string;
+    fullName: string;
+    phone: string;
+    country: string;
+    city: string;
+    address1: string;
+    address2: string | null;
+    postalCode: string;
+  } | null;
+}
+
+export async function getOrders(): Promise<BackendOrder[]> {
+  return apiFetch<BackendOrder[]>("/orders");
+}
+
+// ── Products ──────────────────────────────────────────────────────────────────
+
 async function getProductsFromBackend(params?: {
   category?: string;
   limit?: number;
@@ -286,8 +383,6 @@ async function getProductsFromBackend(params?: {
   const query = new URLSearchParams();
   if (params?.category) query.set("category", params.category);
   if (params?.limit) query.set("limit", String(params.limit));
-  // The backend /api/products endpoint uses page-based pagination, not offset.
-  // Convert offset to page so pagination works correctly.
   if (params?.offset !== undefined && params?.limit) {
     const page = Math.floor(params.offset / params.limit) + 1;
     query.set("page", String(page));
@@ -299,177 +394,112 @@ async function getProductsFromBackend(params?: {
       `/products${qs}`,
     );
 
-    console.log("🔍 API Request:", {
-      endpoint: `/products${qs}`,
-      offset: params?.offset,
-      limit: params?.limit,
-      productsReceived: response.data?.length,
-      total: response.pagination?.total,
-    });
-
     return {
       products: (response.data || []).map(normalizeProduct),
       count: response.pagination?.total || 0,
     };
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    return {
-      products: [],
-      count: 0,
-    };
+  } catch {
+    return { products: [], count: 0 };
   }
 }
+
 export async function getProducts(params?: {
   category?: string;
   limit?: number;
   offset?: number;
-  page?: number; // Add page as an option
+  page?: number;
 }): Promise<{ products: CatalogProduct[]; count: number }> {
-  // If page is provided, convert it to offset for the backend
   if (params?.page !== undefined) {
     const limit = params?.limit || 12;
     const offset = (params.page - 1) * limit;
-
-    // Call backend with offset instead of page
-    return await getProductsFromBackend({
-      category: params.category,
-      limit: limit,
-      offset: offset,
-    });
+    return await getProductsFromBackend({ category: params.category, limit, offset });
   }
-
-  // Otherwise, use offset as-is
   return await getProductsFromBackend(params);
 }
+
 export async function getProduct(id: string): Promise<CatalogProduct> {
   const response = await apiFetch<Record<string, unknown>>(`/products/${id}`);
   return normalizeProduct(response);
 }
 
 export async function getCategories(): Promise<Category[]> {
-  const categories = await apiFetch<Array<Record<string, unknown>>>(
-    "/categories",
-  );
+  const categories = await apiFetch<Array<Record<string, unknown>>>("/categories");
   return categories.map((category) => ({
     id: String(category.id ?? ""),
     name: String(category.nameEN ?? category.name ?? ""),
-    handle: String((category.slug as string | undefined) ?? "").replace(
-      /\s+/g,
-      "-",
-    ) as Category["handle"],
+    handle: String((category.slug as string | undefined) ?? "").replace(/\s+/g, "-") as Category["handle"],
     description: String(category.descriptionEN ?? category.description ?? ""),
     metadata: category as Record<string, unknown>,
   }));
 }
 
+// ── Cart ──────────────────────────────────────────────────────────────────────
+
 export function createCart(): Promise<Cart> {
-  return apiFetch<{ cart: Cart }>("/store/carts", {
-    method: "POST",
-    body: "{}",
-  }).then((r) => r.cart);
+  return apiFetch<{ cart: Cart }>("/store/carts", { method: "POST", body: "{}" }).then((r) => r.cart);
 }
 
 export function getCart(id: string): Promise<Cart> {
   return apiFetch<{ cart: Cart }>(`/store/carts/${id}`).then((r) => r.cart);
 }
 
-export function addToCart(
-  cartId: string,
-  variantId: string,
-  quantity: number,
-): Promise<Cart> {
+export function addToCart(cartId: string, variantId: string, quantity: number): Promise<Cart> {
   return apiFetch<{ cart: Cart }>(`/store/carts/${cartId}/line-items`, {
     method: "POST",
     body: JSON.stringify({ variant_id: variantId, quantity }),
   }).then((r) => r.cart);
 }
 
-export function removeFromCart(
-  cartId: string,
-  lineItemId: string,
-): Promise<Cart> {
-  return apiFetch<{ cart: Cart }>(
-    `/store/carts/${cartId}/line-items/${lineItemId}`,
-    {
-      method: "DELETE",
-    },
-  ).then((r) => r.cart);
+export function removeFromCart(cartId: string, lineItemId: string): Promise<Cart> {
+  return apiFetch<{ cart: Cart }>(`/store/carts/${cartId}/line-items/${lineItemId}`, {
+    method: "DELETE",
+  }).then((r) => r.cart);
 }
 
-export function updateCartItem(
-  cartId: string,
-  lineItemId: string,
-  quantity: number,
-): Promise<Cart> {
-  return apiFetch<{ cart: Cart }>(
-    `/store/carts/${cartId}/line-items/${lineItemId}`,
-    {
-      method: "POST",
-      body: JSON.stringify({ quantity }),
-    },
-  ).then((r) => r.cart);
-}
-
-export function loginCustomer(
-  email: string,
-  password: string,
-): Promise<{ token: string }> {
-  return apiFetch("/store/auth", {
+export function updateCartItem(cartId: string, lineItemId: string, quantity: number): Promise<Cart> {
+  return apiFetch<{ cart: Cart }>(`/store/carts/${cartId}/line-items/${lineItemId}`, {
     method: "POST",
-    body: JSON.stringify({ email, password }),
-  });
+    body: JSON.stringify({ quantity }),
+  }).then((r) => r.cart);
 }
 
-export function registerCustomer(data: {
-  email: string;
-  password: string;
-  first_name: string;
-  last_name: string;
-}): Promise<{ customer: unknown }> {
-  return apiFetch("/store/customers", {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
-}
-
-export function getCustomer(): Promise<unknown> {
-  return apiFetch("/store/customers/me");
-}
-
-export function getOrders(): Promise<Order[]> {
-  return apiFetch<{ orders: Order[] }>("/store/orders").then((r) => r.orders);
-}
+// ── Editorial ─────────────────────────────────────────────────────────────────
 
 export function getEditorialPosts(category?: string): Promise<EditorialPost[]> {
   const qs = category ? `?category=${category}` : "";
-  return apiFetch<{ posts: EditorialPost[] }>(`/store/editorial${qs}`).then(
-    (r) => r.posts,
-  );
+  return apiFetch<{ posts: EditorialPost[] }>(`/store/editorial${qs}`).then((r) => r.posts);
 }
 
 export function getEditorialPost(slug: string): Promise<EditorialPost> {
-  return apiFetch<{ post: EditorialPost }>(`/store/editorial/${slug}`).then(
-    (r) => r.post,
-  );
+  return apiFetch<{ post: EditorialPost }>(`/store/editorial/${slug}`).then((r) => r.post);
 }
 
-export function getForumPosts(): Promise<ForumPost[]> {
-  return apiFetch<{ posts: ForumPost[] }>("/store/forum").then((r) => r.posts);
+// ── Forum ─────────────────────────────────────────────────────────────────────
+
+export async function getForumTopics(page = 1, limit = 20): Promise<{ topics: ForumTopic[]; total: number }> {
+  const response = await apiFetchPaginated<ForumTopic[]>(`/forum/topics?page=${page}&limit=${limit}`);
+  return { topics: response.data, total: response.pagination.total };
 }
 
-export function getForumPost(id: string): Promise<ForumPost> {
-  return apiFetch<{ post: ForumPost }>(`/store/forum/${id}`).then(
-    (r) => r.post,
-  );
+export async function getForumTopicBySlug(slug: string): Promise<ForumTopic> {
+  return apiFetch<ForumTopic>(`/forum/topics/${slug}`);
+}
+
+export async function createForumTopic(data: { titleFA: string; bodyFA: string; category: string; tags?: string[] }): Promise<ForumTopic> {
+  return apiFetch<ForumTopic>("/forum/topics", { method: "POST", body: JSON.stringify(data) });
+}
+
+export async function createForumReply(topicId: string, data: { bodyFA: string }): Promise<ForumReply> {
+  return apiFetch<ForumReply>(`/forum/topics/${topicId}/replies`, { method: "POST", body: JSON.stringify(data) });
 }
 
 // ── Category-specific product fetchers ──
+
 export async function getStones(): Promise<CatalogProduct[]> {
-  // Backend returns { products: [...], count } wrapped in success envelope
-  const response = await apiFetch<{
-    products: Record<string, unknown>[];
-  }>("/stones");
-  return (response.products || []).map(normalizeProduct);
+  const response = await apiFetch<Record<string, unknown>[] | { products: Record<string, unknown>[]; total?: number; page?: number; limit?: number; totalPages?: number }>("/stones");
+  // Handle both array and object with products key
+  const products = Array.isArray(response) ? response : (response.products || []);
+  return products.map(normalizeProduct);
 }
 
 export async function getStoneBySlug(slug: string): Promise<CatalogProduct> {
@@ -478,10 +508,10 @@ export async function getStoneBySlug(slug: string): Promise<CatalogProduct> {
 }
 
 export async function getCandles(): Promise<CatalogProduct[]> {
-  const response = await apiFetch<{
-    products: Record<string, unknown>[];
-  }>("/candles");
-  return (response.products || []).map(normalizeProduct);
+  const response = await apiFetch<Record<string, unknown>[] | { products: Record<string, unknown>[] }>("/candles");
+  // Handle both array and object with products key
+  const products = Array.isArray(response) ? response : (response.products || []);
+  return products.map(normalizeProduct);
 }
 
 export async function getCandleBySlug(slug: string): Promise<CatalogProduct> {
@@ -490,9 +520,7 @@ export async function getCandleBySlug(slug: string): Promise<CatalogProduct> {
 }
 
 export async function getClothes(): Promise<CatalogProduct[]> {
-  const response = await apiFetch<{
-    products: Record<string, unknown>[];
-  }>("/clothes");
+  const response = await apiFetch<{ products: Record<string, unknown>[]; total?: number; pagination?: any }>("/clothes");
   return (response.products || []).map(normalizeProduct);
 }
 
@@ -502,18 +530,14 @@ export async function getClothBySlug(slug: string): Promise<CatalogProduct> {
 }
 
 export async function getAccessories(): Promise<CatalogProduct[]> {
-  const response = await apiFetch<{
-    products: Record<string, unknown>[];
-  }>("/accessories");
-  return (response.products || []).map(normalizeProduct);
+  const response = await apiFetch<Record<string, unknown>[] | { products: Record<string, unknown>[] }>("/accessories");
+  // Handle both array and object with products key
+  const products = Array.isArray(response) ? response : (response.products || []);
+  return products.map(normalizeProduct);
 }
 
-export async function getAccessoryBySlug(
-  slug: string,
-): Promise<CatalogProduct> {
-  const product = await apiFetch<Record<string, unknown>>(
-    `/accessories/${slug}`,
-  );
+export async function getAccessoryBySlug(slug: string): Promise<CatalogProduct> {
+  const product = await apiFetch<Record<string, unknown>>(`/accessories/${slug}`);
   return normalizeProduct(product);
 }
 
@@ -528,6 +552,7 @@ export async function getCourseBySlug(slug: string): Promise<CatalogProduct> {
 }
 
 // ── Editorial / Blog ──
+
 export interface BlogArticle {
   id: string;
   slug: string;
@@ -546,9 +571,7 @@ export interface BlogArticle {
 }
 
 export async function getArticles(): Promise<BlogArticle[]> {
-  const articles = await apiFetch<Record<string, unknown>[]>(
-    "/editorial/articles",
-  );
+  const articles = await apiFetch<Record<string, unknown>[]>("/editorial/articles");
   return articles.map((a) => ({
     id: String(a.id ?? ""),
     slug: String(a.slug ?? ""),
@@ -568,9 +591,7 @@ export async function getArticles(): Promise<BlogArticle[]> {
 }
 
 export async function getArticleBySlug(slug: string): Promise<BlogArticle> {
-  const article = await apiFetch<Record<string, unknown>>(
-    `/editorial/articles/${slug}`,
-  );
+  const article = await apiFetch<Record<string, unknown>>(`/editorial/articles/${slug}`);
   return {
     id: String(article.id ?? ""),
     slug: String(article.slug ?? ""),
@@ -590,6 +611,7 @@ export async function getArticleBySlug(slug: string): Promise<BlogArticle> {
 }
 
 // ── Tours ──
+
 export interface Tour {
   id: string;
   slug: string;
@@ -645,7 +667,7 @@ export async function getTours(): Promise<Tour[]> {
     spotsTotal: Number(tour.spotsTotal ?? 0),
     spotsLeft: Number(tour.spotsLeft ?? 0),
     heroImage: tour.heroImage ? String(tour.heroImage) : undefined,
-    images: Array.isArray(tour.images) 
+    images: Array.isArray(tour.images)
       ? tour.images.map((img: Record<string, unknown>) => ({
           id: String(img.id ?? ""),
           url: String(img.url ?? ""),
@@ -654,7 +676,7 @@ export async function getTours(): Promise<Tour[]> {
       : [],
     includedFA: Array.isArray(tour.includedFA) ? tour.includedFA.map(String) : [],
     notIncludedFA: Array.isArray(tour.notIncludedFA) ? tour.notIncludedFA.map(String) : [],
-    itinerary: Array.isArray(tour.itinerary) 
+    itinerary: Array.isArray(tour.itinerary)
       ? tour.itinerary.map((day: Record<string, unknown>) => ({
           id: String(day.id ?? ""),
           day: Number(day.day ?? 0),
@@ -667,18 +689,16 @@ export async function getTours(): Promise<Tour[]> {
     isActive: Boolean(tour.isActive ?? true),
     isFeatured: Boolean(tour.isFeatured ?? false),
     categoryId: String(tour.categoryId ?? ""),
-    category: tour.category 
+    category: tour.category
       ? {
           id: String((tour.category as Record<string, unknown>).id ?? ""),
           slug: String((tour.category as Record<string, unknown>).slug ?? ""),
           nameFA: String((tour.category as Record<string, unknown>).nameFA ?? ""),
-          nameEN: (tour.category as Record<string, unknown>).nameEN 
-            ? String((tour.category as Record<string, unknown>).nameEN) 
-            : undefined,
+          nameEN: (tour.category as Record<string, unknown>).nameEN ? String((tour.category as Record<string, unknown>).nameEN) : undefined,
         }
       : { id: "", slug: "", nameFA: "" },
-    enquiriesCount: (tour._count as Record<string, number> | undefined)?.enquiries 
-      ? Number((tour._count as Record<string, number>).enquiries) 
+    enquiriesCount: (tour._count as Record<string, number> | undefined)?.enquiries
+      ? Number((tour._count as Record<string, number>).enquiries)
       : undefined,
     createdAt: String(tour.createdAt ?? ""),
     updatedAt: String(tour.updatedAt ?? ""),
@@ -706,7 +726,7 @@ export async function getTourBySlug(slug: string): Promise<Tour> {
     spotsTotal: Number(tour.spotsTotal ?? 0),
     spotsLeft: Number(tour.spotsLeft ?? 0),
     heroImage: tour.heroImage ? String(tour.heroImage) : undefined,
-    images: Array.isArray(tour.images) 
+    images: Array.isArray(tour.images)
       ? tour.images.map((img: Record<string, unknown>) => ({
           id: String(img.id ?? ""),
           url: String(img.url ?? ""),
@@ -715,7 +735,7 @@ export async function getTourBySlug(slug: string): Promise<Tour> {
       : [],
     includedFA: Array.isArray(tour.includedFA) ? tour.includedFA.map(String) : [],
     notIncludedFA: Array.isArray(tour.notIncludedFA) ? tour.notIncludedFA.map(String) : [],
-    itinerary: Array.isArray(tour.itinerary) 
+    itinerary: Array.isArray(tour.itinerary)
       ? tour.itinerary.map((day: Record<string, unknown>) => ({
           id: String(day.id ?? ""),
           day: Number(day.day ?? 0),
@@ -728,20 +748,246 @@ export async function getTourBySlug(slug: string): Promise<Tour> {
     isActive: Boolean(tour.isActive ?? true),
     isFeatured: Boolean(tour.isFeatured ?? false),
     categoryId: String(tour.categoryId ?? ""),
-    category: tour.category 
+    category: tour.category
       ? {
           id: String((tour.category as Record<string, unknown>).id ?? ""),
           slug: String((tour.category as Record<string, unknown>).slug ?? ""),
           nameFA: String((tour.category as Record<string, unknown>).nameFA ?? ""),
-          nameEN: (tour.category as Record<string, unknown>).nameEN 
-            ? String((tour.category as Record<string, unknown>).nameEN) 
-            : undefined,
+          nameEN: (tour.category as Record<string, unknown>).nameEN ? String((tour.category as Record<string, unknown>).nameEN) : undefined,
         }
       : { id: "", slug: "", nameFA: "" },
-    enquiriesCount: (tour._count as Record<string, number> | undefined)?.enquiries 
-      ? Number((tour._count as Record<string, number>).enquiries) 
+    enquiriesCount: (tour._count as Record<string, number> | undefined)?.enquiries
+      ? Number((tour._count as Record<string, number>).enquiries)
       : undefined,
     createdAt: String(tour.createdAt ?? ""),
     updatedAt: String(tour.updatedAt ?? ""),
   };
+}
+
+// ── Tahrirye (تحریریه) ────────────────────────────────────────────────────────
+
+export interface EducationalPost {
+  id: string;
+  slug: string;
+  titleFA: string;
+  titleEN?: string;
+  categoryFA: string;
+  categoryEN?: string;
+  bodyFA: string;
+  bodyEN?: string;
+  excerptFA: string;
+  image?: string;
+  tagsFA: string[];
+  readMinutes: number;
+  isPublished: boolean;
+  publishedAt?: string;
+  authorId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export async function getEducationalPosts(): Promise<EducationalPost[]> {
+  const posts = await apiFetch<Record<string, unknown>[]>("/editorial/educational");
+  return posts.map((post) => ({
+    id: String(post.id ?? ""),
+    slug: String(post.slug ?? ""),
+    titleFA: String(post.titleFA ?? ""),
+    titleEN: post.titleEN ? String(post.titleEN) : undefined,
+    categoryFA: String(post.categoryFA ?? ""),
+    categoryEN: post.categoryEN ? String(post.categoryEN) : undefined,
+    bodyFA: String(post.bodyFA ?? ""),
+    bodyEN: post.bodyEN ? String(post.bodyEN) : undefined,
+    excerptFA: String(post.excerptFA ?? ""),
+    image: post.image ? String(post.image) : undefined,
+    tagsFA: Array.isArray(post.tagsFA) ? post.tagsFA.map(String) : [],
+    readMinutes: Number(post.readMinutes ?? 5),
+    isPublished: Boolean(post.isPublished ?? false),
+    publishedAt: post.publishedAt as string | undefined,
+    authorId: post.authorId as string | undefined,
+    createdAt: String(post.createdAt ?? ""),
+    updatedAt: String(post.updatedAt ?? ""),
+  }));
+}
+
+export async function getEducationalPostBySlug(slug: string): Promise<EducationalPost> {
+  const post = await apiFetch<Record<string, unknown>>(`/editorial/educational/${slug}`);
+  return {
+    id: String(post.id ?? ""),
+    slug: String(post.slug ?? ""),
+    titleFA: String(post.titleFA ?? ""),
+    titleEN: post.titleEN ? String(post.titleEN) : undefined,
+    categoryFA: String(post.categoryFA ?? ""),
+    categoryEN: post.categoryEN ? String(post.categoryEN) : undefined,
+    bodyFA: String(post.bodyFA ?? ""),
+    bodyEN: post.bodyEN ? String(post.bodyEN) : undefined,
+    excerptFA: String(post.excerptFA ?? ""),
+    image: post.image ? String(post.image) : undefined,
+    tagsFA: Array.isArray(post.tagsFA) ? post.tagsFA.map(String) : [],
+    readMinutes: Number(post.readMinutes ?? 5),
+    isPublished: Boolean(post.isPublished ?? false),
+    publishedAt: post.publishedAt as string | undefined,
+    authorId: post.authorId as string | undefined,
+    createdAt: String(post.createdAt ?? ""),
+    updatedAt: String(post.updatedAt ?? ""),
+  };
+}
+
+export interface Book {
+  id: string;
+  slug: string;
+  titleFA: string;
+  titleEN?: string;
+  authorFA: string;
+  authorEN?: string;
+  descriptionFA: string;
+  categoryFA: string;
+  coverImage?: string;
+  year?: number;
+  pages?: number;
+  rating: number;
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export async function getBooks(): Promise<Book[]> {
+  const books = await apiFetch<Record<string, unknown>[]>("/editorial/books");
+  return books.map((book) => ({
+    id: String(book.id ?? ""),
+    slug: String(book.slug ?? ""),
+    titleFA: String(book.titleFA ?? ""),
+    titleEN: book.titleEN ? String(book.titleEN) : undefined,
+    authorFA: String(book.authorFA ?? ""),
+    authorEN: book.authorEN ? String(book.authorEN) : undefined,
+    descriptionFA: String(book.descriptionFA ?? ""),
+    categoryFA: String(book.categoryFA ?? ""),
+    coverImage: book.coverImage ? String(book.coverImage) : undefined,
+    year: book.year ? Number(book.year) : undefined,
+    pages: book.pages ? Number(book.pages) : undefined,
+    rating: Number(book.rating ?? 0),
+    isPublished: Boolean(book.isPublished ?? false),
+    createdAt: String(book.createdAt ?? ""),
+    updatedAt: String(book.updatedAt ?? ""),
+  }));
+}
+
+export async function getBookBySlug(slug: string): Promise<Book> {
+  const book = await apiFetch<Record<string, unknown>>(`/editorial/books/${slug}`);
+  return {
+    id: String(book.id ?? ""),
+    slug: String(book.slug ?? ""),
+    titleFA: String(book.titleFA ?? ""),
+    titleEN: book.titleEN ? String(book.titleEN) : undefined,
+    authorFA: String(book.authorFA ?? ""),
+    authorEN: book.authorEN ? String(book.authorEN) : undefined,
+    descriptionFA: String(book.descriptionFA ?? ""),
+    categoryFA: String(book.categoryFA ?? ""),
+    coverImage: book.coverImage ? String(book.coverImage) : undefined,
+    year: book.year ? Number(book.year) : undefined,
+    pages: book.pages ? Number(book.pages) : undefined,
+    rating: Number(book.rating ?? 0),
+    isPublished: Boolean(book.isPublished ?? false),
+    createdAt: String(book.createdAt ?? ""),
+    updatedAt: String(book.updatedAt ?? ""),
+  };
+}
+
+export interface Poem {
+  id: string;
+  slug: string;
+  titleFA: string;
+  poetFA: string;
+  poetEN?: string;
+  era?: string;
+  eraFA?: string;
+  category: string;
+  categoryFA: string;
+  linesFA: string[];
+  theme: string[];
+  backgroundGradient?: string;
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export async function getPoems(): Promise<Poem[]> {
+  const poems = await apiFetch<Record<string, unknown>[]>("/editorial/poems");
+  return poems.map((poem) => ({
+    id: String(poem.id ?? ""),
+    slug: String(poem.slug ?? ""),
+    titleFA: String(poem.titleFA ?? ""),
+    poetFA: String(poem.poetFA ?? ""),
+    poetEN: poem.poetEN ? String(poem.poetEN) : undefined,
+    era: poem.era ? String(poem.era) : undefined,
+    eraFA: poem.eraFA ? String(poem.eraFA) : undefined,
+    category: String(poem.category ?? ""),
+    categoryFA: String(poem.categoryFA ?? ""),
+    linesFA: Array.isArray(poem.linesFA) ? poem.linesFA.map(String) : [],
+    theme: Array.isArray(poem.theme) ? poem.theme.map(String) : [],
+    backgroundGradient: poem.backgroundGradient ? String(poem.backgroundGradient) : undefined,
+    isPublished: Boolean(poem.isPublished ?? false),
+    createdAt: String(poem.createdAt ?? ""),
+    updatedAt: String(poem.updatedAt ?? ""),
+  }));
+}
+
+export async function getPoemBySlug(slug: string): Promise<Poem> {
+  const poem = await apiFetch<Record<string, unknown>>(`/editorial/poems/${slug}`);
+  return {
+    id: String(poem.id ?? ""),
+    slug: String(poem.slug ?? ""),
+    titleFA: String(poem.titleFA ?? ""),
+    poetFA: String(poem.poetFA ?? ""),
+    poetEN: poem.poetEN ? String(poem.poetEN) : undefined,
+    era: poem.era ? String(poem.era) : undefined,
+    eraFA: poem.eraFA ? String(poem.eraFA) : undefined,
+    category: String(poem.category ?? ""),
+    categoryFA: String(poem.categoryFA ?? ""),
+    linesFA: Array.isArray(poem.linesFA) ? poem.linesFA.map(String) : [],
+    theme: Array.isArray(poem.theme) ? poem.theme.map(String) : [],
+    backgroundGradient: poem.backgroundGradient ? String(poem.backgroundGradient) : undefined,
+    isPublished: Boolean(poem.isPublished ?? false),
+    createdAt: String(poem.createdAt ?? ""),
+    updatedAt: String(poem.updatedAt ?? ""),
+  };
+}
+
+export const POEM_CATEGORIES = [
+  { id: "all", labelFA: "همه", slug: "all" },
+  { id: "ghazal", labelFA: "غزل", slug: "ghazal" },
+  { id: "robaei", labelFA: "رباعی", slug: "robaei" },
+  { id: "modern", labelFA: "شعر نو", slug: "modern" },
+] as const;
+
+// ── Quotes ──
+
+export interface Quote {
+  id: string;
+  textFA: string;
+  textEN?: string;
+  sourceFA: string;
+  sourceEN?: string;
+  scheduledDate?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export async function getTodayQuote(): Promise<Quote | null> {
+  try {
+    const quote = await apiFetch<Record<string, unknown>>("/quotes/today");
+    return {
+      id: String(quote.id ?? ""),
+      textFA: String(quote.textFA ?? ""),
+      textEN: quote.textEN ? String(quote.textEN) : undefined,
+      sourceFA: String(quote.sourceFA ?? ""),
+      sourceEN: quote.sourceEN ? String(quote.sourceEN) : undefined,
+      scheduledDate: quote.scheduledDate as string | undefined,
+      isActive: Boolean(quote.isActive ?? false),
+      createdAt: String(quote.createdAt ?? ""),
+      updatedAt: String(quote.updatedAt ?? ""),
+    };
+  } catch {
+    return null;
+  }
 }

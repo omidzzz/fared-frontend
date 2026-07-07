@@ -8,7 +8,8 @@ import { ResponsiveCarousel } from "@/components/ui/ResponsiveCarousel";
 import { useCart } from "@/hooks/useCart";
 import { useTranslations } from "next-intl";
 import { useLocale } from "@/hooks/useLocale";
-import { useProducts } from "@/hooks/useProducts";
+import { useQuery } from "@tanstack/react-query";
+import { getStones } from "@/lib/api";
 import ProductGrid from "@/components/shop/ProductGrid";
 import CrystalCard from "@/components/ui/CrystalCard";
 
@@ -261,14 +262,14 @@ export default function StonesPage() {
   const t = useTranslations();
   const { isRTL } = useLocale();
 
-  // Fetch featured products for carousel
-  const { data: featuredData, isLoading: featuredLoading } = useProducts({
-    category: "stones",
-    limit: 10,
-    offset: 0,
+  // Fetch all stones products using the correct /api/stones endpoint
+  const { data: stonesData, isLoading: featuredLoading } = useQuery({
+    queryKey: ["stones"],
+    queryFn: () => getStones(),
+    staleTime: 30000,
   });
 
-  const allProducts = featuredData?.products || [];
+  const allProducts = stonesData || [];
   const featuredProducts = allProducts.filter(
     (product: any) => product.isFeatured === true,
   );
